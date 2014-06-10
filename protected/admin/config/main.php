@@ -30,7 +30,7 @@ return array(
 		 //  着重注意修改的地方
       'backend.models.*',
       'backend.components.*',
-      'ext.*',ext
+      'ext.*',
 	),
 
 	'modules'=>array(
