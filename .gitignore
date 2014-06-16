@@ -1,3 +1,4 @@
 /.idea
 /protected/runtime
 /protected/admin/runtime
+/app.sql
