@@ -50,3 +50,976 @@ Stack trace:
 REQUEST_URI=/admin.php?r=gii/model/index
 HTTP_REFERER=http://www.app.com/admin.php?r=gii/module/index
 ---
+2014/06/13 11:24:43 [error] [php] mail(): Failed to connect to mailserver at &quot;&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() (D:\wamp\www\app\protected\admin\controllers\SiteController.php:67)
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#1 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#2 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#3 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#4 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#5 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#6 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=site/contact
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (67)
+in D:\wamp\www\app\admin.php (13)
+2014/06/13 11:52:28 [error] [system.db.CDbCommand] CDbCommand::fetch() failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'username' in 'where clause'. The SQL statement executed was: SELECT * FROM `user` `t` WHERE username=:username LIMIT 1.
+in D:\wamp\www\app\protected\admin\components\UserIdentity.php (20)
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (52)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (94)
+2014/06/13 11:52:28 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'username' in 'where clause'. The SQL statement executed was: SELECT * FROM `user` `t` WHERE username=:username LIMIT 1' in D:\wamp\www\yii\framework\db\CDbCommand.php:543
+Stack trace:
+#0 D:\wamp\www\yii\framework\db\CDbCommand.php(415): CDbCommand->queryInternal('fetch', Array, Array)
+#1 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1351): CDbCommand->queryRow()
+#2 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1456): CActiveRecord->query(Object(CDbCriteria))
+#3 D:\wamp\www\app\protected\admin\components\UserIdentity.php(20): CActiveRecord->find('username=:usern...', Array)
+#4 D:\wamp\www\app\protected\admin\models\LoginForm.php(52): UserIdentity->authenticate()
+#5 D:\wamp\www\yii\framework\validators\CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#6 D:\wamp\www\yii\framework\validators\CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#7 D:\wamp\www\yii\framework\base\CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#8 D:\wamp\www\app\protected\admin\controllers\SiteController.php(94): CModel->validate()
+#9 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#10 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#12 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#13 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('login')
+#14 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#15 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#16 D:\wamp\www\app\admin.php(13): CApplication->run()
+#17 {main}
+REQUEST_URI=/admin.php?r=site/login
+HTTP_REFERER=http://www.app.com/admin.php?r=site/login
+---
+2014/06/13 11:54:52 [error] [exception.CException] exception 'CException' with message 'Property "UserIdentity.pswd" is not defined.' in D:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\components\UserIdentity.php(22): CComponent->__get('pswd')
+#1 D:\wamp\www\app\protected\admin\models\LoginForm.php(52): UserIdentity->authenticate()
+#2 D:\wamp\www\yii\framework\validators\CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#3 D:\wamp\www\yii\framework\validators\CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#4 D:\wamp\www\yii\framework\base\CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#5 D:\wamp\www\app\protected\admin\controllers\SiteController.php(94): CModel->validate()
+#6 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#7 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#8 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#9 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('login')
+#11 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#12 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#13 D:\wamp\www\app\admin.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/admin.php?r=site/login
+HTTP_REFERER=http://www.app.com/admin.php?r=site/login
+---
+2014/06/16 05:42:55 [error] [php] include(UserModel.php): failed to open stream: No such file or directory (D:\wamp\www\yii\framework\YiiBase.php:427)
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\components\UserIdentity.php(20): spl_autoload_call()
+#1 D:\wamp\www\app\protected\admin\models\LoginForm.php(52): UserIdentity->authenticate()
+#2 D:\wamp\www\yii\framework\validators\CInlineValidator.php(42): LoginForm->authenticate()
+#3 D:\wamp\www\yii\framework\validators\CValidator.php(213): CInlineValidator->validateAttribute()
+#4 D:\wamp\www\yii\framework\base\CModel.php(159): CInlineValidator->validate()
+#5 D:\wamp\www\app\protected\admin\controllers\SiteController.php(94): LoginForm->validate()
+#6 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#7 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#8 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#9 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#10 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#11 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#12 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#13 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=site/login
+in D:\wamp\www\app\protected\admin\components\UserIdentity.php (20)
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (52)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (94)
+2014/06/16 07:52:55 [error] [php] Missing argument 2 for YiiBase::t(), called in D:\wamp\www\app\protected\admin\views\site\login.php on line 28 and defined (D:\wamp\www\yii\framework\YiiBase.php:577)
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#1 D:\wamp\www\yii\framework\web\CController.php(869): SiteController->renderFile()
+#2 D:\wamp\www\yii\framework\web\CController.php(782): SiteController->renderPartial()
+#3 D:\wamp\www\app\protected\admin\controllers\SiteController.php(98): SiteController->render()
+#4 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#5 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#6 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#7 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#8 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#10 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#11 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=site/login
+in D:\wamp\www\app\protected\admin\views\site\login.php (28)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (98)
+in D:\wamp\www\app\admin.php (13)
+2014/06/16 07:58:01 [error] [exception.ReflectionException] exception 'ReflectionException' with message 'Class admin/user does not exist' in D:\wamp\www\yii\framework\i18n\CPhpMessageSource.php:118
+Stack trace:
+#0 D:\wamp\www\yii\framework\i18n\CPhpMessageSource.php(118): ReflectionClass->__construct('admin/user')
+#1 D:\wamp\www\yii\framework\i18n\CPhpMessageSource.php(136): CPhpMessageSource->getMessageFile('admin/user.lang', 'zh_cn')
+#2 D:\wamp\www\yii\framework\i18n\CMessageSource.php(103): CPhpMessageSource->loadMessages('admin/user.lang', 'zh_cn')
+#3 D:\wamp\www\yii\framework\i18n\CMessageSource.php(85): CMessageSource->translateMessage('admin/user.lang', 'rememberMe', 'zh_cn')
+#4 D:\wamp\www\yii\framework\YiiBase.php(584): CMessageSource->translate('admin/user.lang', 'rememberMe', NULL)
+#5 D:\wamp\www\app\protected\models\LoginForm.php(39): YiiBase::t('admin/user.lang', 'rememberMe')
+#6 D:\wamp\www\yii\framework\base\CModel.php(333): LoginForm->attributeLabels()
+#7 D:\wamp\www\yii\framework\web\helpers\CHtml.php(1390): CModel->getAttributeLabel('username')
+#8 D:\wamp\www\yii\framework\web\helpers\CHtml.php(1415): CHtml::activeLabel(Object(LoginForm), 'username', Array)
+#9 D:\wamp\www\yii\framework\web\widgets\CActiveForm.php(597): CHtml::activeLabelEx(Object(LoginForm), 'username', Array)
+#10 D:\wamp\www\app\protected\admin\views\site\login.php(28): CActiveForm->labelEx(Object(LoginForm), 'username')
+#11 D:\wamp\www\yii\framework\web\CBaseController.php(126): require('D:\\wamp\\www\\app...')
+#12 D:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('D:\\wamp\\www\\app...', Array, true)
+#13 D:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('D:\\wamp\\www\\app...', Array, true)
+#14 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('login', Array, true)
+#15 D:\wamp\www\app\protected\admin\controllers\SiteController.php(98): CController->render('login', Array)
+#16 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#17 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#18 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#19 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('login')
+#21 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#22 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#23 D:\wamp\www\app\admin.php(13): CApplication->run()
+#24 {main}
+REQUEST_URI=/admin.php?r=site/login
+HTTP_REFERER=http://www.app.com/admin.php
+---
+2014/06/16 07:58:34 [error] [exception.CException] exception 'CException' with message 'Yii 应用程序只能被产生一次.' in D:\wamp\www\yii\framework\YiiBase.php:152
+Stack trace:
+#0 D:\wamp\www\yii\framework\base\CApplication.php(129): YiiBase::setApplication(Object(CWebApplication))
+#1 D:\wamp\www\yii\framework\YiiBase.php(125): CApplication->__construct('D:\\wamp\\www\\app...')
+#2 D:\wamp\www\yii\framework\YiiBase.php(98): YiiBase::createApplication('CWebApplication', 'D:\\wamp\\www\\app...')
+#3 D:\wamp\www\app\admin.php(13): YiiBase::createWebApplication('D:\\wamp\\www\\app...')
+#4 D:\wamp\www\yii\framework\YiiBase.php(427): include('D:\\wamp\\www\\app...')
+#5 [internal function]: YiiBase::autoload('admin')
+#6 [internal function]: spl_autoload_call('admin')
+#7 D:\wamp\www\yii\framework\i18n\CPhpMessageSource.php(118): ReflectionClass->__construct('admin')
+#8 D:\wamp\www\yii\framework\i18n\CPhpMessageSource.php(136): CPhpMessageSource->getMessageFile('admin.user', 'zh_cn')
+#9 D:\wamp\www\yii\framework\i18n\CMessageSource.php(103): CPhpMessageSource->loadMessages('admin.user', 'zh_cn')
+#10 D:\wamp\www\yii\framework\i18n\CMessageSource.php(85): CMessageSource->translateMessage('admin.user', 'rememberMe', 'zh_cn')
+#11 D:\wamp\www\yii\framework\YiiBase.php(584): CMessageSource->translate('admin.user', 'rememberMe', NULL)
+#12 D:\wamp\www\app\protected\models\LoginForm.php(39): YiiBase::t('admin.user', 'rememberMe')
+#13 D:\wamp\www\yii\framework\base\CModel.php(333): LoginForm->attributeLabels()
+#14 D:\wamp\www\yii\framework\web\helpers\CHtml.php(1390): CModel->getAttributeLabel('username')
+#15 D:\wamp\www\yii\framework\web\helpers\CHtml.php(1415): CHtml::activeLabel(Object(LoginForm), 'username', Array)
+#16 D:\wamp\www\yii\framework\web\widgets\CActiveForm.php(597): CHtml::activeLabelEx(Object(LoginForm), 'username', Array)
+#17 D:\wamp\www\app\protected\admin\views\site\login.php(28): CActiveForm->labelEx(Object(LoginForm), 'username')
+#18 D:\wamp\www\yii\framework\web\CBaseController.php(126): require('D:\\wamp\\www\\app...')
+#19 D:\wamp\www\yii\framework\web\CBaseController.php(95): CBaseController->renderInternal('D:\\wamp\\www\\app...', Array, true)
+#20 D:\wamp\www\yii\framework\web\CController.php(869): CBaseController->renderFile('D:\\wamp\\www\\app...', Array, true)
+#21 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('login', Array, true)
+#22 D:\wamp\www\app\protected\admin\controllers\SiteController.php(98): CController->render('login', Array)
+#23 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#24 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#25 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#26 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#27 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('login')
+#28 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#29 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#30 D:\wamp\www\app\admin.php(13): CApplication->run()
+#31 {main}
+REQUEST_URI=/admin.php?r=site/login
+HTTP_REFERER=http://www.app.com/admin.php
+---
+2014/06/16 08:39:24 [error] [php] Missing argument 1 for CModel::getError(), called in D:\wamp\www\yii\framework\base\CComponent.php on line 111 and defined (D:\wamp\www\yii\framework\base\CModel.php:371)
+Stack trace:
+#0 D:\wamp\www\yii\framework\base\CComponent.php(264): AdminLogModel->__get()
+#1 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(227): AdminLogModel->__call()
+#2 D:\wamp\www\app\protected\admin\models\LoginForm.php(78): AdminLogModel->__call()
+#3 D:\wamp\www\app\protected\admin\models\LoginForm.php(78): AdminLogModel->error()
+#4 D:\wamp\www\app\protected\admin\controllers\SiteController.php(94): LoginForm->login()
+#5 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#6 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#7 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#8 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#10 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#12 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=site/login
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (78)
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (78)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (94)
+2014/06/16 08:42:14 [error] [php] Array to string conversion (D:\wamp\www\app\protected\admin\models\LoginForm.php:78)
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#1 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#2 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#3 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#4 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#5 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#6 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=site/login
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (78)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (94)
+in D:\wamp\www\app\admin.php (13)
+2014/06/16 08:42:34 [error] [php] Array to string conversion (D:\wamp\www\app\protected\admin\models\LoginForm.php:79)
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#1 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#2 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#3 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#4 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#5 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#6 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=site/login
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (79)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (94)
+in D:\wamp\www\app\admin.php (13)
+2014/06/16 08:42:45 [error] [php] Array to string conversion (D:\wamp\www\app\protected\admin\models\LoginForm.php:79)
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#1 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#2 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#3 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#4 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#5 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#6 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=site/login
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (79)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (94)
+in D:\wamp\www\app\admin.php (13)
+2014/06/18 11:21:48 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'app.user' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `user`.
+in D:\wamp\www\app\protected\admin\components\UserIdentity.php (20)
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (54)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (94)
+2014/06/18 11:21:48 [error] [exception.CDbException] exception 'CDbException' with message '数据库中无法找到 active record class "UserModel" 对应的 table "user".' in D:\wamp\www\yii\framework\db\ar\CActiveRecord.php:2362
+Stack trace:
+#0 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(UserModel))
+#1 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(658): CActiveRecord->getMetaData()
+#2 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1350): CActiveRecord->getTableSchema()
+#3 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1456): CActiveRecord->query(Object(CDbCriteria))
+#4 D:\wamp\www\app\protected\admin\components\UserIdentity.php(20): CActiveRecord->find('username=:usern...', Array)
+#5 D:\wamp\www\app\protected\admin\models\LoginForm.php(54): UserIdentity->authenticate()
+#6 D:\wamp\www\yii\framework\validators\CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#7 D:\wamp\www\yii\framework\validators\CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#8 D:\wamp\www\yii\framework\base\CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#9 D:\wamp\www\app\protected\admin\controllers\SiteController.php(94): CModel->validate()
+#10 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#11 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#12 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#13 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('login')
+#15 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#16 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#17 D:\wamp\www\app\admin.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/admin.php?r=site/login
+HTTP_REFERER=http://www.app.com/admin.php?r=site/login
+---
+2014/06/18 11:22:06 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'app.user' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `user`.
+in D:\wamp\www\app\protected\admin\components\UserIdentity.php (20)
+in D:\wamp\www\app\protected\admin\models\LoginForm.php (54)
+in D:\wamp\www\app\protected\admin\controllers\SiteController.php (94)
+2014/06/18 11:22:06 [error] [exception.CDbException] exception 'CDbException' with message '数据库中无法找到 active record class "UserModel" 对应的 table "user".' in D:\wamp\www\yii\framework\db\ar\CActiveRecord.php:2362
+Stack trace:
+#0 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(411): CActiveRecordMetaData->__construct(Object(UserModel))
+#1 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(658): CActiveRecord->getMetaData()
+#2 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1350): CActiveRecord->getTableSchema()
+#3 D:\wamp\www\yii\framework\db\ar\CActiveRecord.php(1456): CActiveRecord->query(Object(CDbCriteria))
+#4 D:\wamp\www\app\protected\admin\components\UserIdentity.php(20): CActiveRecord->find('username=:usern...', Array)
+#5 D:\wamp\www\app\protected\admin\models\LoginForm.php(54): UserIdentity->authenticate()
+#6 D:\wamp\www\yii\framework\validators\CInlineValidator.php(42): LoginForm->authenticate('password', Array)
+#7 D:\wamp\www\yii\framework\validators\CValidator.php(213): CInlineValidator->validateAttribute(Object(LoginForm), 'password')
+#8 D:\wamp\www\yii\framework\base\CModel.php(159): CValidator->validate(Object(LoginForm), NULL)
+#9 D:\wamp\www\app\protected\admin\controllers\SiteController.php(94): CModel->validate()
+#10 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#11 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#12 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#13 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('login')
+#15 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#16 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#17 D:\wamp\www\app\admin.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/admin.php?r=site/login
+HTTP_REFERER=http://www.app.com/admin.php?r=site/login
+---
+2014/06/19 11:26:53 [error] [exception.CException] exception 'CException' with message '属性 "CWebApplication.oauthManager" 未被定义.' in D:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 D:\wamp\www\yii\framework\base\CModule.php(105): CComponent->__get('oauthManager')
+#1 D:\wamp\www\app\protected\admin\controllers\SiteController.php(30): CModule->__get('oauthManager')
+#2 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#3 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('index')
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/index')
+#8 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#9 D:\wamp\www\app\admin.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/admin.php?r=site/index
+HTTP_REFERER=http://www.app.com/admin.php?r=site/contact
+---
+2014/06/19 11:40:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:41:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:41:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:41:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:41:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:42:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:42:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem/...')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem/authitem
+---
+2014/06/19 11:45:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:47:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:47:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:47:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:47:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:47:42 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac/authitem"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac/authitem')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac/authitem
+---
+2014/06/19 11:48:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:49:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:49:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:49:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:49:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:49:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:50:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:50:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:51:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "test"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('test')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=test
+---
+2014/06/19 11:51:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "srbac"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('srbac')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=srbac
+---
+2014/06/19 11:52:29 [error] [php] include(Users.php): failed to open stream: No such file or directory (D:\wamp\www\yii\framework\YiiBase.php:427)
+Stack trace:
+#0 D:\wamp\www\app\protected\modules\srbac\SrbacModule.php(277): spl_autoload_call()
+#1 D:\wamp\www\app\protected\modules\srbac\views\authitem\assignments.php(40): SrbacModule->getUserModel()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#3 D:\wamp\www\yii\framework\web\CBaseController.php(95): AuthitemController->renderInternal()
+#4 D:\wamp\www\yii\framework\web\CController.php(869): AuthitemController->renderFile()
+#5 D:\wamp\www\yii\framework\web\CController.php(782): AuthitemController->renderPartial()
+#6 D:\wamp\www\app\protected\modules\srbac\controllers\AuthitemController.php(627): AuthitemController->render()
+#7 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): AuthitemController->actionAssignments()
+#8 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#9 D:\wamp\www\yii\framework\web\CController.php(286): AuthitemController->runAction()
+#10 D:\wamp\www\yii\framework\web\CController.php(265): AuthitemController->runActionWithFilters()
+#11 D:\wamp\www\yii\framework\web\CWebApplication.php(282): AuthitemController->run()
+#12 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#13 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#14 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=srbac/authitem/assignments
+in D:\wamp\www\app\protected\modules\srbac\SrbacModule.php (277)
+in D:\wamp\www\app\protected\modules\srbac\views\authitem\assignments.php (40)
+in D:\wamp\www\app\protected\modules\srbac\controllers\AuthitemController.php (627)
+2014/06/19 11:52:58 [error] [php] include(Users.php): failed to open stream: No such file or directory (D:\wamp\www\yii\framework\YiiBase.php:427)
+Stack trace:
+#0 D:\wamp\www\app\protected\modules\srbac\SrbacModule.php(277): spl_autoload_call()
+#1 D:\wamp\www\app\protected\modules\srbac\views\authitem\tabViews\roleToUser.php(41): SrbacModule->getUserModel()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#3 D:\wamp\www\yii\framework\web\CBaseController.php(95): AuthitemController->renderInternal()
+#4 D:\wamp\www\yii\framework\web\CController.php(869): AuthitemController->renderFile()
+#5 D:\wamp\www\yii\framework\web\widgets\CTabView.php(217): AuthitemController->renderPartial()
+#6 D:\wamp\www\yii\framework\web\widgets\CTabView.php(149): CTabView->renderBody()
+#7 D:\wamp\www\yii\framework\web\CBaseController.php(173): CTabView->run()
+#8 D:\wamp\www\app\protected\modules\srbac\views\authitem\assign.php(57): AuthitemController->widget()
+#9 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#10 D:\wamp\www\yii\framework\web\CBaseController.php(95): AuthitemController->renderInternal()
+#11 D:\wamp\www\yii\framework\web\CController.php(869): AuthitemController->renderFile()
+#12 D:\wamp\www\yii\framework\web\CController.php(782): AuthitemController->renderPartial()
+#13 D:\wamp\www\app\protected\modules\srbac\controllers\AuthitemController.php(221): AuthitemController->render()
+#14 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): AuthitemController->actionAssign()
+#15 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#16 D:\wamp\www\yii\framework\web\CController.php(286): AuthitemController->runAction()
+#17 D:\wamp\www\yii\framework\web\CController.php(265): AuthitemController->runActionWithFilters()
+#18 D:\wamp\www\yii\framework\web\CWebApplication.php(282): AuthitemController->run()
+#19 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#20 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#21 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=srbac/authitem/assign
+in D:\wamp\www\app\protected\modules\srbac\SrbacModule.php (277)
+in D:\wamp\www\app\protected\modules\srbac\views\authitem\tabViews\roleToUser.php (41)
+in D:\wamp\www\app\protected\modules\srbac\views\authitem\assign.php (57)
+2014/06/19 11:53:03 [error] [php] include(Users.php): failed to open stream: No such file or directory (D:\wamp\www\yii\framework\YiiBase.php:427)
+Stack trace:
+#0 D:\wamp\www\app\protected\modules\srbac\SrbacModule.php(277): spl_autoload_call()
+#1 D:\wamp\www\app\protected\modules\srbac\views\authitem\tabViews\roleToUser.php(41): SrbacModule->getUserModel()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#3 D:\wamp\www\yii\framework\web\CBaseController.php(95): AuthitemController->renderInternal()
+#4 D:\wamp\www\yii\framework\web\CController.php(869): AuthitemController->renderFile()
+#5 D:\wamp\www\yii\framework\web\widgets\CTabView.php(217): AuthitemController->renderPartial()
+#6 D:\wamp\www\yii\framework\web\widgets\CTabView.php(149): CTabView->renderBody()
+#7 D:\wamp\www\yii\framework\web\CBaseController.php(173): CTabView->run()
+#8 D:\wamp\www\app\protected\modules\srbac\views\authitem\assign.php(57): AuthitemController->widget()
+#9 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#10 D:\wamp\www\yii\framework\web\CBaseController.php(95): AuthitemController->renderInternal()
+#11 D:\wamp\www\yii\framework\web\CController.php(869): AuthitemController->renderFile()
+#12 D:\wamp\www\yii\framework\web\CController.php(782): AuthitemController->renderPartial()
+#13 D:\wamp\www\app\protected\modules\srbac\controllers\AuthitemController.php(221): AuthitemController->render()
+#14 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): AuthitemController->actionAssign()
+#15 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#16 D:\wamp\www\yii\framework\web\CController.php(286): AuthitemController->runAction()
+#17 D:\wamp\www\yii\framework\web\CController.php(265): AuthitemController->runActionWithFilters()
+#18 D:\wamp\www\yii\framework\web\CWebApplication.php(282): AuthitemController->run()
+#19 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#20 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#21 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=srbac/authitem/assign
+in D:\wamp\www\app\protected\modules\srbac\SrbacModule.php (277)
+in D:\wamp\www\app\protected\modules\srbac\views\authitem\tabViews\roleToUser.php (41)
+in D:\wamp\www\app\protected\modules\srbac\views\authitem\assign.php (57)
+2014/06/19 11:53:22 [error] [php] include(Users.php): failed to open stream: No such file or directory (D:\wamp\www\yii\framework\YiiBase.php:427)
+Stack trace:
+#0 D:\wamp\www\app\protected\modules\srbac\SrbacModule.php(277): spl_autoload_call()
+#1 D:\wamp\www\app\protected\modules\srbac\views\authitem\tabViews\roleToUser.php(41): SrbacModule->getUserModel()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#3 D:\wamp\www\yii\framework\web\CBaseController.php(95): AuthitemController->renderInternal()
+#4 D:\wamp\www\yii\framework\web\CController.php(869): AuthitemController->renderFile()
+#5 D:\wamp\www\yii\framework\web\widgets\CTabView.php(217): AuthitemController->renderPartial()
+#6 D:\wamp\www\yii\framework\web\widgets\CTabView.php(149): CTabView->renderBody()
+#7 D:\wamp\www\yii\framework\web\CBaseController.php(173): CTabView->run()
+#8 D:\wamp\www\app\protected\modules\srbac\views\authitem\assign.php(57): AuthitemController->widget()
+#9 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#10 D:\wamp\www\yii\framework\web\CBaseController.php(95): AuthitemController->renderInternal()
+#11 D:\wamp\www\yii\framework\web\CController.php(869): AuthitemController->renderFile()
+#12 D:\wamp\www\yii\framework\web\CController.php(782): AuthitemController->renderPartial()
+#13 D:\wamp\www\app\protected\modules\srbac\controllers\AuthitemController.php(221): AuthitemController->render()
+#14 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): AuthitemController->actionAssign()
+#15 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#16 D:\wamp\www\yii\framework\web\CController.php(286): AuthitemController->runAction()
+#17 D:\wamp\www\yii\framework\web\CController.php(265): AuthitemController->runActionWithFilters()
+#18 D:\wamp\www\yii\framework\web\CWebApplication.php(282): AuthitemController->run()
+#19 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#20 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#21 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=srbac/authitem/assign
+in D:\wamp\www\app\protected\modules\srbac\SrbacModule.php (277)
+in D:\wamp\www\app\protected\modules\srbac\views\authitem\tabViews\roleToUser.php (41)
+in D:\wamp\www\app\protected\modules\srbac\views\authitem\assign.php (57)
+2014/06/19 11:53:36 [error] [php] include(Users.php): failed to open stream: No such file or directory (D:\wamp\www\yii\framework\YiiBase.php:427)
+Stack trace:
+#0 D:\wamp\www\app\protected\modules\srbac\SrbacModule.php(277): spl_autoload_call()
+#1 D:\wamp\www\app\protected\modules\srbac\views\authitem\assignments.php(40): SrbacModule->getUserModel()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#3 D:\wamp\www\yii\framework\web\CBaseController.php(95): AuthitemController->renderInternal()
+#4 D:\wamp\www\yii\framework\web\CController.php(869): AuthitemController->renderFile()
+#5 D:\wamp\www\yii\framework\web\CController.php(782): AuthitemController->renderPartial()
+#6 D:\wamp\www\app\protected\modules\srbac\controllers\AuthitemController.php(627): AuthitemController->render()
+#7 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): AuthitemController->actionAssignments()
+#8 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#9 D:\wamp\www\yii\framework\web\CController.php(286): AuthitemController->runAction()
+#10 D:\wamp\www\yii\framework\web\CController.php(265): AuthitemController->runActionWithFilters()
+#11 D:\wamp\www\yii\framework\web\CWebApplication.php(282): AuthitemController->run()
+#12 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#13 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#14 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=srbac/authitem/assignments
+in D:\wamp\www\app\protected\modules\srbac\SrbacModule.php (277)
+in D:\wamp\www\app\protected\modules\srbac\views\authitem\assignments.php (40)
+in D:\wamp\www\app\protected\modules\srbac\controllers\AuthitemController.php (627)
+2014/06/19 12:11:45 [error] [php] Undefined variable: list (D:\wamp\www\app\protected\admin\views\adminLog\index.php:10)
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(869): AdminLogController->renderFile()
+#1 D:\wamp\www\yii\framework\web\CController.php(782): AdminLogController->renderPartial()
+#2 D:\wamp\www\app\protected\admin\controllers\AdminLogController.php(8): AdminLogController->render()
+#3 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): AdminLogController->actionIndex()
+#4 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 D:\wamp\www\yii\framework\web\CController.php(286): AdminLogController->runAction()
+#6 D:\wamp\www\yii\framework\web\CController.php(265): AdminLogController->runActionWithFilters()
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(282): AdminLogController->run()
+#8 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#10 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php?r=adminlog/index
+in D:\wamp\www\app\protected\admin\views\adminLog\index.php (10)
+in D:\wamp\www\app\protected\admin\controllers\AdminLogController.php (8)
+in D:\wamp\www\app\admin.php (13)
+2014/06/19 12:17:47 [error] [exception.CException] exception 'CException' with message '属性 "LoginForm.uid" 未被定义.' in D:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\models\LoginForm.php(74): CComponent->__get('uid')
+#1 D:\wamp\www\app\protected\admin\controllers\SiteController.php(94): LoginForm->login()
+#2 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#3 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('login')
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#8 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#9 D:\wamp\www\app\admin.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/admin.php?r=site/login
+HTTP_REFERER=http://www.app.com/admin.php?r=site/login
+---
+2014/06/19 12:18:00 [error] [exception.CException] exception 'CException' with message '属性 "LoginForm.id" 未被定义.' in D:\wamp\www\yii\framework\base\CComponent.php:130
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\models\LoginForm.php(74): CComponent->__get('id')
+#1 D:\wamp\www\app\protected\admin\controllers\SiteController.php(94): LoginForm->login()
+#2 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionLogin()
+#3 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('login')
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('site/login')
+#8 D:\wamp\www\yii\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#9 D:\wamp\www\app\admin.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/admin.php?r=site/login
+HTTP_REFERER=http://www.app.com/admin.php?r=site/login
+---

@@ -36,7 +36,9 @@ class LoginForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'rememberMe'=>'Remember me next time',
+            'username'=>Yii::t('common','username'),
+            'password'=>Yii::t('common','password'),
+			'rememberMe'=>Yii::t('common','rememberMe'),
 		);
 	}
 
@@ -68,6 +70,11 @@ class LoginForm extends CFormModel
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
 		{
 			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
+            $log = new AdminLogModel;
+            $log->username = $this->username;
+            $log->content = Yii::t('admin/user',"{username} login system",array('username'=>$this->username));
+            $log->datetime = time();
+            $log->save();
 			Yii::app()->user->login($this->_identity,$duration);
 			return true;
 		}

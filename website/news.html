@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>时事新闻</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script type="application/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="application/javascript" src="js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row text-center"><h1>时事新闻系统</h1></div>
+    <div class="row">
+        <div class="col-xs-5 text-right">请输入你要查询的新闻</div>
+        <div class="col-xs-3 text-left"><input type="text" id="search" class="form-control"></div>
+        <div class="col-xs-4 text-left"><input type="button" value="确定" class="btn" id="button"></div>
+    </div>
+    <div class="row text-center" id="content">
+	</div>
+
+</div>
+<script>
+    $(document).ready(function(){
+        $("#button").click(function(){
+           var search = $("#search").val();
+            var url ="news.php"
+            $.get(url ,function(response,status,xhr) {
+			var results = resopnse.results;
+			if(results){
+				var html;
+				for(var n in results){
+					html +=results[n].html;
+				};
+				$("#content").html(html);
+			};
+			});
+        });
+    });
+</script>
+</body>
+</html>

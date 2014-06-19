@@ -19,6 +19,7 @@ return array(
     'viewPath' => $backend.'/views',
     'runtimePath' => $backend.'/runtime',
 	'name'=>'My Web Application',
+    'language'=>'zh_cn',
 
 	// preloading 'log' component
 	'preload'=>array('log'),
