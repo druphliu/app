@@ -68,10 +68,11 @@ class LoginForm extends CFormModel
         if ($this->_identity->errorCode === UserIdentity::ERROR_NONE) {
             $duration = $this->rememberMe ? 3600 * 24 * 30 : 0; // 30 days
             Yii::app()->user->login($this->_identity, $duration);
-            $UserInfo = MemberModel::model()->find('username=:username', array(':username' => $this->username));
+            $userInfo = MemberModel::model()->find('username=:username', array(':username' => $this->username));
+            Yii::app()->session['userInfo'] = array('uid'=>$userInfo->uid,'username'=>$userInfo->username,'nickname'=>$userInfo->nickname,'group_id'=>$userInfo->group_id);
             $log = new LogModel();
-            $log->uid = $UserInfo->uid;
-            $log->content = Yii::t('admin/user', "{nickname} login system", array('nickname' => $UserInfo->nickname ? $UserInfo->nickname : $UserInfo->username));
+            $log->uid = $userInfo->uid;
+            $log->content = Yii::t('admin/user', "{nickname} login system", array('nickname' => $userInfo->nickname ? $userInfo->nickname : $userInfo->username));
             $log->datetime = time();
             $log->save();
             return true;
