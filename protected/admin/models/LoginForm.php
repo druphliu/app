@@ -76,6 +76,12 @@ class LoginForm extends CFormModel
             $log->datetime = time();
             $log->save();
 			Yii::app()->user->login($this->_identity,$duration);
+            $UserInfo = MemberModel::model()->find('username=:username',array(':username'=>$this->username));
+            $log = new LogModel();
+            $log->uid=$UserInfo->uid;
+            $log->content=$UserInfo->nickname."登陆了系统";
+            $log->datetime = time();
+            $log->save();
 			return true;
 		}
 		else
