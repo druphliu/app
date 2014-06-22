@@ -4,7 +4,24 @@ class GroupController extends Controller
 {
 	public function actionCreate()
 	{
-		$this->render('create');
+        $model = new GroupModel();
+        if(isset($_POST['GroupModel']))
+        {
+            // 收集用户输入的数据
+            $model->attributes=$_POST['GroupModel'];
+            if($model->validate()){
+//                print_r($this);
+            }
+        }
+        $menuList = AdminMenu::$menuList;
+        foreach($menuList as $k=>$m){
+            $mainMenu = array($m['act']=>$k);
+            foreach($m['action'] as $act){
+                $subMain['action'][] = array($act['act']=>$act['name']);
+            }
+            $action[]=array_merge($mainMenu,$subMain);
+        }
+		$this->render('create',array('model'=>$model,'action'=>$action));
 	}
 
 	public function actionIndex()

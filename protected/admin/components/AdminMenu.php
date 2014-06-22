@@ -8,9 +8,10 @@
 
 class AdminMenu {
     public static $menuList = array(
-        '系统设置','controller'=>'setting','act'=>'setting','action'=>array(
-
-        )
+        '系统设置'=>array('controller'=>'setting', 'url'=>'default/home','act'=>'setting','action'=>array(
+            array('name'=>'系统首页','url'=>'default/home','act'=>'home_index','list_acl'=>array()),
+            array('name'=>'站点设置','url'=>'default/setting','act'=>'home_setting','list_acl'=>array()),
+        ))
     );
     public static function GetUserMenu(){
         $userInfo = Yii::app()->session['userInfo'];
