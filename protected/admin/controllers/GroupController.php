@@ -11,7 +11,7 @@ class GroupController extends Controller
             $model->attributes=$_POST['GroupModel'];
             if($model->validate()){
 				$model->save();
-				$this->redirect(Yii::app()->createUrl('/group/index'));
+				$this->redirect(array('index'));
             }
         }
 		$this->render('create',array('model'=>$model));
@@ -31,7 +31,7 @@ class GroupController extends Controller
 			$model->attributes=$_POST['GroupModel'];
 			if($model->validate()){
 					$model->save();
-					$this->redirect(Yii::app()->createUrl('/group/index'));
+					$this->redirect(array('index'));
 				}
 		}
 		$this->render('update',array('model'=>$model));
@@ -41,7 +41,7 @@ class GroupController extends Controller
 	{
 		$model = GroupModel::model()->findByPk($id);
 		$model->delete();
-		$this->redirect(Yii::app()->createUrl('/group/index'));
+		$this->redirect(array('index'));
 		
 	}
 	
