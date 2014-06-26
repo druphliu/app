@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 <div><a href="<?= Yii::app()->createUrl('/group/create')?>">添加</a></div>
 <div><span>ID</span><span>name</span><span>操作</span></div>
 <?php foreach($data as $d){?>
-    <div><span><?=$d->group_id?></span><span><?=$d->name?></span><span><a href="<?= Yii::app()->createUrl('/group/update/'.$d->group_id)?>">编辑</a>|<a href="<?= Yii::app()->createUrl('/group/delete/'.$d->group_id)?>">删除</a> </span></div>
+    <div><span><?=$d->group_id?></span><span><?=$d->name?></span><span><a href="<?= Yii::app()->createUrl('/group/update/id/'.$d->group_id)?>">编辑</a>|<a onclick="return confirm('确认删除？')" href="<?= Yii::app()->createUrl('/group/delete/id/'.$d->group_id)?>">删除</a> </span></div>
 <?php }?>
 <p>
 	You may change the content of this page by modifying

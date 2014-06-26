@@ -10,18 +10,11 @@ class GroupController extends Controller
             // 收集用户输入的数据
             $model->attributes=$_POST['GroupModel'];
             if($model->validate()){
-//                print_r($this);
+				$model->save();
+				$this->redirect(Yii::app()->createUrl('/group/index'));
             }
         }
-        $menuList = AdminMenu::$menuList;
-        foreach($menuList as $k=>$m){
-            $mainMenu = array($m['act']=>$k);
-            foreach($m['action'] as $act){
-                $subMain['action'][] = array($act['act']=>$act['name']);
-            }
-            $action[]=array_merge($mainMenu,$subMain);
-        }
-		$this->render('create',array('model'=>$model,'action'=>$action));
+		$this->render('create',array('model'=>$model));
 	}
 
 	public function actionIndex()
@@ -30,11 +23,28 @@ class GroupController extends Controller
 		$this->render('index',array('data'=>$data));
 	}
 
-	public function actionUpdate()
+	public function actionUpdate($id)
 	{
-		$this->render('update');
+		$model = GroupModel::model()->findByPk($id);
+		if(isset($_POST['GroupModel']))
+        {
+			$model->attributes=$_POST['GroupModel'];
+			if($model->validate()){
+					$model->save();
+					$this->redirect(Yii::app()->createUrl('/group/index'));
+				}
+		}
+		$this->render('update',array('model'=>$model));
 	}
-
+	
+	public function actionDelete($id)
+	{
+		$model = GroupModel::model()->findByPk($id);
+		$model->delete();
+		$this->redirect(Yii::app()->createUrl('/group/index'));
+		
+	}
+	
 	// Uncomment the following methods and override them if needed
 	/*
 	public function filters()
