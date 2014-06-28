@@ -19,6 +19,7 @@ class GroupController extends Controller
 
 	public function actionIndex()
 	{
+        $this->layout = '//layouts/list';
         $data = GroupModel::model()->findAll();
 		$this->render('index',array('data'=>$data));
 	}

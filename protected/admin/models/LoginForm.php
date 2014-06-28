@@ -71,7 +71,7 @@ class LoginForm extends CFormModel
             $userInfo = MemberModel::model()->find('username=:username', array(':username' => $this->username));
             Yii::app()->session['userInfo'] = array('uid'=>$userInfo->uid,'username'=>$userInfo->username,'nickname'=>$userInfo->nickname,'group_id'=>$userInfo->group_id);
             $log = new LogModel();
-            $log->uid = $userInfo->uid;
+            $log->username = $userInfo->username;
             $log->content = Yii::t('admin/user', "{nickname} login system", array('nickname' => $userInfo->nickname ? $userInfo->nickname : $userInfo->username));
             $log->datetime = time();
             $log->save();

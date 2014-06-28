@@ -38,7 +38,7 @@ class GroupModel extends CActiveRecord
 		return array(
 			array('name, action', 'required'),
 			array('name', 'length', 'max'=>60),
-			array('action', 'length', 'max'=>100),
+			array('action', 'length', 'max'=>300),
 			array('name', 'unique', 'message'=>'该记录存在'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

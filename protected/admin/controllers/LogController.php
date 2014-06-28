@@ -4,6 +4,7 @@ class LogController extends Controller
 {
 	public function actionIndex()
 	{
+        $this->layout = "//layouts/list";
         $list = LogModel::model()->findAll(array('order'=>'datetime desc'));
 		$this->render('index',array('list'=>$list));
 	}

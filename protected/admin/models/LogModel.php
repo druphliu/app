@@ -37,11 +37,11 @@ class LogModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('uid, content, datetime', 'required'),
-			array('uid, datetime', 'numerical', 'integerOnly'=>true),
+			array('username, content, datetime', 'required'),
+			array('username, datetime', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, uid, content, datetime', 'safe', 'on'=>'search'),
+			array('id, username, content, datetime', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,7 +63,7 @@ class LogModel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'uid' => 'Uid',
+			'username' => 'username',
 			'content' => 'Content',
 			'datetime' => 'Datetime',
 		);
@@ -81,7 +81,7 @@ class LogModel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('uid',$this->uid);
+		$criteria->compare('username',$this->username);
 		$criteria->compare('content',$this->content,true);
 		$criteria->compare('datetime',$this->datetime);
 
