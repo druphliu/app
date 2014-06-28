@@ -3,7 +3,7 @@
 
 $this->pageTitle=Yii::app()->name;
 $this->breadcrumbs=array(
-    array('name' => 'Home', 'url' => array('site/index'))
+    array('name' => '首页', 'url' => array('site/index'))
 );
 ?>
 

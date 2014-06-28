@@ -4,7 +4,8 @@
 
 $this->pageTitle=Yii::app()->name . ' - Error';
 $this->breadcrumbs=array(
-	'Error',
+    array('name' => '首页', 'url' => array('site/index')),
+    array('name' => '错误'),
 );
 ?>
 
