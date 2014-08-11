@@ -69,7 +69,7 @@ return array(
 		// uncomment the following to use a MySQL database
 
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=app',
+			'connectionString' => 'mysql:host=localhost;dbname=wechat',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => '',

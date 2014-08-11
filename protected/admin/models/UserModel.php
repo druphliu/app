@@ -19,7 +19,7 @@ class UserModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'user';
+		return 'admin_user';
 	}
 
 	/**
