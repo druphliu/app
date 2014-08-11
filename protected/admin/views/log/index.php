@@ -38,7 +38,7 @@ $this->breadcrumbs=array(
 
     <tbody>
 
-        <?php foreach($list as $l){?>
+        <?php foreach($data as $l){?>
         <tr>
             <td class="center">
                 <label>
@@ -50,14 +50,14 @@ $this->breadcrumbs=array(
                 <?=$l['username']?>
             </td>
             <td>
-                <?=$l['content']?>
+                <?=$l['description']?>
             </td>
             <td>
-                <?=date('Y-m-d H:i:s',$l->datetime)?>
+                <?=$l['created_at']?>
             </td>
             <td>
                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-                    <button class="btn btn-xs btn-danger">
+                    <button class="btn btn-xs btn-danger bootbox-confirm" rel="<?= Yii::app()->createUrl('/log/delete/id/' . $l['id']) ?>">
                         <i class="icon-trash bigger-120"></i>
                     </button>
                 </div>
@@ -77,13 +77,7 @@ $this->breadcrumbs=array(
     </div>
     <div class="col-sm-6">
         <div class="dataTables_paginate paging_bootstrap">
-            <ul class="pagination">
-                <li class="prev disabled"><a href="#"><i class="icon-double-angle-left"></i></a></li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li class="next"><a href="#"><i class="icon-double-angle-right"></i></a></li>
-            </ul>
+            <?php $this->widget('CLinkPager', Page::go($pages)) ?>
         </div>
     </div>
 </div>

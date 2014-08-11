@@ -1,22 +1,32 @@
 <?php
 
-class LogController extends Controller
+class UserController extends Controller
 {
 	public function actionIndex()
 	{
-        $this->layout = "//layouts/list";
-        $dataProvider = new CActiveDataProvider('ActiveRecordLog', array(
+        $dataProvider = new CActiveDataProvider('UserModel', array(
             'criteria' => array(
-                'order' => 'created_at desc',
+                'order' => 'uid desc',
             ),
             //'pagination' => false,
             'pagination' => array(
                 'pageSize' => Page::SIZE,
             ),
         ));
-        $this->render('index', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination()));
+        $this->render('index', array('data' => $dataProvider->getData(),'pages'=>$dataProvider->getPagination()));
 	}
 
+    public function actionProfile(){
+        $model = UserModel::model()->find(array('condition'=>'username=:username','params'=>array(':username'=>Yii::app()->user->id)));
+        if (isset($_POST['UserModel'])) {
+            $model->attributes = $_POST['UserModel'];
+            if ($model->validate()) {
+                $model->save();
+                $this->redirect(array('group/user'));
+            }
+        }
+        $this->render('/user/profile',array('model'=>$model));
+    }
 	// Uncomment the following methods and override them if needed
 	/*
 	public function filters()

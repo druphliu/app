@@ -3,8 +3,34 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title><?php echo CHtml::encode($this->pageTitle); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--js-->
+    <!-- basic scripts -->
+
+    <!--[if !IE]> -->
+
+    <script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-2.0.3.min.js'></script>
+
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+    <script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-1.10.2.min.js'></script>
+    <![endif]-->
+
+    <!--[if !IE]> -->
+
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+    </script>
+
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+    </script>
+    <![endif]-->
+
     <!-- basic styles -->
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/assets/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets/css/font-awesome.min.css" />
@@ -41,6 +67,7 @@
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/html5shiv.js"></script>
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/respond.min.js"></script>
     <![endif]-->
+    <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
 <body>
@@ -290,7 +317,7 @@
         </li>
 
         <li>
-            <a href="#">
+            <a href="<?=Yii::app()->createUrl('user/profile')?>">
                 <i class="icon-user"></i>
                 个人资料
             </a>
@@ -454,32 +481,6 @@
 </a>
 </div><!-- /.main-container -->
 
-<!-- basic scripts -->
-
-<!--[if !IE]> -->
-
-<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-2.0.3.min.js'></script>
-
-<!-- <![endif]-->
-
-<!--[if IE]>
-<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-1.10.2.min.js'></script>
-<![endif]-->
-
-<!--[if !IE]> -->
-
-<script type="text/javascript">
-    window.jQuery || document.write("<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");
-</script>
-
-<!-- <![endif]-->
-
-<!--[if IE]>
-<script type="text/javascript">
-    window.jQuery || document.write("<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
-</script>
-<![endif]-->
-
 <script type="text/javascript">
     if("ontouchend" in document) document.write("<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
 </script>
@@ -507,7 +508,5 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/ace.min.js"></script>
 
 <!-- inline scripts related to this page -->
-
-
 </body>
 </html>

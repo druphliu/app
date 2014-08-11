@@ -6,8 +6,15 @@ $this->breadcrumbs=array(
     array('name' => '创建用户组'),
 );
 ?>
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
-<p>
-    You may change the content of this page by modifying
-    the file <tt><?php echo __FILE__; ?></tt>.
-</p>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            创建用户组
+            <small>
+                <i class="icon-double-angle-right"></i>
+
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+</div>

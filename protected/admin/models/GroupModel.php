@@ -64,8 +64,8 @@ class GroupModel extends CActiveRecord
 	{
 		return array(
 			'group_id' => 'Group',
-			'name' => 'Name',
-			'action' => 'Action',
+			'name' => '名称',
+			'action' => '权限',
 		);
 	}
 
@@ -88,4 +88,13 @@ class GroupModel extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function behaviors()
+    {
+        return array(
+            // 行为类名 => 类文件别名路径
+            'ActiveRecordLogableBehavior'=>
+                'backend.behaviors.ActiveRecordLogableBehavior',
+        );
+    }
 }

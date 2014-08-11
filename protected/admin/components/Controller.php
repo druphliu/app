@@ -26,7 +26,7 @@ class Controller extends CController
         if(Yii::app()->user->isGuest){
             $this->redirect(array('site/login'));
         }else{
-            $userInfo = MemberModel::model()->find('username=:username', array(':username' => Yii::app()->user->name));
+            $userInfo = UserModel::model()->find('username=:username', array(':username' => Yii::app()->user->name));
             Yii::app()->session['userInfo'] = array('uid'=>$userInfo->uid,'username'=>$userInfo->username,'nickname'=>$userInfo->nickname,'group_id'=>$userInfo->group_id);
         }
     }

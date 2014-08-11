@@ -6,11 +6,15 @@ $this->breadcrumbs=array(
     array('name' => '更新用户组'),
 );
 ?>
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
-
-<h1><?php echo $this->id . '/' . $this->action->id; ?></h1>
-
-<p>
-	You may change the content of this page by modifying
-	the file <tt><?php echo __FILE__; ?></tt>.
-</p>
+<div class="page-content">
+<div class="page-header">
+    <h1>
+        编辑用户组
+        <small>
+            <i class="icon-double-angle-right"></i>
+            <?=$model->name?>
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+    <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+</div>
