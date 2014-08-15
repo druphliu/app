@@ -44,7 +44,7 @@ class AdminMenu extends CWidget{
     }
 
     public function run() {
-        $this->menus = AdminMenu::GetUserMenu();
+        $this->menus = MemberMenu::GetUserMenu();
 //        foreach($menu as $name=>$m){
 //            $menuArray[] = array('label'=>$name,'url'=>array($m['url']));
 //        }

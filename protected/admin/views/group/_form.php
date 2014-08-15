@@ -21,7 +21,7 @@
             <?php echo $form->labelEx($model, 'action', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-9">
                 <?php $actions = explode(',', $model->action);
-                foreach (AdminMenu::$menuList as $name => $menu) {
+                foreach (MemberMenu::$menuList as $name => $menu) {
                     ?>
                 <fieldset style="margin:30px; border-radius:5px">
                 <legend>
