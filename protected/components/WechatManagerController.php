@@ -13,6 +13,8 @@ class WechatManagerController extends MemberController{
      * @var array context menu items. This property will be assigned to {@link CMenu::items}.
      */
     public $menu=array();
+
+    public $wechatId;
     /**
      * @var array the breadcrumbs of the current page. The value of this property will
      * be assigned to {@link CBreadcrumbs::links}. Please refer to {@link CBreadcrumbs::links}
@@ -32,7 +34,6 @@ class WechatManagerController extends MemberController{
             Yii::app()->session['group'] = $group;
             Yii::app()->session['userInfo'] = array('uid'=>$userInfo->uid,'username'=>$userInfo->username,'nickname'=>$userInfo->nickname,'lv'=>$userInfo->lv,'groupId'=>$userInfo->groupId);
             //检查权限
-
         }
     }
 

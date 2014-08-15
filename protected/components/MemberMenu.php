@@ -45,12 +45,13 @@ class MemberMenu extends CWidget
     {
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
+        $wechatId = Yii::app()->request->getParam('id');
         if ($controllerId == 'wechat') {
             $menuList = self::$userMenu;
         } else if ($controllerId == 'manager') {
             $userInfo = Yii::app()->session['userInfo'];
-            $groupInfo = GroupModel::model()->find(array('condition' => 'lv=:lv', 'params' => array('lv' => $userInfo['lv'])));
-            $actionArray = explode(',', $groupInfo->action);
+            $group = Yii::app()->session['group'];
+            $actionArray = explode(',', $group[$userInfo['groupId']]->action);
             $menuList = self::$menuList;
             foreach ($menuList as $k => $m) {
                 if (!in_array($m['act'], $actionArray)) {
