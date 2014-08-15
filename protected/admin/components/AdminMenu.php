@@ -9,7 +9,7 @@
 class AdminMenu extends CWidget{
     public $menus;
     public static $menuList = array(
-        '设置'=>array('controller'=>'setting', 'act'=>'setting','class'=>'icon-dashboard','action'=>array(
+        '设置'=>array('controller'=>'setting', 'act'=>'setting','class'=>'fa fa-dashboard','action'=>array(
             array('name'=>'系统设置','url'=>'setting/system','act'=>'setting_system','list_acl'=>array()),
             array('name'=>'基本信息','url'=>'setting/base','act'=>'setting_base','list_acl'=>array()),
 			array('name'=>'Email','url'=>'setting/email','act'=>'setting_email','list_acl'=>array()),
@@ -44,7 +44,7 @@ class AdminMenu extends CWidget{
     }
 
     public function run() {
-        $this->menus = MemberMenu::GetUserMenu();
+        $this->menus = AdminMenu::GetUserMenu();
 //        foreach($menu as $name=>$m){
 //            $menuArray[] = array('label'=>$name,'url'=>array($m['url']));
 //        }

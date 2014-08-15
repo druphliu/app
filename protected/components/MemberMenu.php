@@ -10,10 +10,11 @@ class MemberMenu extends CWidget
 {
     public $menus;
     public static $menuList = array(
-        '设置' => array('controller' => 'setting', 'act' => 'setting', 'class' => 'icon-dashboard', 'action' => array(
-            array('name' => '系统设置', 'url' => 'setting/system', 'act' => 'setting_system', 'list_acl' => array()),
-            array('name' => '基本信息', 'url' => 'setting/base', 'act' => 'setting_base', 'list_acl' => array()),
-            array('name' => 'Email', 'url' => 'setting/email', 'act' => 'setting_email', 'list_acl' => array()),
+        '基础设置' => array('controller' => 'manager', 'act' => 'manager', 'class' => 'fa fa-gears', 'action' => array(
+            array('name' => '功能管理', 'url' => 'manager/index', 'act' => 'manager_index', 'list_acl' => array()),
+            array('name' => '关注回复', 'url' => 'manager/autoReplay', 'act' => 'manager_autoReplay', 'list_acl' => array()),
+            array('name' => '关键词回复', 'url' => 'manager/keyWords', 'act' => 'manager_keyWords', 'list_acl' => array()),
+            array('name' => '语音回复', 'url' => 'manager/voiceReplay', 'act' => 'manager_voiceReplay', 'list_acl' => array()),
         )),
         '系统管理员' => array('controller' => 'group', 'act' => 'group', 'class' => 'icon-group', 'action' => array(
             array('name' => '系统管理组', 'url' => 'group/index', 'act' => 'group_index', 'list_acl' => array()),
@@ -27,11 +28,12 @@ class MemberMenu extends CWidget
         ))
     );
     private static $userMenu = array(
-        '公号管理' => array('controller' => 'user', 'act' => 'index', 'class' => 'fa fa-weixin', 'action' => array(
-            array('name' => '我的公号', 'url' => 'user/wechat', 'act' => 'user_wechat', 'list_acl' => array()),
+        '公号管理' => array('controller' => 'wechat', 'act' => 'index', 'class' => 'fa fa-weixin', 'action' => array(
+            array('name' => '账号列表', 'url' => 'wechat/index', 'act' => 'wechat_index', 'list_acl' => array()),
+            array('name' => '添加账号', 'url' => 'wechat/add', 'act' => 'wechat_add', 'list_acl' => array()),
         )),
         '个人信息' => array('controller' => 'user', 'act' => 'info', 'class' => 'fa fa-user', 'action' => array(
-            array('name' => '修改账号', 'url' => 'user/info', 'act' => 'user_info', 'list_acl' => array()),
+            array('name' => '修改信息', 'url' => 'user/info', 'act' => 'user_info', 'list_acl' => array()),
             array('name' => '修改密码', 'url' => 'user/pswd', 'act' => 'user_pswd', 'list_acl' => array()),
         )),
         '会员升级' => array('controller' => 'user', 'act' => 'lv', 'class' => 'fa fa-microphone', 'action' => array(
@@ -43,9 +45,9 @@ class MemberMenu extends CWidget
     {
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
-        if ($controllerId == 'user') {
+        if ($controllerId == 'wechat') {
             $menuList = self::$userMenu;
-        } else if ($controllerId == 'wechat') {
+        } else if ($controllerId == 'manager') {
             $userInfo = Yii::app()->session['userInfo'];
             $groupInfo = GroupModel::model()->find(array('condition' => 'lv=:lv', 'params' => array('lv' => $userInfo['lv'])));
             $actionArray = explode(',', $groupInfo->action);

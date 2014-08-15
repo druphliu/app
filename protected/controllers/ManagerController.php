@@ -1,12 +1,14 @@
 <?php
 
-class UserController extends MemberController
+class ManagerController extends WechatManagerController
 {
-	public function actionIndex()
+	public function actionIndex($id)
 	{
 		$this->render('index');
 	}
+    public function actionTest(){
 
+    }
 	// Uncomment the following methods and override them if needed
 	/*
 	public function filters()
