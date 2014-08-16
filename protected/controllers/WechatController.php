@@ -17,8 +17,41 @@ class WechatController extends MemberController
         $this->render('index', array('data' => $dataProvider->getData(),'pages'=>$dataProvider->getPagination()));
 	}
 
-    public function actionWechat(){
+    public function actionAdd(){
+        $model = new WechatModel();
+        if (isset($_POST['WechatModel'])) {
+            $dateTime = time();
+            $model->attributes = $_POST['WechatModel'];
+            $model->uid =  Yii::app()->session['userInfo']['uid'];
+            $model->created_at = $dateTime;
+            $model->updated_at = $dateTime;
+            if ($model->validate()) {
+                $model->save();
+                ShowMessage::success('添加成功！',Yii::app()->createUrl('wechat/index'));
+            }
+        }
+        $this->render('add', array('model' => $model));
+    }
 
+    public function actionUpdate($id)
+    {
+        $model = WechatModel::model()->findByPk($id);
+        if (isset($_POST['WechatModel'])) {
+            $model->attributes = $_POST['WechatModel'];
+            if ($model->validate()) {
+                $model->save();
+                ShowMessage::success('修改成功！',Yii::app()->createUrl('wechat/index'));
+            }
+        }
+        $this->render('update', array('model' => $model));
+    }
+
+    public function actionDelete($id)
+    {
+        $model = WechatModel::model()->findByPk($id);
+        $model->delete();
+
+        ShowMessage::success('删除成功！',Yii::app()->createUrl('wechat/index'));
     }
 	// Uncomment the following methods and override them if needed
 	/*

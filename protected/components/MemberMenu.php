@@ -28,7 +28,7 @@ class MemberMenu extends CWidget
         ))
     );
     private static $userMenu = array(
-        '公号管理' => array('controller' => 'wechat', 'act' => 'index', 'class' => 'fa fa-weixin', 'action' => array(
+        '公号管理' => array('controller' => 'wechat', 'act' => 'wechat', 'class' => 'fa fa-weixin', 'action' => array(
             array('name' => '账号列表', 'url' => 'wechat/index', 'act' => 'wechat_index', 'list_acl' => array()),
             array('name' => '添加账号', 'url' => 'wechat/add', 'act' => 'wechat_add', 'list_acl' => array()),
         )),

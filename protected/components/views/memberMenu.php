@@ -1,7 +1,7 @@
 <ul class="nav nav-list">
     <?php foreach ($this->menus as $name => $menu) { ?>
         <?php  if (!isset($menu['url']) && empty($menu['url'])) { ?>
-            <li class="<?php if (strpos($menu['act'], $this->controller->getAction()->id) !== false) { ?>active open<?php }?>">
+            <li class="<?php if (strpos($menu['act'], $this->controller->id) !== false) { ?>active open<?php }?>">
                 <a href="#" class="dropdown-toggle">
                     <i class="<?=$menu['class']?>"></i>
                     <span class="menu-text"> <?=$name?> </span>
