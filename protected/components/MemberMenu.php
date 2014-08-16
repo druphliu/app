@@ -45,11 +45,12 @@ class MemberMenu extends CWidget
     {
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
-        $wechatId = Yii::app()->request->getParam('id');
         $userAllowAction = array('wechat', 'user', 'vip');
+        $mangerAllowAction = array('manager');
         if (in_array($controllerId, $userAllowAction)) {
             $menuList = self::$userMenu;
-        } else if ($controllerId == 'manager') {
+        } else if (in_array($controllerId, $mangerAllowAction)) {
+            $wechatId = Yii::app()->request->getParam('id');
             $userInfo = Yii::app()->session['userInfo'];
             $group = Yii::app()->session['group'];
             $actionArray = explode(',', $group[$userInfo['groupId']]->action);
@@ -57,10 +58,9 @@ class MemberMenu extends CWidget
             foreach ($menuList as $k => $m) {
                 if (!in_array($m['act'], $actionArray)) {
                     unset($menuList[$k]);
+                }else{
                     foreach ($m['action'] as $sk => $subMenu) {
-                        if (!in_array($subMenu['act'], $actionArray)) {
-                            unset($menuList[$k]['action'][$sk]);
-                        }
+                        $menuList[$k]['action'][$sk]['url'] = $menuList[$k]['action'][$sk]['url']."/id/".$wechatId;
                     }
                 }
             }
