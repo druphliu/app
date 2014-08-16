@@ -32,12 +32,12 @@ class MemberMenu extends CWidget
             array('name' => '账号列表', 'url' => 'wechat/index', 'act' => 'wechat_index', 'list_acl' => array()),
             array('name' => '添加账号', 'url' => 'wechat/add', 'act' => 'wechat_add', 'list_acl' => array()),
         )),
-        '个人信息' => array('controller' => 'user', 'act' => 'info', 'class' => 'fa fa-user', 'action' => array(
+        '个人信息' => array('controller' => 'user', 'act' => 'user', 'class' => 'fa fa-user', 'action' => array(
             array('name' => '修改信息', 'url' => 'user/info', 'act' => 'user_info', 'list_acl' => array()),
             array('name' => '修改密码', 'url' => 'user/pswd', 'act' => 'user_pswd', 'list_acl' => array()),
         )),
-        '会员升级' => array('controller' => 'user', 'act' => 'lv', 'class' => 'fa fa-microphone', 'action' => array(
-            array('name' => '充值升级', 'url' => 'user/lv', 'act' => 'user_lv', 'list_acl' => array()),
+        '会员升级' => array('controller' => 'vip', 'act' => 'vip', 'class' => 'fa fa-microphone', 'action' => array(
+            array('name' => '充值升级', 'url' => 'vip/lv', 'act' => 'vip_lv', 'list_acl' => array()),
         ))
     );
 
@@ -46,7 +46,7 @@ class MemberMenu extends CWidget
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
         $wechatId = Yii::app()->request->getParam('id');
-        if ($controllerId == 'wechat') {
+        if ($controllerId == 'wechat'||$controllerId == 'user') {
             $menuList = self::$userMenu;
         } else if ($controllerId == 'manager') {
             $userInfo = Yii::app()->session['userInfo'];

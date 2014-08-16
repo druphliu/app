@@ -14,6 +14,9 @@
  */
 class UserModel extends CActiveRecord
 {
+    public $repswd;
+    public $newpswd;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -34,7 +37,8 @@ class UserModel extends CActiveRecord
 			array('lv, created_at, updated_at', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>40),
 			array('nickname', 'length', 'max'=>100),
-			array('pswd', 'length', 'max'=>32),
+			array('pswd,newpswd,repswd', 'length', 'max'=>32),
+            array('newpswd', 'compare', 'compareAttribute'=>'repswd' ,'on'=>'pswd',"message"=>"两次密码不一致"),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('uid, username, nickname, pswd, lv, created_at, updated_at', 'safe', 'on'=>'search'),
@@ -60,8 +64,9 @@ class UserModel extends CActiveRecord
 		return array(
 			'uid' => 'Uid',
 			'username' => 'Username',
-			'nickname' => 'Nickname',
-			'pswd' => 'Pswd',
+			'nickname' => '昵称',
+			'newpswd' => '新密码',
+            'repswd' => '重复新密码',
 			'lv' => 'Lv',
 			'created_at' => 'Created At',
 			'updated_at' => 'Updated At',
