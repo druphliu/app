@@ -25,4 +25,9 @@ class BootStrapUI
     {
         return CHtml::htmlButton("<i class='icon-undo bigger-110'></i>重置", array('class' => 'btn', 'type' => 'reset'));
     }
+
+    static function ackButton()
+    {
+        return CHtml::htmlButton("<i class='icon-ok bigger-110'></i>确认", array('class' => 'btn btn-info', 'type' => 'submit'));
+    }
 }

@@ -46,7 +46,8 @@ class MemberMenu extends CWidget
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
         $wechatId = Yii::app()->request->getParam('id');
-        if ($controllerId == 'wechat'||$controllerId == 'user') {
+        $userAllowAction = array('wechat', 'user', 'vip');
+        if (in_array($controllerId, $userAllowAction)) {
             $menuList = self::$userMenu;
         } else if ($controllerId == 'manager') {
             $userInfo = Yii::app()->session['userInfo'];
