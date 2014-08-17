@@ -2,12 +2,39 @@
 
 class ManagerController extends WechatManagerController
 {
-	public function actionIndex($id)
-	{
-		$this->render('index');
-	}
-    public function actionTest(){
 
+    public function __construct($id){
+        parent::__construct($id);
+    }
+
+    public function actionIndex($id)
+    {
+        $wechatInfo = $this->_getWechatInfo($id);
+        $this->render('index');
+    }
+
+    public function actionAutoReplay($id)
+    {
+        $wechatInfo = $this->_getWechatInfo($id);
+        $this->render('autoReplay');
+    }
+
+    public function actionKeyWords($id)
+    {
+        $wechatInfo = $this->_getWechatInfo($id);
+        $this->render('keyWords');
+    }
+
+    public function actionTest()
+    {
+
+    }
+    protected function _getWechatInfo($id){
+        $wechatInfo = WechatModel::model()->findByPk($id);
+        if(!$wechatInfo){
+            ShowMessage::error('公众帐号不存在!');
+        }
+        return $wechatInfo;
     }
 	// Uncomment the following methods and override them if needed
 	/*

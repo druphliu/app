@@ -5,7 +5,7 @@
     foreach($this->crumbs as $k=>$crumb) {
        echo "<li>";
         if($k==0):
-            echo '<i class="icon-home home-icon"></i>';
+            echo '<i class="fa fa-home home-icon"></i>';
             endif;
         if(isset($crumb['url'])) {
             $option = isset($crumb['option']) ? $crumb['option'] : null;

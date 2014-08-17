@@ -4,15 +4,15 @@
 $this->breadcrumbs=array(
     array('name' => '首页', 'url' => array('site/index')),
     array('name' => '基础设置'),
-    array('name' => '功能管理'),
+    array('name' => '关键词回复'),
 );
 ?>
 <div class="page-header">
     <h1>
-        功能管理
+        关键词回复
         <small>
             <i class="fa fa-angle-double-right"></i>
-            添加功能
+            回复管理
         </small>
     </h1>
 </div>
