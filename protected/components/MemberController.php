@@ -20,13 +20,21 @@ class MemberController extends CController{
      */
     public $breadcrumbs=array();
 
-    public function __construct($id, $module = null){
-        parent::__construct($id, $module = null);
-        if(Yii::app()->user->isGuest){
-            $this->redirect(array('site/login'));
-        }else{
-            $userInfo = UserModel::model()->find('username=:username', array(':username' => Yii::app()->user->name));
-            Yii::app()->session['userInfo'] = array('uid'=>$userInfo->uid,'username'=>$userInfo->username,'nickname'=>$userInfo->nickname,'lv'=>$userInfo->lv);
+
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action)) {
+            if (Yii::app()->user->isGuest) {
+                $this->redirect(array('site/login'));
+            } else {
+                $userInfo = UserModel::model()->find('username=:username', array(':username' => Yii::app()->user->name));
+                foreach (GroupModel::model()->findAll() as $g) {
+                    $group[$g->id] = $g;
+                };
+                Yii::app()->session['group'] = $group;
+                Yii::app()->session['userInfo'] = array('uid' => $userInfo->uid, 'username' => $userInfo->username, 'nickname' => $userInfo->nickname, 'lv' => $userInfo->lv, 'groupId' => $userInfo->groupId);
+            }
         }
+        return true;
     }
 }
