@@ -14,7 +14,6 @@ class WechatManagerController extends MemberController{
      */
     public $menu=array();
 
-    public $wechatId;
     /**
      * @var array the breadcrumbs of the current page. The value of this property will
      * be assigned to {@link CBreadcrumbs::links}. Please refer to {@link CBreadcrumbs::links}
@@ -32,11 +31,11 @@ class WechatManagerController extends MemberController{
             if (strpos($group[$userInfo['groupId']]->action, Yii::app()->controller->id) || strpos($group[$userInfo['groupId']]->action, $action->id) === false) {
                 ShowMessage::error('无权限使用此功能，请升级你的账号！');
             }
-            $paramId = intval(Yii::app()->request->getParam('id', 0));
-            $id = $paramId ? $paramId : Yii::app()->session['wechatId'];
+            $paramId = intval(Yii::app()->request->getParam('wechatId', 0));
+            $wechatId= $paramId ? $paramId : Yii::app()->session['wechatId'];
             if($paramId)
                 Yii::app()->session['wechatId']=$paramId;
-            $this->wechatInfo = $this->_getWechatInfo($id);
+            $this->wechatInfo = $this->_getWechatInfo($wechatId);
         }
         return true;
     }

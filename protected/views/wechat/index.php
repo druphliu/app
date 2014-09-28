@@ -59,7 +59,7 @@ $this->breadcrumbs=array(
                                             <i class="fa fa-pencil bigger-130"></i>
                                         </a>
                                         <a class="btn btn-minier btn-purple"
-                                           href="<?= Yii::app()->createUrl('/manager/index/id/' . $d->id) ?>"
+                                           href="<?= Yii::app()->createUrl('/manager/index/wechatId/' . $d->id) ?>"
                                            title="功能管理">
                                             功能管理
                                         </a>

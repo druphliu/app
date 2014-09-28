@@ -12,7 +12,7 @@ class MemberMenu extends CWidget
     public static $menuList = array(
         '基础设置' => array('controller' => 'manager', 'act' => 'manager', 'class' => 'fa fa-gears', 'action' => array(
             array('name' => '功能管理', 'url' => 'manager/index', 'act' => 'manager_index', 'list_acl' => array()),
-            array('name' => '关注回复', 'url' => 'manager/autoReplay', 'act' => 'manager_autoReplay', 'list_acl' => array()),
+            array('name' => '关注回复', 'url' => 'manager/subscribeReplay', 'act' => 'manager_subscribeReplay', 'list_acl' => array()),
             array('name' => '关键词回复', 'url' => 'manager/keyWords', 'act' => 'manager_keyWords', 'list_acl' => array()),
         )),
         '系统管理员' => array('controller' => 'group', 'act' => 'group', 'class' => 'icon-group', 'action' => array(
