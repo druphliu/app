@@ -15,9 +15,8 @@ class MemberMenu extends CWidget
             array('name' => '关注回复', 'url' => 'manager/subscribeReplay', 'act' => 'manager_subscribeReplay', 'list_acl' => array()),
             array('name' => '关键词回复', 'url' => 'manager/keyWords', 'act' => 'manager_keyWords', 'list_acl' => array()),
         )),
-        '系统管理员' => array('controller' => 'group', 'act' => 'group', 'class' => 'icon-group', 'action' => array(
-            array('name' => '系统管理组', 'url' => 'group/index', 'act' => 'group_index', 'list_acl' => array()),
-            array('name' => '系统管理员', 'url' => 'group/user', 'act' => 'group_user', 'list_acl' => array()),
+        '营销管理' => array('controller' => 'market', 'act' => 'market', 'class' => 'fa fa-bullhorn', 'action' => array(
+            array('name' => '礼包领取', 'url' => 'market/gift', 'act' => 'market_gift', 'list_acl' => array()),
         )),
         '会员' => array('controller' => 'member', 'act' => 'member', 'class' => 'icon-user', 'action' => array(
             array('name' => '会员管理', 'url' => 'member/admin', 'act' => 'member_admin', 'list_acl' => array())
@@ -45,7 +44,7 @@ class MemberMenu extends CWidget
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
         $userAllowAction = array('wechat', 'user', 'vip');
-        $mangerAllowAction = array('manager');
+        $mangerAllowAction = array('manager','market');
         if (in_array($controllerId, $userAllowAction)) {
             $menuList = self::$userMenu;
         } else if (in_array($controllerId, $mangerAllowAction)) {

@@ -50,7 +50,7 @@ $this->breadcrumbs=array(
                         </label>
                     </th>
                     <th>关键词</th>
-                    <th>是否精准匹配</th>
+                    <th style="width: 10%">是否精准匹配</th>
                     <th>标题</th>
                     <th>图片</th>
                     <th>URL</th>

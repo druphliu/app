@@ -28,9 +28,9 @@ class WechatManagerController extends MemberController{
         if (parent::beforeAction($action)) {
             $group = Yii::app()->session['group'];
             $userInfo = Yii::app()->session['userInfo'];
-            if (strpos($group[$userInfo['groupId']]->action, Yii::app()->controller->id) || strpos($group[$userInfo['groupId']]->action, $action->id) === false) {
-                ShowMessage::error('无权限使用此功能，请升级你的账号！');
-            }
+//            if (strpos($group[$userInfo['groupId']]->action, Yii::app()->controller->id) || strpos($group[$userInfo['groupId']]->action, $action->id) === false) {
+//                ShowMessage::error('无权限使用此功能，请升级你的账号！');
+//            }
             $paramId = intval(Yii::app()->request->getParam('wechatId', 0));
             $wechatId= $paramId ? $paramId : Yii::app()->session['wechatId'];
             if($paramId)

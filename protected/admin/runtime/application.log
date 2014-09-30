@@ -4623,3 +4623,223 @@ Stack trace:
 REQUEST_URI=/admin.php?r=member/admin
 HTTP_REFERER=http://www.app.com/admin.php?r=log/index
 ---
+2014/09/13 17:36:47 [error] [php] Undefined index: group_id (D:\wamp\www\app\protected\admin\components\AdminMenu.php:30)
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\views\layouts\main.php(386): SiteController->widget()
+#1 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#3 D:\wamp\www\yii\framework\web\CController.php(784): SiteController->renderFile()
+#4 D:\wamp\www\app\protected\admin\controllers\SiteController.php(36): SiteController->render()
+#5 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#6 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#7 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#8 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#10 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#12 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (30)
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (47)
+in D:\wamp\www\app\protected\admin\views\layouts\main.php (386)
+2014/09/13 17:37:47 [error] [php] Undefined index: group_id (D:\wamp\www\app\protected\admin\components\AdminMenu.php:30)
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\views\layouts\main.php(386): SiteController->widget()
+#1 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#3 D:\wamp\www\yii\framework\web\CController.php(784): SiteController->renderFile()
+#4 D:\wamp\www\app\protected\admin\controllers\SiteController.php(36): SiteController->render()
+#5 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#6 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#7 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#8 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#10 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#12 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (30)
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (47)
+in D:\wamp\www\app\protected\admin\views\layouts\main.php (386)
+2014/09/13 17:38:46 [error] [php] Undefined index: group_id (D:\wamp\www\app\protected\admin\components\AdminMenu.php:30)
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\views\layouts\main.php(386): SiteController->widget()
+#1 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#3 D:\wamp\www\yii\framework\web\CController.php(784): SiteController->renderFile()
+#4 D:\wamp\www\app\protected\admin\controllers\SiteController.php(36): SiteController->render()
+#5 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#6 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#7 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#8 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#10 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#12 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (30)
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (47)
+in D:\wamp\www\app\protected\admin\views\layouts\main.php (386)
+2014/09/13 18:21:50 [error] [php] Undefined index: group_id (D:\wamp\www\app\protected\admin\components\AdminMenu.php:30)
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\views\layouts\main.php(386): SiteController->widget()
+#1 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#3 D:\wamp\www\yii\framework\web\CController.php(784): SiteController->renderFile()
+#4 D:\wamp\www\app\protected\admin\controllers\SiteController.php(36): SiteController->render()
+#5 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#6 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#7 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#8 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#10 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#12 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (30)
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (47)
+in D:\wamp\www\app\protected\admin\views\layouts\main.php (386)
+2014/09/13 18:21:55 [error] [php] Undefined index: group_id (D:\wamp\www\app\protected\admin\components\AdminMenu.php:30)
+Stack trace:
+#0 D:\wamp\www\app\protected\admin\views\layouts\main.php(386): SiteController->widget()
+#1 D:\wamp\www\yii\framework\web\CBaseController.php(126): require()
+#2 D:\wamp\www\yii\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#3 D:\wamp\www\yii\framework\web\CController.php(784): SiteController->renderFile()
+#4 D:\wamp\www\app\protected\admin\controllers\SiteController.php(36): SiteController->render()
+#5 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#6 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams()
+#7 D:\wamp\www\yii\framework\web\CController.php(286): SiteController->runAction()
+#8 D:\wamp\www\yii\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(282): SiteController->run()
+#10 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#12 D:\wamp\www\app\admin.php(13): CWebApplication->run()
+REQUEST_URI=/admin.php
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (30)
+in D:\wamp\www\app\protected\admin\components\AdminMenu.php (47)
+in D:\wamp\www\app\protected\admin\views\layouts\main.php (386)
+2014/09/13 18:22:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "setting/system"。' in D:\wamp\www\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('setting/system')
+#1 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 D:\wamp\www\app\admin.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin.php?r=setting/system
+HTTP_REFERER=http://www.app.com/admin.php
+---
+2014/09/19 19:55:08 [error] [exception.CException] exception 'CException' with message 'GroupController 无法找到请求的视图 "userList".' in D:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('userList', Array, true)
+#1 D:\wamp\www\app\protected\admin\controllers\GroupController.php(79): CController->render('userList', Array)
+#2 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): GroupController->actionUser()
+#3 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('user')
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('group/user')
+#8 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 D:\wamp\www\app\admin.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/admin.php?r=group/user
+HTTP_REFERER=http://www.app.com/admin.php
+---
+2014/09/19 19:55:21 [error] [exception.CException] exception 'CException' with message 'GroupController 无法找到请求的视图 "view".' in D:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('view', Array, true)
+#1 D:\wamp\www\app\protected\admin\controllers\GroupController.php(60): CController->render('view', Array)
+#2 [internal function]: GroupController->actionView('5')
+#3 D:\wamp\www\yii\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(GroupController), Array)
+#4 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(GroupController), Object(ReflectionMethod), Array)
+#5 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#6 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#7 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('view')
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('group/view/id/5')
+#10 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 D:\wamp\www\app\admin.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/admin.php?r=group/view/id/5
+HTTP_REFERER=http://www.app.com/admin.php?r=group/index
+---
+2014/09/20 11:37:43 [error] [exception.CException] exception 'CException' with message 'GroupController 无法找到请求的视图 "userList".' in D:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('userList', Array, true)
+#1 D:\wamp\www\app\protected\admin\controllers\GroupController.php(79): CController->render('userList', Array)
+#2 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): GroupController->actionUser()
+#3 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('user')
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('group/user')
+#8 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 D:\wamp\www\app\admin.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/admin.php?r=group/user
+HTTP_REFERER=http://www.app.com/admin.php?r=group/index
+---
+2014/09/20 14:23:36 [error] [exception.CException] exception 'CException' with message 'GroupController 无法找到请求的视图 "view".' in D:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('view', Array, true)
+#1 D:\wamp\www\app\protected\admin\controllers\GroupController.php(60): CController->render('view', Array)
+#2 [internal function]: GroupController->actionView('5')
+#3 D:\wamp\www\yii\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(GroupController), Array)
+#4 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(GroupController), Object(ReflectionMethod), Array)
+#5 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#6 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#7 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('view')
+#9 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('group/view/id/5')
+#10 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 D:\wamp\www\app\admin.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/admin.php?r=group/view/id/5
+HTTP_REFERER=http://www.app.com/admin.php?r=group/index
+---
+2014/09/20 14:26:32 [error] [exception.CException] exception 'CException' with message 'GroupController 无法找到请求的视图 "userList".' in D:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('userList', Array, true)
+#1 D:\wamp\www\app\protected\admin\controllers\GroupController.php(79): CController->render('userList', Array)
+#2 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): GroupController->actionUser()
+#3 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('user')
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('group/user')
+#8 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 D:\wamp\www\app\admin.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/admin.php?r=group/user
+HTTP_REFERER=http://www.app.com/admin.php?r=group/index
+---
+2014/09/20 14:32:23 [error] [exception.CException] exception 'CException' with message 'GroupController 无法找到请求的视图 "userList".' in D:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('userList', Array, true)
+#1 D:\wamp\www\app\protected\admin\controllers\GroupController.php(79): CController->render('userList', Array)
+#2 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): GroupController->actionUser()
+#3 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('user')
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('group/user')
+#8 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 D:\wamp\www\app\admin.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/admin.php?r=group/user
+HTTP_REFERER=http://www.app.com/admin.php?r=group/index
+---
+2014/09/27 16:37:36 [error] [exception.CException] exception 'CException' with message 'GroupController 无法找到请求的视图 "userList".' in D:\wamp\www\yii\framework\web\CController.php:878
+Stack trace:
+#0 D:\wamp\www\yii\framework\web\CController.php(782): CController->renderPartial('userList', Array, true)
+#1 D:\wamp\www\app\protected\admin\controllers\GroupController.php(79): CController->render('userList', Array)
+#2 D:\wamp\www\yii\framework\web\actions\CInlineAction.php(49): GroupController->actionUser()
+#3 D:\wamp\www\yii\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 D:\wamp\www\yii\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 D:\wamp\www\yii\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 D:\wamp\www\yii\framework\web\CWebApplication.php(282): CController->run('user')
+#7 D:\wamp\www\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('group/user')
+#8 D:\wamp\www\yii\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 D:\wamp\www\app\admin.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/admin.php?r=group/user
+HTTP_REFERER=http://www.app.com/admin.php
+---

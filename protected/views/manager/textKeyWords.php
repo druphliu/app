@@ -52,7 +52,7 @@ $this->breadcrumbs=array(
                         </label>
                     </th>
                     <th>关键词</th>
-                    <th>是否精准匹配</th>
+                    <th style="width: 10%">是否精准匹配</th>
                     <th class="hidden-480">回复内容</th>
 
                     <th></th>
