@@ -4,6 +4,7 @@ class MarketController extends WechatManagerController
 {
 	public function actionGift()
 	{
+
 		$this->render('gift');
 	}
 

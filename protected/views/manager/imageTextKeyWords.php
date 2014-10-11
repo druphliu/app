@@ -70,13 +70,15 @@ $this->breadcrumbs=array(
                         </td>
 
                         <td>
-                            <?=$d->keywords?>
+                            <?php foreach($d->imagetextreplay_keywords as $keywords){?>
+                                <span class="label label-sm label-primary arrowed arrowed-right"><?=$keywords->name?></span>
+                                <?php ;}?>
                         </td>
-                        <td><?php if($d->isAccurate){?>
+                        <td><?php  foreach($d->imagetextreplay_keywords as $isAccurate){if($isAccurate->isAccurate){?>
                                 <span class="label label-sm label-success">是</span>
                             <?php }else{?>
                                 <span class="label label-sm label-warning">否</span>
-                            <?php }?>
+                            <?php }break;}?>
                         </td>
                         <td><?=$d->title?></td>
                         <td><img src="<?=$d->imgUrl?>" width="100px" height="50px"></td>

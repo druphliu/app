@@ -6,8 +6,6 @@
  * The followings are the available columns in table 'imagetextreplay':
  * @property integer $id
  * @property string $type
- * @property string $keywords
- * @property integer $isAccurate
  * @property string $title
  * @property string $imgUrl
  * @property string $description
@@ -17,6 +15,9 @@
 class ImagetextreplayModel extends CActiveRecord
 {
     const IMAGE_TEXT_REPLAY_TYPE = 'image-text';
+
+    public $keywords;
+    public $isAccurate;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -44,13 +45,13 @@ class ImagetextreplayModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('isAccurate, wechatId', 'numerical', 'integerOnly'=>true),
+			array('wechatId', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>9),
-			array('keywords, title', 'length', 'max'=>100),
+			array('title', 'length', 'max'=>100),
 			array('imgUrl, description, url', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, type, keywords, isAccurate, title, imgUrl, description, wechatId, url', 'safe', 'on'=>'search'),
+			array('id, type, title, imgUrl, description, wechatId, url', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,6 +63,7 @@ class ImagetextreplayModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'imagetextreplay_keywords'=>array(self::HAS_MANY, 'KeywordsModel', 'replayId')
 		);
 	}
 
@@ -73,8 +75,6 @@ class ImagetextreplayModel extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'type' => 'Type',
-			'keywords' => 'Keywords',
-			'isAccurate' => 'Is Accurate',
 			'title' => 'Title',
 			'imgUrl' => 'Img Url',
 			'description' => 'Description',
@@ -96,8 +96,6 @@ class ImagetextreplayModel extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('type',$this->type,true);
-		$criteria->compare('keywords',$this->keywords,true);
-		$criteria->compare('isAccurate',$this->isAccurate);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('imgUrl',$this->imgUrl,true);
 		$criteria->compare('description',$this->description,true);

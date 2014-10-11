@@ -9,10 +9,18 @@
         )); ?>
         <?php echo $form->errorSummary($model, BootStrapUI::alertError, '', array('class' => BootStrapUI::alertErrorClass)); ?>
         <div class="form-group">
-            <?php echo $form->labelEx($model, 'keyWords', array('class' => BootStrapUI::formLabelClass)); ?>
+            <?php echo $form->labelEx($model, 'keywords', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-4">
-                <?php echo $form->textField($model, 'keyWords', array('class' => 'col-xs-10 col-sm-10')); ?>
-                <?php echo $form->error($model, 'keyWords', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                <?php echo $form->textField($model, 'keywords', array('class' => 'col-xs-10 col-sm-10')); ?>
+                <?php echo $form->error($model, 'keywords', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'iaAccurate', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo $form->checkBox($model, 'isAccurate', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php echo $form->error($model, 'isAccurate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
         <div class="space-4"></div>

@@ -49,7 +49,7 @@ $this->breadcrumbs=array(
                                 </td>
                                 <td>
                                     <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-                                        <a class="red bootbox-confirm"
+                                        <a class="red bootbox-confirm" href="javascript:void(0)"
                                            rel="<?= Yii::app()->createUrl('/wechat/delete/id/' . $d->id) ?>" title="删除">
                                             <i class="fa fa-trash-o bigger-130"></i>
                                         </a>

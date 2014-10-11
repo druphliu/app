@@ -17,6 +17,14 @@
             </div>
         </div>
         <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'iaAccurate', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo $form->checkBox($model, 'isAccurate', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php echo $form->error($model, 'isAccurate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+            </div>
+        </div>
+        <div class="space-4"></div>
 
         <div class="form-group">
             <?php echo $form->labelEx($model, 'title', array('class' => BootStrapUI::formLabelClass)); ?>

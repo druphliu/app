@@ -88,8 +88,9 @@ class ManagerController extends WechatManagerController
             case TextreplayModel::TEXT_REPLAY_TYPE:
                 $dataProvider = new CActiveDataProvider('TextreplayModel', array(
                     'criteria' => array(
-                        'condition' => "type='" . SubscribereplayModel::KEYWORDS_TYPE . "'",
                         'order' => 'id DESC',
+                        'with'=>array('textreplay_keywords'),
+                        'condition' => "t.type='" . SubscribereplayModel::KEYWORDS_TYPE . "'"
                     ),
                     //'pagination' => false,
                     'pagination' => array(
@@ -102,7 +103,8 @@ class ManagerController extends WechatManagerController
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
                 $dataProvider = new CActiveDataProvider('ImagetextreplayModel', array(
                     'criteria' => array(
-                        'condition' => "type='" . SubscribereplayModel::KEYWORDS_TYPE . "'",
+                        'with'=>array('imagetextreplay_keywords'),
+                        'condition' => "t.type='" . SubscribereplayModel::KEYWORDS_TYPE . "'",
                         'order' => 'id DESC',
                     ),
                     //'pagination' => false,
@@ -131,15 +133,29 @@ class ManagerController extends WechatManagerController
         if (isset($_POST['ImagetextreplayModel']) || isset($_POST['TextreplayModel'])) {
             if (isset($_POST['ImagetextreplayModel'])) {
                 $model->attributes = $_POST['ImagetextreplayModel'];
+                $keywords = $_POST['ImagetextreplayModel']['keywords'];
+                $isAccurate = $_POST['ImagetextreplayModel']['isAccurate'];
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords', array('type' => ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));
             } elseif (isset($_POST['TextreplayModel'])) {
                 $model->attributes = $_POST['TextreplayModel'];
+                $keywords = $_POST['TextreplayModel']['keywords'];
+                $isAccurate = $_POST['TextreplayModel']['isAccurate'];
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords');
             }
             $model->wechatId = $this->wechatInfo->id;
             $model->type = SubscribereplayModel::KEYWORDS_TYPE;
+            $keywordsArray = explode(',',$keywords);
             if ($model->validate()) {
                 $model->save();
+                foreach( $keywordsArray as $k){
+                    //新加关键词
+                    $keywordsModel = new KeywordsModel();
+                    $keywordsModel->replayId = $model->id;
+                    $keywordsModel->name = $k;
+                    $keywordsModel->isAccurate = $isAccurate;
+                    $keywordsModel->wechatId = $this->wechatInfo->id;
+                    $keywordsModel->save();
+                }
                 ShowMessage::success('添加成功', $jumpUrl);
             }
         }
@@ -151,23 +167,68 @@ class ManagerController extends WechatManagerController
     public function actionKeyWordsUpdate($id)
     {
         $type = Yii::app()->request->getParam('type');
+        $oldKeywords = array();
+        $oldIsAccurate = 0;
         switch ($type) {
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $model = ImagetextreplayModel::model()->findByPk($id);
+                $model = ImagetextreplayModel::model()->with('imagetextreplay_keywords')->findByPk($id);
+                $comm = '';
+                foreach($model->imagetextreplay_keywords as $keywords){
+                    $oldKeywords[] = $keywords->name;
+                    $oldIsAccurate = $keywords->isAccurate;
+                    $model->keywords .= $comm.$keywords->name;
+                    $comm = ',';
+                    $model->isAccurate = $keywords->isAccurate;
+                }
                 break;
             case TextreplayModel::TEXT_REPLAY_TYPE:
-                $model = TextreplayModel::model()->findByPk($id);
+                $model = TextreplayModel::model()->with('textreplay_keywords')->findByPk($id);
+                $comm = '';
+                foreach($model->textreplay_keywords as $keywords){
+                    $oldKeywords[] = $keywords->name;
+                    $oldIsAccurate = $keywords->isAccurate;
+                    $model->keywords .= $comm.$keywords->name;
+                    $model->isAccurate = $keywords->isAccurate;
+                    $comm = ',';
+                }
                 break;
         }
         if (isset($_POST['ImagetextreplayModel']) || isset($_POST['TextreplayModel'])) {
             if (isset($_POST['ImagetextreplayModel'])) {
                 $model->attributes = $_POST['ImagetextreplayModel'];
+                $keywords = $_POST['ImagetextreplayModel']['keywords'];
+                $isAccurate = $_POST['ImagetextreplayModel']['isAccurate'];
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords', array('type' => ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));
             } elseif (isset($_POST['TextreplayModel'])) {
                 $model->attributes = $_POST['TextreplayModel'];
+                $keywords = $_POST['TextreplayModel']['keywords'];
+                $isAccurate = $_POST['TextreplayModel']['isAccurate'];
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords');
             }
+            $keywordsArray = explode(',',$keywords);
+
+            $keywordsAdd = array_unique(array_merge($oldKeywords,$keywordsArray));
+            $arrayDel = array_diff($keywordsAdd,$keywordsArray);//删除了的关键字
+            $arrayAdd = array_diff($keywordsAdd,$oldKeywords);//添加的关键字
             if ($model->validate()) {
+                foreach($arrayAdd as $k){
+                    //新加关键词
+                    $keywordsModel = new KeywordsModel();
+                    $keywordsModel->replayId = $id;
+                    $keywordsModel->name = $k;
+                    $keywordsModel->isAccurate = $isAccurate;
+                    $keywordsModel->wechatId = $this->wechatInfo->id;
+                    $keywordsModel->save();
+                }
+                foreach($arrayDel as $k){
+                    //删除的关键词
+                    $keywordsModel = KeywordsModel::model()->find('replayId=:replayId and name=:name',array(':name'=>$k,':replayId'=>$id));
+                    $keywordsModel->delete();
+
+                }
+                if ($oldIsAccurate != $isAccurate) {
+                    KeywordsModel::model()->updateAll( array('isAccurate' => $isAccurate),'replayId=:replayId', array(':replayId' => $id));
+                }
                 $model->save();
                 ShowMessage::success('编辑成功', $jumpUrl);
             }
@@ -191,6 +252,8 @@ class ManagerController extends WechatManagerController
                 break;
         }
         $model->delete();
+        //删除相关关键词
+        KeywordsModel::model()->deleteAll('replayId=:replayId',array(':replayId'=>$id));
         ShowMessage::success('删除成功', $jumpUrl);
     }
     // Uncomment the following methods and override them if needed
@@ -219,4 +282,5 @@ class ManagerController extends WechatManagerController
         );
     }
     */
+
 }

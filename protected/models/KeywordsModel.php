@@ -1,25 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "textreplay".
+ * This is the model class for table "keywords".
  *
- * The followings are the available columns in table 'textreplay':
- * @property integer $id
- * @property integer $wechatId
+ * The followings are the available columns in table 'keywords':
+ * @property string $name
+ * @property integer $replayId
  * @property string $type
- * @property string $content
+ * @property integer $isAccurate
+ * @property integer $wechatId
  */
-class TextreplayModel extends CActiveRecord
+class KeywordsModel extends CActiveRecord
 {
-    const TEXT_REPLAY_TYPE = 'text';
-
-    public $keywords;
-    public $isAccurate;
-
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return TextreplayModel the static model class
+	 * @return KeywordsModel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -31,7 +27,7 @@ class TextreplayModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'textreplay';
+		return 'keywords';
 	}
 
 	/**
@@ -42,12 +38,13 @@ class TextreplayModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('wechatId, type, content', 'required'),
-			array('wechatId', 'numerical', 'integerOnly'=>true),
-			array('type', 'length', 'max'=>9),
+			array('name, replayId, isAccurate, wechatId', 'required'),
+			array('replayId, isAccurate, wechatId', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>150),
+			array('type', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, wechatId, type, content', 'safe', 'on'=>'search'),
+			array('name, replayId, type, isAccurate, wechatId', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,7 +56,6 @@ class TextreplayModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-            'textreplay_keywords'=>array(self::HAS_MANY, 'KeywordsModel', 'replayId')
 		);
 	}
 
@@ -69,10 +65,11 @@ class TextreplayModel extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'wechatId' => 'Wechat',
+			'name' => 'Name',
+			'replayId' => 'Replay',
 			'type' => 'Type',
-			'content' => 'Content',
+			'isAccurate' => 'Is Accurate',
+			'wechatId' => 'Wechat',
 		);
 	}
 
@@ -87,15 +84,14 @@ class TextreplayModel extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('wechatId',$this->wechatId);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('replayId',$this->replayId);
 		$criteria->compare('type',$this->type,true);
-		$criteria->compare('content',$this->content,true);
+		$criteria->compare('isAccurate',$this->isAccurate);
+		$criteria->compare('wechatId',$this->wechatId);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-
-
 }
