@@ -1,7 +1,7 @@
 <?php
 /* @var $this GroupController */
 
-$this->breadcrumbs=array(
+$this->breadcrumbs = array(
     array('name' => '首页', 'url' => array('site/index')),
     array('name' => '公众账号'),
 );
@@ -36,16 +36,16 @@ $this->breadcrumbs=array(
 
                         <tbody>
 
-                        <?php foreach($data as $d){?>
+                        <?php foreach ($data as $d) { ?>
                             <tr>
                                 <td class="center">
                                     <label>
-                                        <input type="checkbox" class="ace" value="<?=$d['name']?>">
+                                        <input type="checkbox" class="ace" value="<?= $d['name'] ?>">
                                         <span class="lbl"></span>
                                     </label>
                                 </td>
                                 <td>
-                                    <?=$d['name']?>
+                                    <?= $d['name'] ?>
                                 </td>
                                 <td>
                                     <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
@@ -63,19 +63,21 @@ $this->breadcrumbs=array(
                                            title="功能管理">
                                             功能管理
                                         </a>
-                                        <a class="btn btn-minier btn-purple"
-                                           href="<?= Yii::app()->createUrl('/user/wechatUpdate/id/' . $d->id) ?>"
+                                        <a class="btn btn-minier btn-purple api" href="javascript:void(0)"
+                                           rel="<?= Yii::app()->createUrl('/wechat/Api/id/' . $d->id) ?>"
                                            title="API接口">
                                             API接口
                                         </a>
                                     </div>
                                 </td>
                             </tr>
-                        <?php }?>
+                        <?php } ?>
                         </tbody>
                     </table>
-                </div><!-- /.table-responsive -->
-            </div><!-- /span -->
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /span -->
         </div>
     </div>
 </div>
@@ -89,3 +91,37 @@ $this->breadcrumbs=array(
         </div>
     </div>
 </div>
+<script>
+    $(".api").click(function () {
+        var url = $(this).attr('rel');
+        $.getJSON(url, function (json) {
+            bootbox.dialog({
+                    title: "API接口",
+                    message: '<div class="row"> ' +
+                        '<div class="col-md-12"> ' +
+                        '<div class="table-responsive">'+
+                        '<table class="table table-striped table-bordered table-hover" id="sample-table-1">'+
+                        '<thead>'+
+                        '<tr><th>TOKEN</th><th>URL</th></tr>'+
+                        '</thead>'+
+                        '<tbody>' +
+                        '<tr><td>'+json.token+'</td><td>'+json.apiUrl+'</td></tr>' +
+                        '</tbody>' +
+                        '</table>' +
+                        '</div>' +
+                        '</div> </div>',
+                    className: "class-with-width",
+                    buttons: {
+                        success: {
+                            label: "确定",
+                            className: "btn-success"
+                        }
+                    }
+                }
+            );
+        });
+    })
+</script>
+<style>
+    .class-with-width >div{ width: 800px !important; }
+</style>

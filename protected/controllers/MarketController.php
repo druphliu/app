@@ -191,6 +191,7 @@ class MarketController extends WechatManagerController
 
     public function actionCodeImport()
     {
+        set_time_limit(0);
         $giftId = Yii::app()->request->getParam('giftId');
         $file = $_FILES;
         if ($file && $giftId) {

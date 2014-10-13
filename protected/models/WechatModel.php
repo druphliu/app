@@ -8,11 +8,13 @@
  * @property integer $uid
  * @property string $type
  * @property string $name
- * @property string $wechatId
+ * @property string $originalId
  * @property string $wechatAccount
  * @property integer $area
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $token
+ * @property string $apiUrl
  */
 class WechatModel extends CActiveRecord
 {
@@ -46,11 +48,13 @@ class WechatModel extends CActiveRecord
 			array('uid, area, created_at, updated_at', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>3),
 			array('name', 'length', 'max'=>40),
-			array('wechatId', 'length', 'max'=>15),
+			array('originalId', 'length', 'max'=>15),
 			array('wechatAccount', 'length', 'max'=>20),
+			array('token', 'length', 'max'=>32),
+			array('apiUrl', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, uid, type, name, wechatId, wechatAccount, area, created_at, updated_at', 'safe', 'on'=>'search'),
+			array('id, uid, type, name, originalId, wechatAccount, area, created_at, updated_at, token, apiUrl', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,11 +79,13 @@ class WechatModel extends CActiveRecord
 			'uid' => 'Uid',
 			'type' => '类型',
 			'name' => '公众号名称',
-			'wechatId' => '公众号原始ID',
+			'originalId' => '公众号原始ID',
 			'wechatAccount' => '微信号',
 			'area' => '地区',
 			'created_at' => 'Created At',
 			'updated_at' => 'Updated At',
+			'token' => 'Token',
+			'apiUrl' => 'Api Url',
 		);
 	}
 
@@ -98,11 +104,13 @@ class WechatModel extends CActiveRecord
 		$criteria->compare('uid',$this->uid);
 		$criteria->compare('type',$this->type,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('wechatId',$this->wechatId,true);
+		$criteria->compare('originalId',$this->originalId,true);
 		$criteria->compare('wechatAccount',$this->wechatAccount,true);
 		$criteria->compare('area',$this->area);
 		$criteria->compare('created_at',$this->created_at);
 		$criteria->compare('updated_at',$this->updated_at);
+		$criteria->compare('token',$this->token,true);
+		$criteria->compare('apiUrl',$this->apiUrl,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

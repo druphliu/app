@@ -45,6 +45,7 @@ $this->breadcrumbs = array(
                                                     <span class="lbl"></span>
                                                 </label>
                                             </th>
+                                            <th>ID</th>
                                             <th>CODE</th>
                                             <th>是否领取</th>
                                             <th></th>
@@ -64,7 +65,9 @@ $this->breadcrumbs = array(
                                                         <span class="lbl"></span>
                                                     </label>
                                                 </td>
-
+                                                <td>
+                                                    <?= $i?>
+                                                </td>
                                                 <td>
                                                     <?php echo substr_replace($d->code, '*****', 4, 5) ?>
                                                 </td>

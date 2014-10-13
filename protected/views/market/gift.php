@@ -45,11 +45,12 @@ $this->breadcrumbs=array(
                                                     <span class="lbl"></span>
                                                 </label>
                                             </th>
+                                            <th>ID</th>
                                             <th>活动名称</th>
                                             <th>活动类型</th>
                                             <th>是否开始</th>
                                             <th>创建时间</th>
-                                            <th></th>
+                                            <th width="25%"></th>
                                         </tr>
                                         </thead>
 
@@ -62,7 +63,9 @@ $this->breadcrumbs=array(
                                                         <span class="lbl"></span>
                                                     </label>
                                                 </td>
-
+                                                <td>
+                                                    <?= $i?>
+                                                </td>
                                                 <td>
                                                     <?= $d->title?>
                                                 </td>
