@@ -53,15 +53,15 @@ $this->breadcrumbs=array(
                                         <a class="btn btn-xs btn-success"
                                            href="<?= Yii::app()->createUrl('/group/view/id/' . $d->group_id) ?>"
                                            class="blue">
-                                            <i class="icon-zoom-in bigger-130"></i>
+                                            <i class="fa fa-info bigger-130"></i>
                                         </a>
                                         <a class="btn btn-xs btn-danger bootbox-confirm"
                                            rel="<?= Yii::app()->createUrl('/group/delete/id/' . $d->group_id) ?>">
-                                            <i class="icon-trash bigger-120"></i>
+                                            <i class="fa fa-trash-o bigger-120"></i>
                                         </a>
                                         <a class="btn btn-xs btn-info"
                                            href="<?= Yii::app()->createUrl('/group/update/id/' . $d->group_id) ?>">
-                                            <i class="icon-edit bigger-120"></i>
+                                            <i class="fa fa-edit bigger-120"></i>
                                         </a>
                                     </div>
                                 </td>

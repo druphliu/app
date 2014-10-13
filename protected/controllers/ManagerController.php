@@ -28,17 +28,17 @@ class ManagerController extends WechatManagerController
                 switch ($subscribeInfo->type) {
                     case TextreplayModel::TEXT_REPLAY_TYPE:
                         if ($type == TextreplayModel::TEXT_REPLAY_TYPE) {
-                            $model = TextreplayModel::model()->findByPk($subscribeInfo->replayId);
+                            $model = TextreplayModel::model()->findByPk($subscribeInfo->responseId);
                         } else {
-                            $textModel = ImagetextreplayModel::model()->findByPk($subscribeInfo->replayId);
+                            $textModel = ImagetextreplayModel::model()->findByPk($subscribeInfo->responseId);
                             $model = $textModel ? $textModel : new ImagetextreplayModel();
                         }
                         break;
                     case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
                         if ($type == ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE) {
-                            $model = ImagetextreplayModel::model()->findByPk($subscribeInfo->replayId);
+                            $model = ImagetextreplayModel::model()->findByPk($subscribeInfo->responseId);
                         } else {
-                            $imageTextModel = ImagetextreplayModel::model()->findByPk($subscribeInfo->replayId);
+                            $imageTextModel = ImagetextreplayModel::model()->findByPk($subscribeInfo->responseId);
                             $model = $imageTextModel ? $imageTextModel : new ImagetextreplayModel();
                         }
                         $type = ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE;
@@ -65,11 +65,11 @@ class ManagerController extends WechatManagerController
                 //如果新加，添加数据到subscribe表反之更新
                 if (isset($subscribeInfo)) {
                     $subscribeInfo->type = $type;
-                    $subscribeInfo->replayId = $model->id;
+                    $subscribeInfo->responseId = $model->id;
                     $subscribeInfo->save();
                 } else {
                     $subscribeModel = new SubscribereplayModel();
-                    $subscribeModel->replayId = $model->id;
+                    $subscribeModel->responseId = $model->id;
                     $subscribeModel->type = $type;
                     $subscribeModel->wechatId = $this->wechatInfo->id;
                     $subscribeModel->save();
@@ -90,7 +90,7 @@ class ManagerController extends WechatManagerController
                     'criteria' => array(
                         'order' => 'id DESC',
                         'with' => array('textreplay_keywords'),
-                        'condition' => "t.type='" . SubscribereplayModel::KEYWORDS_TYPE . "'"
+                        'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" . SubscribereplayModel::KEYWORDS_TYPE . "'"
                     ),
                     //'pagination' => false,
                     'pagination' => array(
@@ -104,7 +104,7 @@ class ManagerController extends WechatManagerController
                 $dataProvider = new CActiveDataProvider('ImagetextreplayModel', array(
                     'criteria' => array(
                         'with' => array('imagetextreplay_keywords'),
-                        'condition' => "t.type='" . SubscribereplayModel::KEYWORDS_TYPE . "'",
+                        'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" . SubscribereplayModel::KEYWORDS_TYPE . "'",
                         'order' => 'id DESC',
                     ),
                     //'pagination' => false,
@@ -150,10 +150,11 @@ class ManagerController extends WechatManagerController
                 foreach ($keywordsArray as $k) {
                     //新加关键词
                     $keywordsModel = new KeywordsModel();
-                    $keywordsModel->replayId = $model->id;
+                    $keywordsModel->responseId = $model->id;
                     $keywordsModel->name = $k;
                     $keywordsModel->isAccurate = $isAccurate;
                     $keywordsModel->wechatId = $this->wechatInfo->id;
+                    $keywordsModel->type = $type;
                     $keywordsModel->save();
                 }
                 ShowMessage::success('添加成功', $jumpUrl);
@@ -214,7 +215,7 @@ class ManagerController extends WechatManagerController
                 foreach ($arrayAdd as $k) {
                     //新加关键词
                     $keywordsModel = new KeywordsModel();
-                    $keywordsModel->replayId = $id;
+                    $keywordsModel->responseId = $id;
                     $keywordsModel->name = $k;
                     $keywordsModel->isAccurate = $isAccurate;
                     $keywordsModel->wechatId = $this->wechatInfo->id;
@@ -223,11 +224,11 @@ class ManagerController extends WechatManagerController
                 }
                 foreach ($arrayDel as $k) {
                     //删除的关键词
-                    $keywordsModel = KeywordsModel::model()->find('replayId=:replayId and name=:name', array(':name' => $k, ':replayId' => $id));
+                    $keywordsModel = KeywordsModel::model()->find('responseId=:responseId and name=:name', array(':name' => $k, ':responseId' => $id));
                     $keywordsModel->delete();
                 }
                 if ($oldIsAccurate != $isAccurate) {
-                    KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'replayId=:replayId', array(':replayId' => $id));
+                    KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'responseId=:responseId', array(':responseId' => $id));
                 }
                 $model->save();
                 ShowMessage::success('编辑成功', $jumpUrl);
@@ -253,7 +254,7 @@ class ManagerController extends WechatManagerController
         }
         $model->delete();
         //删除相关关键词
-        KeywordsModel::model()->deleteAll('replayId=:replayId', array(':replayId' => $id));
+        KeywordsModel::model()->deleteAll('responseId=:responseId', array(':responseId' => $id));
         ShowMessage::success('删除成功', $jumpUrl);
     }
     // Uncomment the following methods and override them if needed

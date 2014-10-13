@@ -367,9 +367,9 @@
                         <i class="fa fa-group"></i>
                     </button>
 
-                    <button class="btn btn-danger">
-                        <i class="fa fa-cogs"></i>
-                    </button>
+                    <a class="btn btn-danger" href="<?=Yii::app()->createUrl('wechat/index')?>" title="公号管理">
+                        <i class="fa fa-weixin"></i>
+                    </a>
                 </div>
 
                 <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">

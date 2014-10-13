@@ -58,7 +58,7 @@ $this->breadcrumbs=array(
             <td>
                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
                     <button class="btn btn-xs btn-danger bootbox-confirm" rel="<?= Yii::app()->createUrl('/log/delete/id/' . $l['id']) ?>">
-                        <i class="icon-trash bigger-120"></i>
+                        <i class="fa fa-trash-o bigger-120"></i>
                     </button>
                 </div>
             </td>

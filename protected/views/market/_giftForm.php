@@ -41,6 +41,16 @@
                     <?php echo $form->error($model, 'isAccurate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
                 </div>
             </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'template', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->textArea($model, 'template', array('class' => 'col-xs-10 col-sm-10')); ?>
+                    <?php echo $form->error($model, 'template', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
+                </div>
+                <i>可用标签:{code}</i>
+            </div>
         </div>
         <div class="form-group" id="action"
              <?php if ($type != GiftModel::TYPE_MENU){ ?>style="display: none" <?php } ?>>

@@ -8,6 +8,7 @@ class MarketController extends WechatManagerController
         $dataProvider = new CActiveDataProvider('GiftModel', array(
             'criteria' => array(
                 'order' => 'id DESC',
+                'condition'=>'wechatId='.$this->wechatInfo->id
             ),
             //'pagination' => false,
             'pagination' => array(
@@ -24,6 +25,7 @@ class MarketController extends WechatManagerController
         $model = new GiftModel();
         if (isset($_POST['GiftModel'])) {
             $model->attributes = $_POST['GiftModel'];
+            $model->wechatId = $this->wechatInfo->id;
             $type = $model->type;
             if ($model->validate()) {
                 $model->save();
@@ -34,7 +36,7 @@ class MarketController extends WechatManagerController
                         $keywordsArray = explode(',', $keywords);
                         foreach ($keywordsArray as $k) {
                             $keywordsModel = new KeywordsModel();
-                            $keywordsModel->replayId = $model->id;
+                            $keywordsModel->responseId = $model->id;
                             $keywordsModel->type = GiftModel::GIFT_TYPE;
                             $keywordsModel->isAccurate = $isAccurate;
                             $keywordsModel->name = $k;
@@ -70,8 +72,8 @@ class MarketController extends WechatManagerController
         switch ($model->type) {
             //获取关联表数据
             case GiftModel::TYPE_KEYWORDS:
-                $keywords = KeywordsModel::model()->findAll('type=:type and replayId=:replayId',
-                    array(':type' => GiftModel::GIFT_TYPE, ':replayId' => $id));
+                $keywords = KeywordsModel::model()->findAll('type=:type and responseId=:responseId',
+                    array(':type' => GiftModel::GIFT_TYPE, ':responseId' => $id));
                 foreach ($keywords as $k) {
                     $oldKeywords[] = $k->name;
                     $oldIsAccurate = $k->isAccurate;
@@ -101,7 +103,7 @@ class MarketController extends WechatManagerController
                         foreach ($arrayAdd as $k) {
                             //新加关键词
                             $keywordsModel = new KeywordsModel();
-                            $keywordsModel->replayId = $id;
+                            $keywordsModel->responseId = $id;
                             $keywordsModel->name = $k;
                             $keywordsModel->isAccurate = $isAccurate;
                             $keywordsModel->wechatId = $this->wechatInfo->id;
@@ -110,11 +112,11 @@ class MarketController extends WechatManagerController
                         }
                         foreach ($arrayDel as $k) {
                             //删除的关键词
-                            $keywordsModel = KeywordsModel::model()->find('replayId=:replayId and name=:name', array(':name' => $k, ':replayId' => $id));
+                            $keywordsModel = KeywordsModel::model()->find('responseId=:responseId and name=:name', array(':name' => $k, ':responseId' => $id));
                             $keywordsModel->delete();
                         }
                         if ($oldIsAccurate != $isAccurate) {
-                            KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'replayId=:replayId', array(':replayId' => $id));
+                            KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'responseId=:responseId', array(':responseId' => $id));
                         }
                         //更新是否精准匹配字段
                         break;
@@ -162,7 +164,7 @@ class MarketController extends WechatManagerController
         //删除关键字或者menu action
         switch ($model->type) {
             case GiftModel::TYPE_KEYWORDS:
-                KeywordsModel::model()->deleteAll('replayId=:replayId and type=:type', array(':replayId' => $id, ':type' => GiftModel::GIFT_TYPE));
+                KeywordsModel::model()->deleteAll('responseId=:responseId and type=:type', array(':responseId' => $id, ':type' => GiftModel::GIFT_TYPE));
                 break;
             case GiftModel::TYPE_MENU:
                 MenuactionModel::model()->deleteAll('responseId=:responseId and type=:type', array(':responseId' => $id, ':type' => GiftModel::GIFT_TYPE));

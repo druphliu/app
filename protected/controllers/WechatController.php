@@ -8,6 +8,7 @@ class WechatController extends MemberController
         $dataProvider = new CActiveDataProvider('WechatModel', array(
             'criteria' => array(
                 'order' => 'created_at desc',
+                'condition' => 'uid=' . Yii::app()->session['userInfo']['uid'],
             ),
             //'pagination' => false,
             'pagination' => array(
@@ -39,6 +40,9 @@ class WechatController extends MemberController
     public function actionUpdate($id)
     {
         $model = WechatModel::model()->findByPk($id);
+        if ($model->uid != Yii::app()->session['userInfo']['uid']) {
+            return;
+        }
         if (isset($_POST['WechatModel'])) {
             $model->attributes = $_POST['WechatModel'];
             if ($model->validate()) {
@@ -51,7 +55,7 @@ class WechatController extends MemberController
 
     public function actionDelete($id)
     {
-        $model = WechatModel::model()->findByPk($id);
+        $model = WechatModel::model()->find('id=:id and uid=:uid',array(':id'=>$id,':uid'=>Yii::app()->session['userInfo']['uid']));
         $model->delete();
 
         ShowMessage::success('删除成功！', Yii::app()->createUrl('wechat/index'));

@@ -4,8 +4,9 @@
  * This is the model class for table "keywords".
  *
  * The followings are the available columns in table 'keywords':
+ * @property integer $id
  * @property string $name
- * @property integer $replayId
+ * @property integer $responseId
  * @property string $type
  * @property integer $isAccurate
  * @property integer $wechatId
@@ -38,13 +39,13 @@ class KeywordsModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, replayId, isAccurate, wechatId', 'required'),
-			array('replayId, isAccurate, wechatId', 'numerical', 'integerOnly'=>true),
+			array('name, responseId, isAccurate, wechatId', 'required'),
+			array('responseId, isAccurate, wechatId', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>150),
 			array('type', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('name, replayId, type, isAccurate, wechatId', 'safe', 'on'=>'search'),
+			array('id, name, responseId, type, isAccurate, wechatId', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,8 +66,9 @@ class KeywordsModel extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'id' => 'ID',
 			'name' => 'Name',
-			'replayId' => 'Replay',
+			'responseId' => 'Response',
 			'type' => 'Type',
 			'isAccurate' => 'Is Accurate',
 			'wechatId' => 'Wechat',
@@ -84,8 +86,9 @@ class KeywordsModel extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('replayId',$this->replayId);
+		$criteria->compare('responseId',$this->responseId);
 		$criteria->compare('type',$this->type,true);
 		$criteria->compare('isAccurate',$this->isAccurate);
 		$criteria->compare('wechatId',$this->wechatId);

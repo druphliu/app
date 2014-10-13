@@ -90,13 +90,13 @@
 <ul class="nav ace-nav">
 <li class="grey">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-        <i class="icon-tasks"></i>
+        <i class="fa fa-tasks"></i>
         <span class="badge badge-grey">4</span>
     </a>
 
     <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
         <li class="dropdown-header">
-            <i class="icon-ok"></i>
+            <i class="fa fa-ok"></i>
             还有4个任务完成
         </li>
 
@@ -155,7 +155,7 @@
         <li>
             <a href="#">
                 查看任务详情
-                <i class="icon-arrow-right"></i>
+                <i class="fa fa-arrow-right"></i>
             </a>
         </li>
     </ul>
@@ -163,7 +163,7 @@
 
 <li class="purple">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-        <i class="icon-bell-alt icon-animated-bell"></i>
+        <i class="fa fa-bell icon-animated-bell"></i>
         <span class="badge badge-important">8</span>
     </a>
 
@@ -227,7 +227,7 @@
 
 <li class="green">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-        <i class="icon-envelope icon-animated-vertical"></i>
+        <i class="fa fa-envelope icon-animated-vertical"></i>
         <span class="badge badge-success">5</span>
     </a>
 
@@ -305,7 +305,7 @@
 									<?php echo Yii::app()->session['userInfo']['nickname']?Yii::app()->session['userInfo']['nickname']:Yii::app()->session['userInfo']['username']?>
 								</span>
 
-        <i class="icon-caret-down"></i>
+        <i class="fa fa-caret-down"></i>
     </a>
 
     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
@@ -356,19 +356,19 @@
 <div class="sidebar-shortcuts" id="sidebar-shortcuts">
     <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
         <button class="btn btn-success">
-            <i class="icon-signal"></i>
+            <i class="fa fa-signal"></i>
         </button>
 
         <button class="btn btn-info">
-            <i class="icon-pencil"></i>
+            <i class="fa fa-pencil"></i>
         </button>
 
         <button class="btn btn-warning">
-            <i class="icon-group"></i>
+            <i class="fa fa-group"></i>
         </button>
 
         <button class="btn btn-danger">
-            <i class="icon-cogs"></i>
+            <i class="fa fa-cogs"></i>
         </button>
     </div>
 

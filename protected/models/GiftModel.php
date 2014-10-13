@@ -7,7 +7,10 @@
  * @property integer $id
  * @property string $title
  * @property string $type
+ * @property integer $wechatId
+ * @property string $template
  * @property string $created_at
+ * @property integer $status
  */
 class GiftModel extends CActiveRecord
 {
@@ -47,12 +50,14 @@ class GiftModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title', 'required'),
+			array('title, wechatId, created_at', 'required'),
+			array('wechatId, status', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>150),
 			array('type', 'length', 'max'=>8),
+			array('template', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, type, created_at', 'safe', 'on'=>'search'),
+			array('id, title, type, wechatId, template, created_at, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,7 +81,10 @@ class GiftModel extends CActiveRecord
 			'id' => 'ID',
 			'title' => 'Title',
 			'type' => 'Type',
+			'wechatId' => 'Wechat',
+			'template' => 'Template',
 			'created_at' => 'Created At',
+			'status' => 'Status',
 		);
 	}
 
@@ -94,7 +102,10 @@ class GiftModel extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('type',$this->type,true);
+		$criteria->compare('wechatId',$this->wechatId);
+		$criteria->compare('template',$this->template,true);
 		$criteria->compare('created_at',$this->created_at,true);
+		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

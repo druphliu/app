@@ -14,14 +14,14 @@ class AdminMenu extends CWidget{
             array('name'=>'基本信息','url'=>'setting/base','act'=>'setting_base','list_acl'=>array()),
 			array('name'=>'Email','url'=>'setting/email','act'=>'setting_email','list_acl'=>array()),
         )),
-        '系统管理员'=>array('controller'=>'group','act'=>'group','class'=>'icon-group','action'=>array(
+        '系统管理员'=>array('controller'=>'group','act'=>'group','class'=>'fa fa-group','action'=>array(
             array('name'=>'系统管理组','url'=>'group/index','act'=>'group_index','list_acl'=>array()),
             array('name'=>'系统管理员','url'=>'group/user','act'=>'group_user','list_acl'=>array()),
         )),
-		'会员'=>array('controller'=>'member','act'=>'member','class'=>'icon-user','action'=>array(
+		'会员'=>array('controller'=>'member','act'=>'member','class'=>'fa fa-user','action'=>array(
 			array('name'=>'会员管理','url'=>'member/admin','act'=>'member_admin','list_acl'=>array())
 		)),
-		'日志管理'=>array('controller'=>'log','act'=>'log','class'=>'icon-exclamation-sign','action'=>array(
+		'日志管理'=>array('controller'=>'log','act'=>'log','class'=>'fa fa-exclamation-sign','action'=>array(
 			array('name'=>'系统日志','url'=>'log/index','act'=>'log_index','list_acl'=>array())
 		))
     );

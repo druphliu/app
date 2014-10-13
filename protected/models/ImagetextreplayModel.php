@@ -63,7 +63,7 @@ class ImagetextreplayModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-            'imagetextreplay_keywords'=>array(self::HAS_MANY, 'KeywordsModel', 'replayId')
+            'imagetextreplay_keywords'=>array(self::HAS_MANY, 'KeywordsModel', 'responseId')
 		);
 	}
 

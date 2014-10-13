@@ -7,7 +7,7 @@
  * @property string $id
  * @property string $type
  * @property integer $wechatId
- * @property integer $replayId
+ * @property integer $responseId
  */
 class SubscribereplayModel extends CActiveRecord
 {
@@ -39,12 +39,12 @@ class SubscribereplayModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('wechatId, replayId', 'required'),
-			array('wechatId, replayId', 'numerical', 'integerOnly'=>true),
+			array('wechatId, responseId', 'required'),
+			array('wechatId, responseId', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, type, wechatId, replayId', 'safe', 'on'=>'search'),
+			array('id, type, wechatId, responseId', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,7 +68,7 @@ class SubscribereplayModel extends CActiveRecord
 			'id' => 'ID',
 			'type' => 'Type',
 			'wechatId' => 'Wechat',
-			'replayId' => 'Replay',
+			'responseId' => 'Replay',
 		);
 	}
 
@@ -86,7 +86,7 @@ class SubscribereplayModel extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('type',$this->type,true);
 		$criteria->compare('wechatId',$this->wechatId);
-		$criteria->compare('replayId',$this->replayId);
+		$criteria->compare('responseId',$this->responseId);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
