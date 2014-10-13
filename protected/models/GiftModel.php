@@ -50,7 +50,7 @@ class GiftModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, wechatId, created_at', 'required'),
+			array('title, wechatId', 'required'),
 			array('wechatId, status', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>150),
 			array('type', 'length', 'max'=>8),

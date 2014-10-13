@@ -160,7 +160,7 @@ class MarketController extends WechatManagerController
     public function actionGiftDelete($id)
     {
         $model = GiftModel::model()->findByPk($id);
-        GiftcodeModel::model()->deleteAll('giftId=:giftId', array(':giftId' => $id));
+        GiftCodeModel::model()->deleteAll('giftId=:giftId', array(':giftId' => $id));
         //删除关键字或者menu action
         switch ($model->type) {
             case GiftModel::TYPE_KEYWORDS:
@@ -208,7 +208,7 @@ class MarketController extends WechatManagerController
                 while (!feof($handle)) {
                     $code = fgets($handle, 4096);
                     //入库
-                    $CodeModel = new GiftcodeModel();
+                    $CodeModel = new GiftCodeModel();
                     $CodeModel->giftId=$giftId;
                     $CodeModel->code = trim($code);
                     $CodeModel->save();

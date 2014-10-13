@@ -28,7 +28,7 @@ class WechatController extends MemberController
             $model->created_at = $dateTime;
             $model->updated_at = $dateTime;
             $model->token = md5($model->originalId);
-            $model->apiUrl = Yii::app()->params['siteUrl'] . '/api/index/id/' . $model->originalId;
+            $model->apiUrl = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('/api/index/id/' . $model->originalId);
             if ($model->validate()) {
                 $model->save();
                 ShowMessage::success('添加成功！', Yii::app()->createUrl('wechat/index'));

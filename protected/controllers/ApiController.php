@@ -4,6 +4,7 @@ class ApiController extends Controller
 {
     public function actionIndex($id)
     {
+        $response='';
         $originalId = $id;
         $wechatInfo = WechatModel::model()->find('originalId=:originalId', array(':originalId' => $originalId));
         if ($wechatInfo) {
@@ -151,7 +152,7 @@ class ApiController extends Controller
         $giftInfo = GiftModel::model()->findByPk($responseId);
         if ($giftInfo->status == 1) {
             //启用才发
-            $codeInfo = GiftcodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
+            $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
             if ($codeInfo) {
                 //update
                 $codeInfo->openId = $openId;
