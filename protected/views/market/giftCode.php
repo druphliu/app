@@ -66,7 +66,7 @@ $this->breadcrumbs = array(
                                                     </label>
                                                 </td>
                                                 <td>
-                                                    <?= $i?>
+                                                    <?= $i ?>
                                                 </td>
                                                 <td>
                                                     <?php echo substr_replace($d->code, '*****', 4, 5) ?>
@@ -118,7 +118,7 @@ $this->breadcrumbs = array(
                     message: '<div class="row"> ' +
                         '<div class="col-md-12"> ' +
                         '<form class="form-horizontal" id="myform"  method="post" ' +
-                        'action="<?php echo Yii::app()->createUrl('market/codeImport')?>" '+
+                        'action="<?php echo Yii::app()->createUrl('market/codeImport')?>" ' +
                         'enctype="multipart/form-data"> ' +
                         '<div class="form-group"> ' +
                         '<div class="col-md-8"> ' +
@@ -131,30 +131,40 @@ $this->breadcrumbs = array(
                             label: "导入",
                             className: "btn-success",
                             callback: function () {
-                                    var data=new FormData($(this).parents("form").get(0));
-                                    data.append('file', $('input[type=file]')[0].files[0]);
-                                    data.append('giftId',$('input[type=hidden]').val());
-                                    $.ajax({
-                                        type:'POST',
-                                        url:'<?php echo Yii::app()->createUrl('market/codeImport')?>',
-                                        data:data,
-                                        /**
-                                         *必须false才会自动加上正确的Content-Type
-                                         */
-                                        contentType:false,
-                                        /**
-                                         * 必须false才会避开jQuery对 formdata 的默认处理
-                                         * XMLHttpRequest会对 formdata 进行正确的处理
-                                         */
-                                        processData:false
-                                    }).then(function(msg){
-                                        //doneCal
-                                        alert(msg);
-                                        window.location.href='';
-                                    },function(){
-                                        //failCal
-                                        alert('failed');
-                                    });
+                                //loading
+                                $('body').addClass('modal-open');
+                                $('body').append('<div class="bootbox modal fade in" role="dialog" tabindex="-1" ' +
+                                    'style="display: block;" aria-hidden="false"><div class="modal-dialog" ' +
+                                    'style="width: 100%;text-align: center; padding-top: 80px;">' +
+                                    '<i class="fa fa-spinner fa-spin orange bigger-275"></i>' +
+                                    '</div><div class="modal-backdrop fade in"></div>');
+                                var data = new FormData($(this).parents("form").get(0));
+                                data.append('file', $('input[type=file]')[0].files[0]);
+                                data.append('giftId', $('input[type=hidden]').val());
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '<?php echo Yii::app()->createUrl('market/codeImport')?>',
+                                    data: data,
+                                    /**
+                                     *必须false才会自动加上正确的Content-Type
+                                     */
+                                    contentType: false,
+                                    /**
+                                     * 必须false才会避开jQuery对 formdata 的默认处理
+                                     * XMLHttpRequest会对 formdata 进行正确的处理
+                                     */
+                                    processData: false
+                                }).then(function (msg) {
+                                    //remove loading
+                                    $(".bootbox").remove();
+                                    $(".modal-backdrop").remove();
+                                    //doneCal
+                                    alert(msg);
+                                    window.location.href = '';
+                                }, function () {
+                                    //failCal
+                                    alert('failed');
+                                });
 
                             }
                         }

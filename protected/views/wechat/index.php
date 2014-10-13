@@ -93,6 +93,12 @@ $this->breadcrumbs = array(
 </div>
 <script>
     $(".api").click(function () {
+        //loading
+        $('body').addClass('modal-open');
+        $('body').append('<div class="bootbox modal fade in" role="dialog" tabindex="-1" ' +
+            'style="display: block;" aria-hidden="false"><div class="modal-dialog" style="width: 100%;text-align: center; padding-top: 80px;">' +
+            '<i class="fa fa-spinner fa-spin orange bigger-275"></i>' +
+            '</div><div class="modal-backdrop fade in"></div>');
         var url = $(this).attr('rel');
         $.getJSON(url, function (json) {
             bootbox.dialog({
@@ -114,7 +120,12 @@ $this->breadcrumbs = array(
                     buttons: {
                         success: {
                             label: "确定",
-                            className: "btn-success"
+                            className: "btn-success",
+                            callback:function(){
+                                //remove loading
+                                $(".bootbox").remove();
+                                $(".modal-backdrop").remove();
+                            }
                         }
                     }
                 }
