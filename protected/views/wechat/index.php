@@ -131,6 +131,13 @@ $this->breadcrumbs = array(
                 }
             );
         });
+    });
+    $().ready(function(){
+        $(document).on('click','.bootbox-close-button',function(){
+            //remove loading
+            $(".bootbox").remove();
+            $(".modal-backdrop").remove();
+        })
     })
 </script>
 <style>
