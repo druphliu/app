@@ -152,26 +152,30 @@ class ApiController extends Controller
         $giftInfo = GiftModel::model()->findByPk($responseId);
         if ($giftInfo->status == 1) {
             //启用才发
-            $userHasGet = GiftCodeModel::model()->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
-            if ($userHasGet) {
-                $content = $giftInfo->template ? str_replace('{code}', $userHasGet->code, $giftInfo->template) : $userHasGet->code;
+            if ($giftInfo->startTime > date('Y-m-d H:i:s')) {
+                $content = $giftInfo->unstartMsg ? $giftInfo->unstartMsg : "抱歉,还未开始呢";
+            } elseif ($giftInfo->endTime < date('Y-m-d H:i:s')) {
+                $content = $giftInfo->endMsg ? $giftInfo->endMsg : "抱歉,你来晚了";
             } else {
-                $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
-                if ($codeInfo) {
-                    //update
-                    $codeInfo->openId = $openId;
-                    $codeInfo->save();
-                    if ($giftInfo->template) {
-                        $content = $giftInfo->template ? str_replace('{code}', $codeInfo->code, $giftInfo->template) : $codeInfo->code;
-                    } else {
-                        $content = $codeInfo->code;
-                    }
+                $userHasGet = GiftCodeModel::model()->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
+                if ($userHasGet) {
+                    $content = $giftInfo->template ? str_replace('{code}', $userHasGet->code, $giftInfo->template) : $userHasGet->code;
                 } else {
-                    $content = "抱歉,领完了";
+                    $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
+                    if ($codeInfo) {
+                        //update
+                        $codeInfo->openId = $openId;
+                        $codeInfo->save();
+                        if ($giftInfo->template) {
+                            $content = $giftInfo->template ? str_replace('{code}', $codeInfo->code, $giftInfo->template) : $codeInfo->code;
+                        } else {
+                            $content = $codeInfo->code;
+                        }
+                    } else {
+                        $content = $giftInfo->codeOverMsg ? $giftInfo->codeOverMsg : "抱歉,领完了";
+                    }
                 }
             }
-        } else {
-            $content = "抱歉，你来早了...";
         }
         $responseObj = new WeChatTextResponse($content);
         return $responseObj;

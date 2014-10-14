@@ -43,6 +43,26 @@
             </div>
             <div class="space-4"></div>
             <div class="form-group">
+                <?php echo $form->labelEx($model, 'startTime', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div id="startTime" class="input-group date date-picker col-xs-3 col-sm-3">
+                    <?php echo $form->textField($model, 'startTime', array('class' => 'form-control date-picker add-on')); ?>
+                    <span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>
+                    <?php echo $form->error($model, 'startTime', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'endTime', array('class' => BootStrapUI::formLabelClass)); ?>
+                    <div id="endTime" class="input-group date date-picker col-xs-3 col-sm-3">
+                        <?php echo $form->textField($model, 'endTime', array('class' => 'form-control date-picker add-on', 'data-rule-minlength' => 3)); ?>
+                        <span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>
+
+
+                    <?php echo $form->error($model, 'endTime', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
                 <?php echo $form->labelEx($model, 'template', array('class' => BootStrapUI::formLabelClass)); ?>
                 <div class="col-sm-4">
                     <?php echo $form->textArea($model, 'template', array('class' => 'col-xs-10 col-sm-10')); ?>
@@ -50,6 +70,33 @@
 
                 </div>
                 <i>可用标签:{code}</i>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'unstartMsg', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->textArea($model, 'unstartMsg', array('class' => 'col-xs-10 col-sm-10')); ?>
+                    <?php echo $form->error($model, 'unstartMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'codeOverMsg', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->textArea($model, 'codeOverMsg', array('class' => 'col-xs-10 col-sm-10')); ?>
+                    <?php echo $form->error($model, 'codeOverMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'endMsg', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->textArea($model, 'endMsg', array('class' => 'col-xs-10 col-sm-10')); ?>
+                    <?php echo $form->error($model, 'endMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
+                </div>
             </div>
         </div>
         <div class="form-group" id="action"
@@ -71,6 +118,8 @@
         <?php $this->endWidget(); ?>
     </div>
 </div>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootstrap-datetimepicker.min.js"></script>
+<link href="<?php echo Yii::app()->request->baseUrl; ?>/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
 <script>
     $().ready(function () {
         $("#GiftModel_type").change(function () {
@@ -87,6 +136,26 @@
                     $("#action").show();
                     break;
             }
-        })
+        });
+        $("#startTime").datetimepicker({
+            format: 'yyyy-MM-dd hh:mm:ss',
+            language: 'zh',
+            pickDate: true,
+            pickTime: true,
+            hourStep: 1,
+            minuteStep: 15,
+            secondStep: 30,
+            inputMask: true
+        });
+        $("#endTime").datetimepicker({
+            format: 'yyyy-MM-dd hh:mm:ss',
+            language: 'zh',
+            pickDate: true,
+            pickTime: true,
+            hourStep: 1,
+            minuteStep: 15,
+            secondStep: 30,
+            inputMask: true
+        });
     })
 </script>

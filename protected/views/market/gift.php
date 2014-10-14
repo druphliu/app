@@ -48,8 +48,10 @@ $this->breadcrumbs=array(
                                             <th>ID</th>
                                             <th>活动名称</th>
                                             <th>活动类型</th>
-                                            <th>是否开始</th>
                                             <th>创建时间</th>
+                                            <th>开始时间</th>
+                                            <th>结束时间</th>
+                                            <th>是否启用</th>
                                             <th width="25%"></th>
                                         </tr>
                                         </thead>
@@ -72,14 +74,16 @@ $this->breadcrumbs=array(
                                                 <td>
                                                     <?= GiftModel::$typeArray[$d->type]?>
                                                 </td>
+
+                                                <td><?=$d->created_at?></td>
+                                                <td><?=$d->startTime?></td>
+                                                <td><?=$d->endTime?></td>
                                                 <td><?php  if($d->status){?>
                                                         <span class="label label-sm label-success">是</span>
                                                     <?php }else{?>
                                                         <span class="label label-sm label-warning">否</span>
                                                     <?php }?>
                                                 </td>
-                                                <td><?=$d->created_at?></td>
-
                                                 <td style="width:23%">
                                                     <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
                                                         <a class="btn btn-xs btn-primary" href="<?php echo Yii::app()->createUrl('market/giftCodes/id/'.$d->id)?>">
