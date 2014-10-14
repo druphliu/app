@@ -79,12 +79,15 @@ class GiftModel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => 'Title',
-			'type' => 'Type',
+			'title' => '礼包名称',
+			'type' => '领取方式',
 			'wechatId' => 'Wechat',
-			'template' => 'Template',
+			'template' => '回复模版',
 			'created_at' => 'Created At',
 			'status' => 'Status',
+            'keyword'=>'关键词',
+            'isAccurate'=>'是否精准匹配',
+            'action'=>'菜单值'
 		);
 	}
 

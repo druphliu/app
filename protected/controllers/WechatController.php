@@ -43,7 +43,10 @@ class WechatController extends MemberController
         if ($model->uid != Yii::app()->session['userInfo']['uid']) {
             return;
         }
+
         if (isset($_POST['WechatModel'])) {
+            unset($_POST['WechatModel']['type']);
+            unset($_POST['WechatModel']['originalId']);
             $model->attributes = $_POST['WechatModel'];
             if ($model->validate()) {
                 $model->save();

@@ -72,7 +72,9 @@ class TextreplayModel extends CActiveRecord
 			'id' => 'ID',
 			'wechatId' => 'Wechat',
 			'type' => 'Type',
-			'content' => 'Content',
+			'content' => '内容',
+            'keywords'=>'关键词',
+            'iaAccurate'=>'是否精准匹配',
 		);
 	}
 

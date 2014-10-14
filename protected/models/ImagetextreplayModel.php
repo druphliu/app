@@ -75,11 +75,13 @@ class ImagetextreplayModel extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'type' => 'Type',
-			'title' => 'Title',
-			'imgUrl' => 'Img Url',
-			'description' => 'Description',
+			'title' => '标题',
+			'imgUrl' => '图片路径',
+			'description' => '描述',
 			'wechatId' => 'Wechat',
-			'url' => 'Url',
+			'url' => 'URL',
+            'keywords'=>'关键词',
+            'iaAccurate'=>'是否精准匹配'
 		);
 	}
 

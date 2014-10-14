@@ -176,7 +176,8 @@ class ManagerController extends WechatManagerController
         $oldIsAccurate = 0;
         switch ($type) {
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $model = ImagetextreplayModel::model()->with('imagetextreplay_keywords')->findByPk($id);
+                $model = ImagetextreplayModel::model()->with('imagetextreplay_keywords')->find('t.id=:id and
+                imagetextreplay_keywords.type=:type',array(':id'=>$id,':type'=>ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));
                 $comm = '';
                 foreach ($model->imagetextreplay_keywords as $keywords) {
                     $oldKeywords[] = $keywords->name;
@@ -187,7 +188,8 @@ class ManagerController extends WechatManagerController
                 }
                 break;
             case TextreplayModel::TEXT_REPLAY_TYPE:
-                $model = TextreplayModel::model()->with('textreplay_keywords')->findByPk($id);
+                $model = TextreplayModel::model()->with('textreplay_keywords')->find('t.id=:id and
+                textreplay_keywords.type=:type',array(':id'=>$id,':type'=>TextreplayModel::TEXT_REPLAY_TYPE));
                 $comm = '';
                 foreach ($model->textreplay_keywords as $keywords) {
                     $oldKeywords[] = $keywords->name;

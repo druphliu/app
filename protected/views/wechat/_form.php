@@ -18,9 +18,10 @@
         </div>
         <div class="space-4"></div>
         <div class="form-group">
+            <?php $disable=false;$actionId=Yii::app()->controller->action->id;if($actionId=='update'):$disable=true;endif;?>
             <?php echo $form->labelEx($model, 'type', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-9">
-                <?php echo $form->textField($model, 'type', array('class' => 'col-xs-8 col-sm-2')); ?>
+                <?php echo $form->dropDownList($model, 'type', WechatModel::$typeSelect,array('class' => 'col-xs-8 col-sm-2','disabled'=>$disable)); ?>
                 <?php echo $form->error($model, 'type', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
@@ -28,7 +29,6 @@
         <div class="form-group">
             <?php echo $form->labelEx($model, 'originalId', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-9">
-                <?php $disable=false;$actionId=Yii::app()->controller->action->id;if($actionId=='update'):$disable=true;endif;?>
                 <?php echo $form->textField($model, 'originalId', array('class' => 'col-xs-8 col-sm-2','disabled'=>$disable)); ?>
                 <?php echo $form->error($model, 'originalId', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>

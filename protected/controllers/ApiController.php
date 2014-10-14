@@ -4,7 +4,7 @@ class ApiController extends Controller
 {
     public function actionIndex($id)
     {
-        $response='';
+        $response = '';
         $originalId = $id;
         $wechatInfo = WechatModel::model()->find('originalId=:originalId', array(':originalId' => $originalId));
         if ($wechatInfo) {
@@ -152,18 +152,23 @@ class ApiController extends Controller
         $giftInfo = GiftModel::model()->findByPk($responseId);
         if ($giftInfo->status == 1) {
             //启用才发
-            $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
-            if ($codeInfo) {
-                //update
-                $codeInfo->openId = $openId;
-                $codeInfo->save();
-                if ($giftInfo->template) {
-                    $content = str_replace('{code}', $codeInfo->code, $giftInfo->template);
-                } else {
-                    $content = $codeInfo->code;
-                }
+            $userHasGet = GiftCodeModel::model()->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
+            if ($userHasGet) {
+                $content = $giftInfo->template ? str_replace('{code}', $userHasGet->code, $giftInfo->template) : $userHasGet->code;
             } else {
-                $content = "抱歉,领完了";
+                $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
+                if ($codeInfo) {
+                    //update
+                    $codeInfo->openId = $openId;
+                    $codeInfo->save();
+                    if ($giftInfo->template) {
+                        $content = $giftInfo->template ? str_replace('{code}', $codeInfo->code, $giftInfo->template) : $codeInfo->code;
+                    } else {
+                        $content = $codeInfo->code;
+                    }
+                } else {
+                    $content = "抱歉,领完了";
+                }
             }
         } else {
             $content = "抱歉，你来早了...";

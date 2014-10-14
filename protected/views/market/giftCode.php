@@ -69,7 +69,7 @@ $this->breadcrumbs = array(
                                                     <?= $i ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo substr_replace($d->code, '*****', 4, 5) ?>
+                                                    <?php echo $d->code; //substr_replace($d->code, '*****', 4, 5) ?>
                                                 </td>
                                                 <td><?php if ($d->openId) { ?>
                                                         <span class="label label-sm label-success">是</span>
@@ -124,13 +124,18 @@ $this->breadcrumbs = array(
                         '<div class="col-md-8"> ' +
                         '<input type="file" id="id-input-file-2" name="code"/>' +
                         '<input type="hidden" name="giftId" value="<?=$giftId?>" />' +
-                        '</div> ' +
+                        '<i>仅支持txt格式文件,参考格式<a target="_blank" href="upload/eg.txt">查看</a></i></div> ' +
                         '</form> </div> </div>',
                     buttons: {
                         success: {
                             label: "导入",
                             className: "btn-success",
                             callback: function () {
+                                var file = $('input[type=file]')[0].files[0];
+                                if(!file){
+                                    alert('请选择文件');
+                                    return;
+                                }
                                 //loading
                                 $('body').addClass('modal-open');
                                 $('body').append('<div class="bootbox modal fade in" role="dialog" tabindex="-1" ' +
@@ -139,7 +144,7 @@ $this->breadcrumbs = array(
                                     '<i class="fa fa-spinner fa-spin orange bigger-275"></i>' +
                                     '</div><div class="modal-backdrop fade in"></div>');
                                 var data = new FormData($(this).parents("form").get(0));
-                                data.append('file', $('input[type=file]')[0].files[0]);
+                                data.append('file', file);
                                 data.append('giftId', $('input[type=hidden]').val());
                                 $.ajax({
                                     type: 'POST',
@@ -178,7 +183,15 @@ $this->breadcrumbs = array(
                 droppable: false,
                 onchange: null,
                 thumbnail: false, //| true | large
-                whitelist: 'gif|png|jpg|jpeg'
+                whitelist: 'text',
+                before_change: function(files, dropped) {
+                    var file = files[0];
+                    if(file.type!='text/plain'){
+                        alert('格式有误');
+                        return false;
+                    }
+                    return true;
+                }
             });
         });
 
