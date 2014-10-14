@@ -14,6 +14,7 @@
  * @property string $unstartMsg
  * @property string $endMsg
  * @property string $codeOverMsg
+ * @property string $pauseMsg
  * @property string $startTime
  * @property string $endTime
  */
@@ -59,11 +60,11 @@ class GiftModel extends CActiveRecord
 			array('wechatId, status', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>150),
 			array('type', 'length', 'max'=>8),
-			array('template, unstartMsg, endMsg, codeOverMsg', 'length', 'max'=>255),
+			array('template, unstartMsg, endMsg, codeOverMsg, pauseMsg', 'length', 'max'=>255),
 			array('startTime, endTime', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, type, wechatId, template, created_at, status, unstartMsg, endMsg, codeOverMsg, startTime, endTime', 'safe', 'on'=>'search'),
+			array('id, title, type, wechatId, template, created_at, status, unstartMsg, endMsg, codeOverMsg, pauseMsg, startTime, endTime', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,6 +95,7 @@ class GiftModel extends CActiveRecord
 			'unstartMsg' => '未开始回复',
 			'endMsg' => '结束回复',
 			'codeOverMsg' => '领取完毕回复',
+			'pauseMsg' => '活动暂停回复',
 			'startTime' => '开始时间',
 			'endTime' => '结束时间',
             'keyword'=>'关键词',
@@ -123,6 +125,7 @@ class GiftModel extends CActiveRecord
 		$criteria->compare('unstartMsg',$this->unstartMsg,true);
 		$criteria->compare('endMsg',$this->endMsg,true);
 		$criteria->compare('codeOverMsg',$this->codeOverMsg,true);
+		$criteria->compare('pauseMsg',$this->pauseMsg,true);
 		$criteria->compare('startTime',$this->startTime,true);
 		$criteria->compare('endTime',$this->endTime,true);
 

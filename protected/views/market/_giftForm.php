@@ -98,6 +98,15 @@
 
                 </div>
             </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'pauseMsg', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->textArea($model, 'pauseMsg', array('class' => 'col-xs-10 col-sm-10')); ?>
+                    <?php echo $form->error($model, 'pauseMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
+                </div>
+            </div>
         </div>
         <div class="form-group" id="action"
              <?php if ($type != GiftModel::TYPE_MENU){ ?>style="display: none" <?php } ?>>

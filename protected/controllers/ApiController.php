@@ -150,30 +150,29 @@ class ApiController extends Controller
     private function _getGiftReplay($responseId, $openId)
     {
         $giftInfo = GiftModel::model()->findByPk($responseId);
-        if ($giftInfo->status == 1) {
-            //启用才发
-            if ($giftInfo->startTime > date('Y-m-d H:i:s')) {
-                $content = $giftInfo->unstartMsg ? $giftInfo->unstartMsg : "抱歉,还未开始呢";
-            } elseif ($giftInfo->endTime < date('Y-m-d H:i:s')) {
-                $content = $giftInfo->endMsg ? $giftInfo->endMsg : "抱歉,你来晚了";
+        if ($giftInfo->startTime > date('Y-m-d H:i:s')) {
+            $content = $giftInfo->unstartMsg ? $giftInfo->unstartMsg : "抱歉,还未开始呢";
+        } elseif ($giftInfo->endTime < date('Y-m-d H:i:s')) {
+            $content = $giftInfo->endMsg ? $giftInfo->endMsg : "抱歉,你来晚了";
+        } elseif ($giftInfo->status==0) {
+            $content = $giftInfo->pauseMsg ? $giftInfo->pauseMsg : "抱歉,活动暂时停止";
+        } else {
+            $userHasGet = GiftCodeModel::model()->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
+            if ($userHasGet) {
+                $content = $giftInfo->template ? str_replace('{code}', $userHasGet->code, $giftInfo->template) : $userHasGet->code;
             } else {
-                $userHasGet = GiftCodeModel::model()->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
-                if ($userHasGet) {
-                    $content = $giftInfo->template ? str_replace('{code}', $userHasGet->code, $giftInfo->template) : $userHasGet->code;
-                } else {
-                    $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
-                    if ($codeInfo) {
-                        //update
-                        $codeInfo->openId = $openId;
-                        $codeInfo->save();
-                        if ($giftInfo->template) {
-                            $content = $giftInfo->template ? str_replace('{code}', $codeInfo->code, $giftInfo->template) : $codeInfo->code;
-                        } else {
-                            $content = $codeInfo->code;
-                        }
+                $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
+                if ($codeInfo) {
+                    //update
+                    $codeInfo->openId = $openId;
+                    $codeInfo->save();
+                    if ($giftInfo->template) {
+                        $content = $giftInfo->template ? str_replace('{code}', $codeInfo->code, $giftInfo->template) : $codeInfo->code;
                     } else {
-                        $content = $giftInfo->codeOverMsg ? $giftInfo->codeOverMsg : "抱歉,领完了";
+                        $content = $codeInfo->code;
                     }
+                } else {
+                    $content = $giftInfo->codeOverMsg ? $giftInfo->codeOverMsg : "抱歉,领完了";
                 }
             }
         }
