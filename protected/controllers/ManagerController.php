@@ -88,9 +88,11 @@ class ManagerController extends WechatManagerController
             case TextreplayModel::TEXT_REPLAY_TYPE:
                 $dataProvider = new CActiveDataProvider('TextreplayModel', array(
                     'criteria' => array(
-                        'order' => 'id DESC',
+                        'order' => 't.id DESC',
                         'with' => array('textreplay_keywords'),
-                        'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" . SubscribereplayModel::KEYWORDS_TYPE . "'"
+                        'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" .
+                            SubscribereplayModel::KEYWORDS_TYPE . "' and textreplay_keywords.type='".TextreplayModel::TEXT_REPLAY_TYPE."'",
+                        'together'=>true
                     ),
                     //'pagination' => false,
                     'pagination' => array(
@@ -104,8 +106,10 @@ class ManagerController extends WechatManagerController
                 $dataProvider = new CActiveDataProvider('ImagetextreplayModel', array(
                     'criteria' => array(
                         'with' => array('imagetextreplay_keywords'),
-                        'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" . SubscribereplayModel::KEYWORDS_TYPE . "'",
-                        'order' => 'id DESC',
+                        'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" . SubscribereplayModel::KEYWORDS_TYPE .
+                            "' and imagetextreplay_keywords.type='".ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE."'",
+                        'together'=>true,
+                        'order' => 't.id DESC',
                     ),
                     //'pagination' => false,
                     'pagination' => array(

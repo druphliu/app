@@ -10,12 +10,12 @@
  * @property string $openId
  * @property string $created_at
  */
-class GiftcodeModel extends CActiveRecord
+class GiftCodeModel extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return GiftcodeModel the static model class
+	 * @return GiftCodeModel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
