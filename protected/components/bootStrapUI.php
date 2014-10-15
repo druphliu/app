@@ -18,7 +18,7 @@ class BootStrapUI
     const formLabelClass='col-sm-3 control-label no-padding-right';
     static function saveButton()
     {
-        return CHtml::htmlButton("<i class='icon-ok bigger-110'></i>保存", array('class' => 'btn btn-info', 'type' => 'submit'));
+        return CHtml::htmlButton("<i class='icon-ok bigger-110'></i>保存", array('class' => 'btn btn-info','id'=>'submit', 'type' => 'submit'));
     }
 
     static function resetButton()
