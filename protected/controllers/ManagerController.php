@@ -53,6 +53,7 @@ class ManagerController extends WechatManagerController
             }
         }
         if (isset($_POST['TextreplayModel']) || isset($_POST['ImagetextreplayModel'])) {
+
             if ($type == TextreplayModel::TEXT_REPLAY_TYPE) {
                 $model->attributes = $_POST['TextreplayModel'];
             } else {

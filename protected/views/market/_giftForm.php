@@ -82,7 +82,10 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'template', array('class' => BootStrapUI::formLabelClass)); ?>
                 <div class="col-sm-9">
-                    <?php echo $form->textArea($model, 'template', array('class' => 'col-xs-10 col-sm-5')); ?>
+                    <div class="col-sm-5">
+                        <div class="wysiwyg-editor" id="editor1" style="height: 115px"><?php echo $model->template?></div>
+                    </div>
+                    <?php echo $form->hiddenField($model, 'template', array('id' => 'template')); ?>
                     <?php echo $form->error($model, 'template', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
                     <i>可用标签:{code}</i>
                 </div>
@@ -92,7 +95,10 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'unstartMsg', array('class' => BootStrapUI::formLabelClass)); ?>
                 <div class="col-sm-9">
-                    <?php echo $form->textArea($model, 'unstartMsg', array('class' => 'col-xs-10 col-sm-5')); ?>
+                    <div class="col-sm-5">
+                        <div class="wysiwyg-editor" id="editor2" style="height: 115px"><?php echo $model->unstartMsg?></div>
+                    </div>
+                    <?php echo $form->hiddenField($model, 'unstartMsg', array('id' => 'unstartMsg')); ?>
                     <?php echo $form->error($model, 'unstartMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
 
                 </div>
@@ -101,7 +107,10 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'codeOverMsg', array('class' => BootStrapUI::formLabelClass)); ?>
                 <div class="col-sm-9">
-                    <?php echo $form->textArea($model, 'codeOverMsg', array('class' => 'col-xs-10 col-sm-5')); ?>
+                    <div class="col-sm-5">
+                        <div class="wysiwyg-editor" id="editor3" style="height: 115px"><?php echo $model->codeOverMsg?></div>
+                    </div>
+                    <?php echo $form->hiddenField($model, 'codeOverMsg', array('id' => 'codeOverMsg')); ?>
                     <?php echo $form->error($model, 'codeOverMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
 
                 </div>
@@ -110,7 +119,10 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'endMsg', array('class' => BootStrapUI::formLabelClass)); ?>
                 <div class="col-sm-9">
-                    <?php echo $form->textArea($model, 'endMsg', array('class' => 'col-xs-10 col-sm-5')); ?>
+                    <div class="col-sm-5">
+                        <div class="wysiwyg-editor" id="editor4" style="height: 115px"><?php echo $model->endMsg?></div>
+                    </div>
+                    <?php echo $form->hiddenField($model, 'endMsg', array('id' => 'endMsg')); ?>
                     <?php echo $form->error($model, 'endMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
 
                 </div>
@@ -119,7 +131,10 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'pauseMsg', array('class' => BootStrapUI::formLabelClass)); ?>
                 <div class="col-sm-9">
-                    <?php echo $form->textArea($model, 'pauseMsg', array('class' => 'col-xs-10 col-sm-5')); ?>
+                    <div class="col-sm-5">
+                        <div class="wysiwyg-editor" id="editor5" style="height: 115px"><?php echo $model->pauseMsg?></div>
+                    </div>
+                    <?php echo $form->hiddenField($model, 'pauseMsg', array('id' => 'pauseMsg')); ?>
                     <?php echo $form->error($model, 'pauseMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
 
                 </div>
@@ -146,6 +161,14 @@
 </div>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootstrap-datetimepicker.min.js"></script>
 <link href="<?php echo Yii::app()->request->baseUrl; ?>/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+<!-- inline scripts related to this page -->
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/markdown/markdown.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/markdown/bootstrap-markdown.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.hotkeys.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootstrap-wysiwyg.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootbox.min.js"></script>
 <script>
     $().ready(function () {
         $("#GiftModel_type").change(function () {
@@ -183,5 +206,47 @@
             secondStep: 30,
             inputMask: true
         });
+        $('#editor1').ace_wysiwyg({
+            toolbar:
+                [
+                    {name:'createLink', className:'btn-pink'},
+                    {name:'unlink', className:'btn-pink'}
+                ]
+        }).prev().addClass('wysiwyg-style2');
+        $('#editor2').ace_wysiwyg({
+            toolbar:
+                [
+                    {name:'createLink', className:'btn-pink'},
+                    {name:'unlink', className:'btn-pink'}
+                ]
+        }).prev().addClass('wysiwyg-style2');
+        $('#editor3').ace_wysiwyg({
+            toolbar:
+                [
+                    {name:'createLink', className:'btn-pink'},
+                    {name:'unlink', className:'btn-pink'}
+                ]
+        }).prev().addClass('wysiwyg-style2');
+        $('#editor4').ace_wysiwyg({
+            toolbar:
+                [
+                    {name:'createLink', className:'btn-pink'},
+                    {name:'unlink', className:'btn-pink'}
+                ]
+        }).prev().addClass('wysiwyg-style2');
+        $('#editor5').ace_wysiwyg({
+            toolbar:
+                [
+                    {name:'createLink', className:'btn-pink'},
+                    {name:'unlink', className:'btn-pink'}
+                ]
+        }).prev().addClass('wysiwyg-style2');
+    });
+    $("#submit").click(function(){
+        $("#template").val($("#editor1").html());
+        $("#unstartMsg").val($("#editor2").html());
+        $("#codeOverMsg").val($("#editor3").html());
+        $("#endMsg").val($("#editor4").html());
+        $("#pauseMsg").val($("#editor5").html());
     })
 </script>

@@ -43,8 +43,9 @@
         <div class="space-4"></div>
         <div class="form-group">
             <?php echo $form->labelEx($model, 'content', array('class' => BootStrapUI::formLabelClass)); ?>
-            <div class="col-sm-9">
-                <?php echo $form->textArea($model, 'content', array('class' => 'col-xs-10 col-sm-5','style'=>'width:420px; height:300px; margin:5px 0')); ?>
+            <div class="col-sm-5">
+                <div class="wysiwyg-editor" id="editor"><?php echo $model->content?></div>
+                <?php echo $form->hiddenField($model, 'content', array('id' => 'content')); ?>
                 <?php echo $form->error($model, 'content', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
@@ -59,3 +60,26 @@
         <?php $this->endWidget(); ?>
     </div>
 </div>
+
+<!-- inline scripts related to this page -->
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/markdown/markdown.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/markdown/bootstrap-markdown.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.hotkeys.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootstrap-wysiwyg.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootbox.min.js"></script>
+<script>
+    $().ready(function(){
+        $('#editor').ace_wysiwyg({
+            toolbar:
+                [
+                    {name:'createLink', className:'btn-pink'},
+                    {name:'unlink', className:'btn-pink'}
+                ]
+        }).prev().addClass('wysiwyg-style2');
+    });
+    $("#submit").click(function(){
+        $("#content").val($("#editor").html());
+    })
+</script>

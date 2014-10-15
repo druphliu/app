@@ -42,7 +42,7 @@ class TextreplayModel extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('wechatId, type, content, keywords', 'required'),
+            array('wechatId, type, content', 'required'),
             array('wechatId', 'numerical', 'integerOnly' => true),
             array('type', 'length', 'max' => 9),
             // The following rule is used by search().

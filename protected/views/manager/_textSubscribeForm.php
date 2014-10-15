@@ -33,9 +33,9 @@
                 <td></td>
             </tr>
             <tr>
-                <td width="420" valign="top">
-                    <?php echo $form->textArea($model,'content',array('style'=>'width:420px; height:500px; margin:5px 0'))?>
-
+                <td width="520" valign="top">
+                    <div class="wysiwyg-editor" id="editor"><?php echo $model->content?></div>
+                    <?php echo $form->hiddenField($model,'content',array('id'=>'content'))?>
                 </td>
                 <td valign="top">
                     <div style="margin-left:20px" class="zdhuifu">
@@ -52,18 +52,6 @@
                         10.周公解梦&#12288;梦见+关键词&#12288;例如:梦见父母<br>
                         11.陪聊&#12288;直接输入聊天关键词即可<br>
                         12.聊天&#12288;直接输入聊天关键词即可<br>
-                        13.藏头诗 藏头诗+关键词&#12288;例：藏头诗我爱你&#12288;<br>
-                        14.笑话&#12288;直接发送笑话<br>
-                        15.糗事&#12288;直接发送糗事<br>
-                        16.快递 快递＋快递名＋快递号&#12288;例：快递顺丰117215889174<br>
-                        17.健康指数查询&#12288;健康＋高，＋重&#12288;例：健康170,65<br>
-                        18.朗读 朗读＋关键词&#12288;例：朗读微旭｜微信营销专家多用户营销系统<br>
-                        19.计算器 计算器使用方法&#12288;例：计算50-50&#12288;，计算100*100<br>
-                        20.输入价格了解微旭｜微信营销专家平台系统的价格<br>
-                        21.输入服务了解微旭｜微信营销专家平台系统的售后服务<br>
-                        23.输入抽奖，即可玩幸运大抽奖<br>
-                        2４.输入会员即可填写会员资料<br>
-                        25.更多功能请回复帮助，或者help<br>
 
                     </div>
                 </td>
@@ -86,3 +74,25 @@
         <?php $this->endWidget(); ?>
     </div>
 </div>
+<!-- inline scripts related to this page -->
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/markdown/markdown.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/markdown/bootstrap-markdown.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.hotkeys.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootstrap-wysiwyg.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootbox.min.js"></script>
+<script>
+    $().ready(function(){
+        $('#editor').ace_wysiwyg({
+            toolbar:
+                [
+                    {name:'createLink', className:'btn-pink'},
+                    {name:'unlink', className:'btn-pink'}
+                ]
+        }).prev().addClass('wysiwyg-style2');
+    });
+    $("#submit").click(function(){
+        $("#content").val($("#editor").html());
+    })
+</script>

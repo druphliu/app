@@ -45,7 +45,7 @@ class ImagetextreplayModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-            array('wechatId, type, title, keywords, url, imgUrl', 'required'),
+            array('wechatId, type, title, url, imgUrl', 'required'),
 			array('wechatId', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>9),
 			array('title', 'length', 'max'=>100),
