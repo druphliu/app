@@ -48,7 +48,7 @@ class WechatModel extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('uid', 'required'),
+            array('uid, originalId, name, wechatAccount', 'required'),
             array('uid, area, created_at, updated_at', 'numerical', 'integerOnly' => true),
             array('type', 'length', 'max' => 4),
             array('name', 'length', 'max' => 40),

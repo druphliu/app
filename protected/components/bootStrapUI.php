@@ -8,7 +8,7 @@
  */
 class BootStrapUI
 {
-    const alertError = '<button data-dismiss="alert" class="close" type="button"><i class="icon-remove"></i></button>
+    const alertError = '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-remove"></i></button>
 							<strong><i class="icon-remove"></i>请更正以下错误:</strong>';
     const alertErrorClass = 'alert alert-danger';
 
