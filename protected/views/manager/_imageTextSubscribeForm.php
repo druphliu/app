@@ -5,7 +5,24 @@
             'enableAjaxValidation' => false,
             'enableClientValidation' => true,
             'focus' => array($model, 'content'),
-            'htmlOptions' => array('class' => 'form-horizontal')
+            'htmlOptions' => array('class' => 'form-horizontal'),
+            'clientOptions'=>array(
+                'validateOnSubmit'=>true,
+                'afterValidate' => 'js:function(form, data, hasError) {
+                  if(hasError) {
+                      for(var i in data) $("#"+i).parents(".form-group").addClass("has-error");
+                      return false;
+                  }
+                  else {
+                      form.children().removeClass("has-error");
+                      return true;
+                  }
+              }',
+                'afterValidateAttribute' => 'js:function(form, attribute, data, hasError) {
+                  if(hasError) $("#"+attribute.id).parents(".form-group").addClass("has-error");
+                      else $("#"+attribute.id).parents(".form-group").removeClass("has-error");
+              }'
+            )
         )); ?>
         <?php echo $form->errorSummary($model, BootStrapUI::alertError, '', array('class' => BootStrapUI::alertErrorClass)); ?>
 
@@ -35,8 +52,8 @@
         <div class="space-4"></div>
         <div class="form-group">
             <?php echo $form->labelEx($model, 'imgUrl', array('class' => BootStrapUI::formLabelClass)); ?>
-            <div class="col-sm-4">
-                <?php echo $form->textField($model, 'imgUrl', array('class' => 'col-xs-10 col-sm-10')); ?>
+            <div class="col-sm-9">
+                <?php echo $form->textField($model, 'imgUrl', array('class' => 'col-xs-10 col-sm-5')); ?>
                 <?php echo $form->error($model, 'imgUrl', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>

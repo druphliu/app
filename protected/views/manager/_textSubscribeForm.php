@@ -5,7 +5,24 @@
             'enableAjaxValidation' => false,
             'enableClientValidation' => true,
             'focus' => array($model, 'content'),
-            'htmlOptions' => array('class' => 'form-horizontal')
+            'htmlOptions' => array('class' => 'form-horizontal'),
+            'clientOptions'=>array(
+                'validateOnSubmit'=>true,
+                'afterValidate' => 'js:function(form, data, hasError) {
+                  if(hasError) {
+                      for(var i in data) $("#"+i).parents(".form-group").addClass("has-error");
+                      return false;
+                  }
+                  else {
+                      form.children().removeClass("has-error");
+                      return true;
+                  }
+              }',
+                'afterValidateAttribute' => 'js:function(form, attribute, data, hasError) {
+                  if(hasError) $("#"+attribute.id).parents(".form-group").addClass("has-error");
+                      else $("#"+attribute.id).parents(".form-group").removeClass("has-error");
+              }'
+            )
         )); ?>
         <?php echo $form->errorSummary($model, BootStrapUI::alertError, '', array('class' => BootStrapUI::alertErrorClass)); ?>
 

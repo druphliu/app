@@ -135,6 +135,7 @@ class ManagerController extends WechatManagerController
                 break;
         }
         if (isset($_POST['ImagetextreplayModel']) || isset($_POST['TextreplayModel'])) {
+
             if (isset($_POST['ImagetextreplayModel'])) {
                 $model->attributes = $_POST['ImagetextreplayModel'];
                 $keywords = $_POST['ImagetextreplayModel']['keywords'];

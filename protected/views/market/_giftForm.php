@@ -5,13 +5,30 @@
             'enableAjaxValidation' => false,
             'enableClientValidation' => true,
             'focus' => array($model, 'keyWords'),
-            'htmlOptions' => array('class' => 'form-horizontal')
+            'htmlOptions' => array('class' => 'form-horizontal'),
+            'clientOptions'=>array(
+                'validateOnSubmit'=>true,
+                'afterValidate' => 'js:function(form, data, hasError) {
+                  if(hasError) {
+                      for(var i in data) $("#"+i).parents(".form-group").addClass("has-error");
+                      return false;
+                  }
+                  else {
+                      form.children().removeClass("has-error");
+                      return true;
+                  }
+              }',
+                'afterValidateAttribute' => 'js:function(form, attribute, data, hasError) {
+                  if(hasError) $("#"+attribute.id).parents(".form-group").addClass("has-error");
+                      else $("#"+attribute.id).parents(".form-group").removeClass("has-error");
+              }'
+            )
         )); ?>
         <?php echo $form->errorSummary($model, BootStrapUI::alertError, '', array('class' => BootStrapUI::alertErrorClass)); ?>
         <div class="form-group">
             <?php echo $form->labelEx($model, 'title', array('class' => BootStrapUI::formLabelClass)); ?>
-            <div class="col-sm-4">
-                <?php echo $form->textField($model, 'title', array('class' => 'col-xs-10 col-sm-10')); ?>
+            <div class="col-sm-9">
+                <?php echo $form->textField($model, 'title', array('class' => 'col-xs-10 col-sm-5')); ?>
                 <?php echo $form->error($model, 'title', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
@@ -28,8 +45,8 @@
         <div id="keyword" <?php if ($type != GiftModel::TYPE_KEYWORDS){ ?>style="display: none" <?php } ?>>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'keyword', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->textField($model, 'keyword', array('class' => 'col-xs-10 col-sm-10')); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textField($model, 'keyword', array('class' => 'col-xs-10 col-sm-5')); ?>
                     <?php echo $form->error($model, 'keyword', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
                 </div>
             </div>
@@ -64,18 +81,18 @@
             <div class="space-4"></div>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'template', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->textArea($model, 'template', array('class' => 'col-xs-10 col-sm-10')); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textArea($model, 'template', array('class' => 'col-xs-10 col-sm-5')); ?>
                     <?php echo $form->error($model, 'template', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-
+                    <i>可用标签:{code}</i>
                 </div>
-                <i>可用标签:{code}</i>
+
             </div>
             <div class="space-4"></div>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'unstartMsg', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->textArea($model, 'unstartMsg', array('class' => 'col-xs-10 col-sm-10')); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textArea($model, 'unstartMsg', array('class' => 'col-xs-10 col-sm-5')); ?>
                     <?php echo $form->error($model, 'unstartMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
 
                 </div>
@@ -83,8 +100,8 @@
             <div class="space-4"></div>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'codeOverMsg', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->textArea($model, 'codeOverMsg', array('class' => 'col-xs-10 col-sm-10')); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textArea($model, 'codeOverMsg', array('class' => 'col-xs-10 col-sm-5')); ?>
                     <?php echo $form->error($model, 'codeOverMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
 
                 </div>
@@ -92,8 +109,8 @@
             <div class="space-4"></div>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'endMsg', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->textArea($model, 'endMsg', array('class' => 'col-xs-10 col-sm-10')); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textArea($model, 'endMsg', array('class' => 'col-xs-10 col-sm-5')); ?>
                     <?php echo $form->error($model, 'endMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
 
                 </div>
@@ -101,8 +118,8 @@
             <div class="space-4"></div>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'pauseMsg', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->textArea($model, 'pauseMsg', array('class' => 'col-xs-10 col-sm-10')); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textArea($model, 'pauseMsg', array('class' => 'col-xs-10 col-sm-5')); ?>
                     <?php echo $form->error($model, 'pauseMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
 
                 </div>
@@ -111,8 +128,8 @@
         <div class="form-group" id="action"
              <?php if ($type != GiftModel::TYPE_MENU){ ?>style="display: none" <?php } ?>>
             <?php echo $form->labelEx($model, 'action', array('class' => BootStrapUI::formLabelClass)); ?>
-            <div class="col-sm-4">
-                <?php echo $form->textField($model, 'action', array('class' => 'col-xs-10 col-sm-10')); ?>
+            <div class="col-sm-9">
+                <?php echo $form->textField($model, 'action', array('class' => 'col-xs-10 col-sm-5')); ?>
                 <?php echo $form->error($model, 'action', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>

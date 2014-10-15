@@ -53,25 +53,37 @@ class ApiController extends Controller
 
     private function textResponse($wechatId, $request)
     {
+        $keyword = '';
         $message = trim($request->content);
         //find keywords
-        $keywords = KeywordsModel::model()->find("wechatId=:wechatId and name like concat(:name,'%')", array(':wechatId' => $wechatId, ':name' => $message));
-        $type = $keywords ? $keywords->type : TextreplayModel::TEXT_REPLAY_TYPE;
+        $keywords = KeywordsModel::model()->findAll("wechatId=:wechatId and name like concat('%',:name,'%')",
+            array(':wechatId' => $wechatId, ':name' => $message));
+        foreach ($keywords as $k) {
+            if ($k->isAccurate and trim($k->name) == $message) {
+                //精准匹配
+                $keyword = $k;
+            }
+            if (!$k->isAccurate and mb_strpos($k->name, $message) !== false) {
+                //模糊匹配
+                $keyword = $k;
+            }
+        }
+        $type = $keyword ? $keyword->type : TextreplayModel::TEXT_REPLAY_TYPE;
         switch ($type) {
             case TextreplayModel::TEXT_REPLAY_TYPE:
-                if ($keywords) {
-                    $response = $this->_getTextReplay($keywords->responseId);
+                if ($keyword) {
+                    $response = $this->_getTextReplay($keyword->responseId);
                 } else {
                     $content = "亲，暂时不能理解你说的";
                     $response = new WeChatTextResponse($content);
                 }
                 break;
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $response = $this->_getImageTextReplay($keywords->responseId);
+                $response = $this->_getImageTextReplay($keyword->responseId);
                 break;
             case GiftModel::GIFT_TYPE:
                 //礼包领取
-                $response = $this->_getGiftReplay($keywords->responseId, $request->from_user_name);
+                $response = $this->_getGiftReplay($keyword->responseId, $request->from_user_name);
                 break;
         }
         $xml = $response->_to_xml($request);
@@ -154,7 +166,7 @@ class ApiController extends Controller
             $content = $giftInfo->unstartMsg ? $giftInfo->unstartMsg : "抱歉,还未开始呢";
         } elseif ($giftInfo->endTime < date('Y-m-d H:i:s')) {
             $content = $giftInfo->endMsg ? $giftInfo->endMsg : "抱歉,你来晚了";
-        } elseif ($giftInfo->status==0) {
+        } elseif ($giftInfo->status == 0) {
             $content = $giftInfo->pauseMsg ? $giftInfo->pauseMsg : "抱歉,活动暂时停止";
         } else {
             $userHasGet = GiftCodeModel::model()->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
