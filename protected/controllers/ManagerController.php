@@ -168,7 +168,7 @@ class ManagerController extends WechatManagerController
         }
 
         $view = 'keywordsReplayCreate';
-        $this->render($view, array('model' => $model, 'type' => $type));
+        $this->render($view, array('model' => $model, 'type' => $type,'wechatId'=>$this->wechatInfo->id));
     }
 
     public function actionKeyWordsUpdate($id)
@@ -244,7 +244,7 @@ class ManagerController extends WechatManagerController
         }
 
         $view = 'keywordsReplayCreate';
-        $this->render($view, array('model' => $model, 'type' => $type));
+        $this->render($view, array('model' => $model, 'type' => $type,'wechatId'=>$this->wechatInfo->id));
     }
 
     public function actionKeyWordsDelete($id)

@@ -85,8 +85,15 @@
         <?php $this->endWidget(); ?>
     </div>
 </div>
+<!--add project global -->
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/global.js"></script>
 <script>
     $().ready(function(){
 
+    });
+    $("#submit").click(function () {
+        var wechatId = '<?php echo $wechatId?>';
+        var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
+        return keywordsCheck(wechatId,url,'ImagetextreplayModel');
     })
 </script>

@@ -6,8 +6,8 @@
             'enableClientValidation' => true,
             'focus' => array($model, 'keyWords'),
             'htmlOptions' => array('class' => 'form-horizontal'),
-            'clientOptions'=>array(
-                'validateOnSubmit'=>true,
+            'clientOptions' => array(
+                'validateOnSubmit' => true,
                 'afterValidate' => 'js:function(form, data, hasError) {
                   if(hasError) {
                       for(var i in data) $("#"+i).parents(".form-group").addClass("has-error");
@@ -44,8 +44,8 @@
         <div class="form-group">
             <?php echo $form->labelEx($model, 'content', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-5">
-                <div class="wysiwyg-editor" id="editor"><?php echo $model->content?></div>
-                <?php echo $form->hiddenField($model, 'content', array('id' => 'content')); ?>
+                <div class="wysiwyg-editor" id="editor"><?php echo $model->content ?></div>
+                <?php echo $form->hiddenField($model, 'content'); ?>
                 <?php echo $form->error($model, 'content', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
@@ -60,6 +60,8 @@
         <?php $this->endWidget(); ?>
     </div>
 </div>
+<!--add project global -->
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/global.js"></script>
 
 <!-- inline scripts related to this page -->
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -70,16 +72,20 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootstrap-wysiwyg.min.js"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootbox.min.js"></script>
 <script>
-    $().ready(function(){
+    $().ready(function () {
         $('#editor').ace_wysiwyg({
-            toolbar:
-                [
-                    {name:'createLink', className:'btn-pink'},
-                    {name:'unlink', className:'btn-pink'}
-                ]
+            toolbar: [
+                {name: 'createLink', className: 'btn-pink'},
+                {name: 'unlink', className: 'btn-pink'}
+            ]
         }).prev().addClass('wysiwyg-style2');
     });
-    $("#submit").click(function(){
-        $("#content").val($("#editor").html());
+    $("#submit").click(function () {
+        var wechatId = '<?php echo $wechatId?>';
+        var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
+        $("#TextreplayModel_content").val($("#editor").html());
+        return keywordsCheck(wechatId,url,'TextreplayModel');
     })
+
+
 </script>

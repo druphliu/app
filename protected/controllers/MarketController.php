@@ -8,7 +8,7 @@ class MarketController extends WechatManagerController
         $dataProvider = new CActiveDataProvider('GiftModel', array(
             'criteria' => array(
                 'order' => 'id DESC',
-                'condition'=>'wechatId='.$this->wechatInfo->id
+                'condition' => 'wechatId=' . $this->wechatInfo->id
             ),
             //'pagination' => false,
             'pagination' => array(
@@ -31,7 +31,7 @@ class MarketController extends WechatManagerController
                 $model->save();
                 switch ($type) {
                     case GiftModel::TYPE_KEYWORDS:
-                        $keywords = $_POST['GiftModel']['keyword'];
+                        $keywords = $_POST['GiftModel']['keywords'];
                         $isAccurate = $_POST['GiftModel']['isAccurate'];
                         $keywordsArray = explode(',', $keywords);
                         foreach ($keywordsArray as $k) {
@@ -62,7 +62,8 @@ class MarketController extends WechatManagerController
                 ShowMessage::success('添加成功', Yii::app()->createUrl('market/gift'));
             }
         }
-        $this->render('giftCreate', array('model' => $model, 'type' => $type ? $type : GiftModel::TYPE_KEYWORDS));
+        $this->render('giftCreate', array('model' => $model, 'type' => $type ? $type : GiftModel::TYPE_KEYWORDS,
+            'wechatId' => $this->wechatInfo->id));
     }
 
     public function actionGiftUpdate($id)
@@ -81,7 +82,7 @@ class MarketController extends WechatManagerController
                     $keyword .= $common . $k->name;
                     $common = ',';
                 }
-                $model->keyword = $keyword;
+                $model->keywords = $keyword;
                 $model->isAccurate = $isAccurate;
                 break;
             case GiftModel::TYPE_MENU:
@@ -96,7 +97,7 @@ class MarketController extends WechatManagerController
                 switch ($model->type) {
                     //根据活动类型更新不同关联表
                     case GiftModel::TYPE_KEYWORDS:
-                        $keywordsArray = explode(',', $_POST['GiftModel']['keyword']);
+                        $keywordsArray = explode(',', $_POST['GiftModel']['keywords']);
                         $keywordsAdd = array_unique(array_merge($oldKeywords, $keywordsArray));
                         $arrayDel = array_diff($keywordsAdd, $keywordsArray); //删除了的关键字
                         $arrayAdd = array_diff($keywordsAdd, $oldKeywords); //添加的关键字
@@ -138,7 +139,7 @@ class MarketController extends WechatManagerController
                 ShowMessage::success('编辑成功', Yii::app()->createUrl('market/gift'));
             }
         }
-        $this->render('giftUpdate', array('model' => $model, 'type' => $model->type));
+        $this->render('giftUpdate', array('model' => $model, 'type' => $model->type,'wechatId'=>$this->wechatInfo->id));
     }
 
     public function actionGiftStart($id)
@@ -209,7 +210,7 @@ class MarketController extends WechatManagerController
                     $code = fgets($handle, 4096);
                     //入库
                     $CodeModel = new GiftCodeModel();
-                    $CodeModel->giftId=$giftId;
+                    $CodeModel->giftId = $giftId;
                     $CodeModel->code = trim($code);
                     $CodeModel->save();
                 }

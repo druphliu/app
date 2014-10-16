@@ -17,7 +17,7 @@ $this->breadcrumbs = array(
     </h1>
 </div>
 <?php if ($type == TextreplayModel::TEXT_REPLAY_TYPE){
-    echo $this->renderPartial('_textKeywordsForm', array('model' => $model));
+    echo $this->renderPartial('_textKeywordsForm', array('model' => $model,'wechatId'=>$wechatId));
 }else {
-    echo $this->renderPartial('_imageTextKeywordsForm', array('model' => $model));
+    echo $this->renderPartial('_imageTextKeywordsForm', array('model' => $model,'wechatId'=>$wechatId));
 }?>

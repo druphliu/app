@@ -27,7 +27,7 @@ class GiftModel extends CActiveRecord
     public static $typeArray = array(self::TYPE_KEYWORDS=>'关键词',self::TYPE_MENU=>'菜单');
 
     public $action;
-    public $keyword;
+    public $keywords;
     public $isAccurate;
 
 	/**
@@ -98,7 +98,7 @@ class GiftModel extends CActiveRecord
 			'pauseMsg' => '活动暂停回复',
 			'startTime' => '开始时间',
 			'endTime' => '结束时间',
-            'keyword'=>'关键词',
+            'keywords'=>'关键词',
             'isAccurate'=>'是否精准匹配',
             'action'=>'菜单值'
 		);
