@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
     <!-- basic styles -->
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -70,7 +71,7 @@
         if("ontouchend" in document) document.write("<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
 
-    <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+
 </head>
 
 <body>
