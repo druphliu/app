@@ -92,8 +92,8 @@ class ManagerController extends WechatManagerController
                         'order' => 't.id DESC',
                         'with' => array('textreplay_keywords'),
                         'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" .
-                            SubscribereplayModel::KEYWORDS_TYPE . "' and textreplay_keywords.type='".TextreplayModel::TEXT_REPLAY_TYPE."'",
-                        'together'=>true
+                            SubscribereplayModel::KEYWORDS_TYPE . "' and textreplay_keywords.type='" . TextreplayModel::TEXT_REPLAY_TYPE . "'",
+                        'together' => true
                     ),
                     //'pagination' => false,
                     'pagination' => array(
@@ -108,8 +108,8 @@ class ManagerController extends WechatManagerController
                     'criteria' => array(
                         'with' => array('imagetextreplay_keywords'),
                         'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" . SubscribereplayModel::KEYWORDS_TYPE .
-                            "' and imagetextreplay_keywords.type='".ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE."'",
-                        'together'=>true,
+                            "' and imagetextreplay_keywords.type='" . ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE . "'",
+                        'together' => true,
                         'order' => 't.id DESC',
                     ),
                     //'pagination' => false,
@@ -168,7 +168,7 @@ class ManagerController extends WechatManagerController
         }
 
         $view = 'keywordsReplayCreate';
-        $this->render($view, array('model' => $model, 'type' => $type,'wechatId'=>$this->wechatInfo->id));
+        $this->render($view, array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id));
     }
 
     public function actionKeyWordsUpdate($id)
@@ -179,7 +179,7 @@ class ManagerController extends WechatManagerController
         switch ($type) {
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
                 $model = ImagetextreplayModel::model()->with('imagetextreplay_keywords')->find('t.id=:id and
-                imagetextreplay_keywords.type=:type',array(':id'=>$id,':type'=>ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));
+                imagetextreplay_keywords.type=:type', array(':id' => $id, ':type' => ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));
                 $comm = '';
                 foreach ($model->imagetextreplay_keywords as $keywords) {
                     $oldKeywords[] = $keywords->name;
@@ -191,7 +191,7 @@ class ManagerController extends WechatManagerController
                 break;
             case TextreplayModel::TEXT_REPLAY_TYPE:
                 $model = TextreplayModel::model()->with('textreplay_keywords')->find('t.id=:id and
-                textreplay_keywords.type=:type',array(':id'=>$id,':type'=>TextreplayModel::TEXT_REPLAY_TYPE));
+                textreplay_keywords.type=:type', array(':id' => $id, ':type' => TextreplayModel::TEXT_REPLAY_TYPE));
                 $comm = '';
                 foreach ($model->textreplay_keywords as $keywords) {
                     $oldKeywords[] = $keywords->name;
@@ -219,7 +219,16 @@ class ManagerController extends WechatManagerController
             $keywordsAdd = array_unique(array_merge($oldKeywords, $keywordsArray));
             $arrayDel = array_diff($keywordsAdd, $keywordsArray); //删除了的关键字
             $arrayAdd = array_diff($keywordsAdd, $oldKeywords); //添加的关键字
+            $arrayAlive = array_diff($oldKeywords, $arrayAdd); //没改变的
             if ($model->validate()) {
+                if (($isAccurate != $oldIsAccurate) && $arrayAlive) {
+                    //是否精准匹配改变了
+                    foreach ($arrayAlive as $name) {
+                        $keywordsModel = KeywordsModel::model()->find('name=:name', array(':name' => $name));
+                        $keywordsModel->isAccurate = $isAccurate;
+                        $keywordsModel->save();
+                    }
+                }
                 foreach ($arrayAdd as $k) {
                     //新加关键词
                     $keywordsModel = new KeywordsModel();
@@ -244,7 +253,7 @@ class ManagerController extends WechatManagerController
         }
 
         $view = 'keywordsReplayCreate';
-        $this->render($view, array('model' => $model, 'type' => $type,'wechatId'=>$this->wechatInfo->id));
+        $this->render($view, array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id));
     }
 
     public function actionKeyWordsDelete($id)

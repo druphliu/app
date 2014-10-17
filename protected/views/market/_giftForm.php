@@ -32,17 +32,17 @@
                 <?php echo $form->error($model, 'title', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
-        <div class="space-4"></div>
-        <div class="form-group">
-            <?php echo $form->labelEx($model, 'type', array('class' => BootStrapUI::formLabelClass)); ?>
-            <div class="col-sm-4">
-                <?php echo $form->dropDownList($model, 'type', GiftModel::$typeArray, array('class' => 'col-xs-3 col-sm-3')); ?>
-                <?php echo $form->error($model, 'type', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-            </div>
-        </div>
 
         <div class="space-4"></div>
-        <div id="keyword" <?php if ($type != GiftModel::TYPE_KEYWORDS){ ?>style="display: none" <?php } ?>>
+        <?php if ($type != GiftModel::TYPE_KEYWORDS) { ?>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'action', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textField($model, 'action', array('class' => 'col-xs-10 col-sm-5')); ?>
+                    <?php echo $form->error($model, 'action', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                </div>
+            </div>
+        <?php } else { ?>
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'keywords', array('class' => BootStrapUI::formLabelClass)); ?>
                 <div class="col-sm-9">
@@ -58,99 +58,90 @@
                     <?php echo $form->error($model, 'isAccurate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
                 </div>
             </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'startTime', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div id="startTime" class="input-group date date-picker col-xs-3 col-sm-3">
-                    <?php echo $form->textField($model, 'startTime', array('class' => 'form-control date-picker add-on')); ?>
-                    <span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>
-                    <?php echo $form->error($model, 'startTime', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                </div>
-            </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'endTime', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div id="endTime" class="input-group date date-picker col-xs-3 col-sm-3">
-                    <?php echo $form->textField($model, 'endTime', array('class' => 'form-control date-picker add-on', 'data-rule-minlength' => 3)); ?>
-                    <span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>
-
-
-                    <?php echo $form->error($model, 'endTime', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                </div>
-            </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'template', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <div class="col-sm-5">
-                        <div class="wysiwyg-editor" id="editor1"
-                             style="height: 115px"><?php echo $model->template ?></div>
-                    </div>
-                    <?php echo $form->hiddenField($model, 'template', array('id' => 'template')); ?>
-                    <?php echo $form->error($model, 'template', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                    <i>可用标签:{code}</i>
-                </div>
-
-            </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'unstartMsg', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <div class="col-sm-5">
-                        <div class="wysiwyg-editor" id="editor2"
-                             style="height: 115px"><?php echo $model->unstartMsg ?></div>
-                    </div>
-                    <?php echo $form->hiddenField($model, 'unstartMsg', array('id' => 'unstartMsg')); ?>
-                    <?php echo $form->error($model, 'unstartMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-
-                </div>
-            </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'codeOverMsg', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <div class="col-sm-5">
-                        <div class="wysiwyg-editor" id="editor3"
-                             style="height: 115px"><?php echo $model->codeOverMsg ?></div>
-                    </div>
-                    <?php echo $form->hiddenField($model, 'codeOverMsg', array('id' => 'codeOverMsg')); ?>
-                    <?php echo $form->error($model, 'codeOverMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-
-                </div>
-            </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'endMsg', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <div class="col-sm-5">
-                        <div class="wysiwyg-editor" id="editor4"
-                             style="height: 115px"><?php echo $model->endMsg ?></div>
-                    </div>
-                    <?php echo $form->hiddenField($model, 'endMsg', array('id' => 'endMsg')); ?>
-                    <?php echo $form->error($model, 'endMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-
-                </div>
-            </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'pauseMsg', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <div class="col-sm-5">
-                        <div class="wysiwyg-editor" id="editor5"
-                             style="height: 115px"><?php echo $model->pauseMsg ?></div>
-                    </div>
-                    <?php echo $form->hiddenField($model, 'pauseMsg', array('id' => 'pauseMsg')); ?>
-                    <?php echo $form->error($model, 'pauseMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-
-                </div>
+        <?php } ?>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'startTime', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div id="startTime" class="input-group date date-picker col-xs-3 col-sm-3">
+                <?php echo $form->textField($model, 'startTime', array('class' => 'form-control date-picker add-on')); ?>
+                <span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>
+                <?php echo $form->error($model, 'startTime', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
-        <div class="form-group" id="action"
-             <?php if ($type != GiftModel::TYPE_MENU){ ?>style="display: none" <?php } ?>>
-            <?php echo $form->labelEx($model, 'action', array('class' => BootStrapUI::formLabelClass)); ?>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'endTime', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div id="endTime" class="input-group date date-picker col-xs-3 col-sm-3">
+                <?php echo $form->textField($model, 'endTime', array('class' => 'form-control date-picker add-on', 'data-rule-minlength' => 3)); ?>
+                <span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>
+
+
+                <?php echo $form->error($model, 'endTime', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'template', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-9">
-                <?php echo $form->textField($model, 'action', array('class' => 'col-xs-10 col-sm-5')); ?>
-                <?php echo $form->error($model, 'action', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                <div class="col-sm-5">
+                    <div class="wysiwyg-editor" id="editor1"
+                         style="height: 115px"><?php echo $model->template ?></div>
+                </div>
+                <?php echo $form->hiddenField($model, 'template', array('id' => 'template')); ?>
+                <?php echo $form->error($model, 'template', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                <i>可用标签:{code}</i>
+            </div>
+
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'unstartMsg', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <div class="col-sm-5">
+                    <div class="wysiwyg-editor" id="editor2"
+                         style="height: 115px"><?php echo $model->unstartMsg ?></div>
+                </div>
+                <?php echo $form->hiddenField($model, 'unstartMsg', array('id' => 'unstartMsg')); ?>
+                <?php echo $form->error($model, 'unstartMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'codeOverMsg', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <div class="col-sm-5">
+                    <div class="wysiwyg-editor" id="editor3"
+                         style="height: 115px"><?php echo $model->codeOverMsg ?></div>
+                </div>
+                <?php echo $form->hiddenField($model, 'codeOverMsg', array('id' => 'codeOverMsg')); ?>
+                <?php echo $form->error($model, 'codeOverMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'endMsg', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <div class="col-sm-5">
+                    <div class="wysiwyg-editor" id="editor4"
+                         style="height: 115px"><?php echo $model->endMsg ?></div>
+                </div>
+                <?php echo $form->hiddenField($model, 'endMsg', array('id' => 'endMsg')); ?>
+                <?php echo $form->error($model, 'endMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'pauseMsg', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <div class="col-sm-5">
+                    <div class="wysiwyg-editor" id="editor5"
+                         style="height: 115px"><?php echo $model->pauseMsg ?></div>
+                </div>
+                <?php echo $form->hiddenField($model, 'pauseMsg', array('id' => 'pauseMsg')); ?>
+                <?php echo $form->error($model, 'pauseMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
             </div>
         </div>
         <div class="space-4"></div>
@@ -179,21 +170,6 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootbox.min.js"></script>
 <script>
     $().ready(function () {
-        $("#GiftModel_type").change(function () {
-            var type = $(this).val();
-            var TYPE_KEYWORDS = "<?= GiftModel::TYPE_KEYWORDS?>";
-            var TYPE_MENU = "<?= GiftModel::TYPE_MENU?>";
-            switch (type) {
-                case TYPE_KEYWORDS:
-                    $("#keyword").show();
-                    $("#action").hide();
-                    break;
-                case TYPE_MENU:
-                    $("#keyword").hide();
-                    $("#action").show();
-                    break;
-            }
-        });
         $("#startTime").datetimepicker({
             format: 'yyyy-MM-dd hh:mm:ss',
             language: 'zh',
@@ -246,12 +222,13 @@
         }).prev().addClass('wysiwyg-style2');
     });
     $("#submit").click(function () {
+        var typeKeywords = <?php if($type==GiftModel::TYPE_KEYWORDS){echo 1;}else{echo 0;}?>;
         $("#template").val($("#editor1").html());
         $("#unstartMsg").val($("#editor2").html());
         $("#codeOverMsg").val($("#editor3").html());
         $("#endMsg").val($("#editor4").html());
         $("#pauseMsg").val($("#editor5").html());
-        if ($("#GiftModel_type").val() == 'keywords') {
+        if (typeKeywords) {
             var wechatId = '<?php echo $wechatId?>';
             var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
             return keywordsCheck(wechatId, url, 'GiftModel');

@@ -4,11 +4,27 @@ class MarketController extends WechatManagerController
 {
     public function actionGift()
     {
+        $type = Yii::app()->request->getParam('type');
+        $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
+        switch ($type) {
+            case GiftModel::TYPE_KEYWORDS:
+                $with = 'gift_keywords';
+                $whereType = "and t.type='" . GiftModel::TYPE_KEYWORDS . "'
+                and gift_keywords.type='" . GiftModel::GIFT_TYPE . "'";
+                break;
+            case GiftModel::TYPE_MENU:
+                $with = 'gift_menuaction';
+                $whereType = "and t.type='" . GiftModel::TYPE_MENU . "'
+                and gift_menuaction.type='" . GiftModel::GIFT_TYPE . "'";
+                break;
+        }
         $this->layout = '/layouts/memberList';
         $dataProvider = new CActiveDataProvider('GiftModel', array(
             'criteria' => array(
-                'order' => 'id DESC',
-                'condition' => 'wechatId=' . $this->wechatInfo->id
+                'order' => 't.id DESC',
+                'with' => array($with),
+                'condition' => "t.wechatId = {$this->wechatInfo->id} $whereType",
+                'together' => true
             ),
             //'pagination' => false,
             'pagination' => array(
@@ -16,17 +32,17 @@ class MarketController extends WechatManagerController
                 'pageVar' => 'page'
             ),
         ));
-        $this->render('gift', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination()));
+        $this->render('gift', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(), 'type' => $type));
     }
 
     public function actionGiftCreate()
     {
-        $type = '';
+        $type = Yii::app()->request->getParam('type');
+        $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
         $model = new GiftModel();
         if (isset($_POST['GiftModel'])) {
             $model->attributes = $_POST['GiftModel'];
             $model->wechatId = $this->wechatInfo->id;
-            $type = $model->type;
             if ($model->validate()) {
                 $model->save();
                 switch ($type) {
@@ -101,12 +117,22 @@ class MarketController extends WechatManagerController
                         $keywordsAdd = array_unique(array_merge($oldKeywords, $keywordsArray));
                         $arrayDel = array_diff($keywordsAdd, $keywordsArray); //删除了的关键字
                         $arrayAdd = array_diff($keywordsAdd, $oldKeywords); //添加的关键字
+                        $arrayAlive = array_diff($oldKeywords, $arrayAdd); //没改变的
+                        $newIsAccurate = $_POST['GiftModel']['isAccurate'];
+                        if(($isAccurate !=$newIsAccurate) && $arrayAlive){
+                            //是否精准匹配改变了
+                            foreach($arrayAlive as $name){
+                                $keywordsModel = KeywordsModel::model()->find('name=:name',array(':name'=>$name));
+                                $keywordsModel->isAccurate = $newIsAccurate;
+                                $keywordsModel->save();
+                            }
+                        }
                         foreach ($arrayAdd as $k) {
                             //新加关键词
                             $keywordsModel = new KeywordsModel();
                             $keywordsModel->responseId = $id;
                             $keywordsModel->name = $k;
-                            $keywordsModel->isAccurate = $isAccurate;
+                            $keywordsModel->isAccurate = $newIsAccurate;
                             $keywordsModel->wechatId = $this->wechatInfo->id;
                             $keywordsModel->type = GiftModel::GIFT_TYPE;
                             $keywordsModel->save();
@@ -139,7 +165,7 @@ class MarketController extends WechatManagerController
                 ShowMessage::success('编辑成功', Yii::app()->createUrl('market/gift'));
             }
         }
-        $this->render('giftUpdate', array('model' => $model, 'type' => $model->type,'wechatId'=>$this->wechatInfo->id));
+        $this->render('giftUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id));
     }
 
     public function actionGiftStart($id)

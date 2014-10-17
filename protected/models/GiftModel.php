@@ -76,6 +76,8 @@ class GiftModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'gift_keywords' => array(self::HAS_MANY, 'KeywordsModel', 'responseId'),
+            'gift_menuaction' => array(self::HAS_MANY, 'MenuactionModel', 'responseId')
 		);
 	}
 
