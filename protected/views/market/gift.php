@@ -115,11 +115,11 @@ $this->breadcrumbs=array(
                                                             <a class="btn btn-xs btn-info" href="<?php echo Yii::app()->createUrl('market/giftUpdate/id/'.$d->id)?>">
                                                                 <i class="fa fa-edit bigger-120">编辑</i>
                                                             </a>
-                                                            <a class="btn btn-xs btn-info" href="<?php echo Yii::app()->createUrl('market/giftStart/id/'.$d->id)?>">
+                                                            <a class="btn btn-xs btn-info status" rel="<?php echo Yii::app()->createUrl('ajax/giftStatus/id/'.$d->id)?>" data="1" href="javascript:void(0)">
                                                                 <i class="fa fa-play bigger-120">启用</i>
                                                             </a>
                                                         <?php }else{?>
-                                                            <a class="btn btn-xs btn-info" href="<?php echo Yii::app()->createUrl('market/giftStop/id/'.$d->id)?>">
+                                                            <a class="btn btn-xs btn-info status" rel="<?php echo Yii::app()->createUrl('ajax/giftStatus/id/'.$d->id)?>"  data="0" href="javascript:void(0)">
                                                                 <i class="fa fa-stop bigger-120">停止</i>
                                                             </a>
                                                         <?php }?>
@@ -151,3 +151,27 @@ $this->breadcrumbs=array(
         </div>
     </div>
 </div>
+<script>
+    $().ready(function(){
+        $(".status").click(function(){
+            var status = $(this).attr('data');
+            var url = $(this).attr('rel');
+            var i = $(this).find('i');
+            var html = i.html();
+            i.removeClass().html('<i class="fa fa-spinner fa-spin bigger-140"></i>'+html+'中');
+            $(this).attr('disabled','disabled');
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: "status=" + status,
+                dataType: 'json',
+                async:false,
+                success: function (data) {
+                    if (data.result ==0) {
+                        window.location.href='';
+                    }
+                }
+            });
+        })
+    })
+</script>

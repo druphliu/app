@@ -8,7 +8,7 @@
  */
 class AjaxController extends Controller
 {
-    public function ActionCheckKeywords()
+    public function actionCheckKeywords()
     {
         $exitKeywords = '';
         $result = 1;
@@ -73,5 +73,14 @@ class AjaxController extends Controller
             $msg = '关键字不能为空';
         }
         echo json_encode(array('result' => $result, 'msg' => $msg));
+    }
+
+    public function actionGiftStatus($id)
+    {
+        $status = Yii::app()->request->getParam('status');
+        $model = GiftModel::model()->findByPk($id);
+        $model->status = in_array($status, array(0, 1)) ? $status : 0;
+        $model->save();
+        echo json_encode(array('result' => 0));
     }
 }
