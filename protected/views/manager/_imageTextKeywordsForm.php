@@ -92,8 +92,10 @@
 
     });
     $("#submit").click(function () {
+        var type = '<?php echo ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE?>';
+        var responseId = '<?php echo $responseId?>';
         var wechatId = '<?php echo $wechatId?>';
         var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-        return keywordsCheck(wechatId,url,'ImagetextreplayModel');
+        return keywordsCheck(wechatId,type,url,'ImagetextreplayModel',responseId);
     })
 </script>

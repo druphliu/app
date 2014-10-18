@@ -80,7 +80,7 @@ class MarketController extends WechatManagerController
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render('giftCreate', array('model' => $model, 'type' => $type ? $type : GiftModel::TYPE_KEYWORDS,
-            'wechatId' => $this->wechatInfo->id));
+            'wechatId' => $this->wechatInfo->id,'responseId'=>0));
     }
 
     public function actionGiftUpdate($id)
@@ -167,7 +167,7 @@ class MarketController extends WechatManagerController
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
-        $this->render('giftUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id));
+        $this->render('giftUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id,'responseId'=>$id));
     }
 
     public function actionGiftStart($id)

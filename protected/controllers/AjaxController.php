@@ -12,37 +12,37 @@ class AjaxController extends Controller
     {
         $exitKeywords = '';
         $result = 1;
-        $count = 0;
         $msg = "";
         $keyword = Yii::app()->request->getParam('keyword');
+        $responseId = Yii::app()->request->getParam('responseId');
         $wechatId = Yii::app()->request->getParam('wechatId');
+        $type = Yii::app()->request->getParam('type');
         if ($keyword && $wechatId) {
             $isAccurate = Yii::app()->request->getParam('isAccurate');
             $keywordArray = explode(',', $keyword);
             foreach ($keywordArray as $k) {
                 $keywords = Yii::app()->db->createCommand()
-                    ->select('name, isAccurate')
+                    ->select('name, isAccurate,type, responseId' )
                     ->from('keywords')
-                    ->where(array('and', 'wechatId=' . $wechatId, array('like', 'name', array('%' . $k . '%'))))
+                    ->where(array('and', 'wechatId=' . $wechatId,
+                        array('like', 'name', array('%' . $k . '%'))))
                     ->queryAll();
                 if ($keywords) {
                     foreach ($keywords as $k) {
-                        if ($k['name'] == $keyword) {
-                            //更新时防止将自身值作为判断了
-                            $count++;
-                        }
                         switch ($k['isAccurate']) {
                             case 1:
                                 //当前关键词精准匹配
                                 if ($isAccurate) {
                                     //新加关键字为精准匹配
                                     if ($k['name'] == $keyword) {
-                                        $exitKeywords .= $k['name'] . ',';
+                                        if (!($responseId && ($k['type'] == $type && $k['responseId'] == $responseId)))
+                                            $exitKeywords .= $k['name'] . ',';
                                     }
                                 } else {
                                     //新加关键字模糊匹配
                                     if (mb_strpos($k['name'], $keyword) !== false) {
-                                        $exitKeywords .= $k['name'] . ',';
+                                        if (!($responseId && ($k['type'] == $type && $k['responseId'] == $responseId)))
+                                            $exitKeywords .= $k['name'] . ',';
                                     }
                                 }
                                 break;
@@ -51,18 +51,20 @@ class AjaxController extends Controller
                                 if ($isAccurate) {
                                     //新加关键字为精准匹配
                                     if (mb_strpos($keyword, $k['name']) !== false) {
-                                        $exitKeywords .= $k['name'] . ',';
+                                        if (!($responseId && ($k['type'] == $type && $k['responseId'] == $responseId)))
+                                            $exitKeywords .= $k['name'] . ',';
                                     }
                                 } else {
                                     //新加关键字模糊匹配
                                     if (mb_strpos($keyword, $k['name']) !== false || mb_strpos($k['name'], $keyword) !== false) {
-                                        $exitKeywords .= $k['name'] . ',';
+                                        if (!($responseId && ($k['type'] == $type && $k['responseId'] == $responseId)))
+                                            $exitKeywords .= $k['name'] . ',';
                                     }
                                 }
                                 break;
                         }
                     }
-                    if ($exitKeywords && ($count == 0 || $count > 1)) {
+                    if ($exitKeywords) {
                         $result = -1;
                         $msg = '与关键词' . $exitKeywords . '冲突了';
                     }

@@ -16,5 +16,5 @@ $this->breadcrumbs = array(
         </small>
     </h1>
 </div>
-<?php $this->renderPartial('_giftForm', array('model' => $model, 'type' => $type,'wechatId'=>$wechatId));
+<?php $this->renderPartial('_giftForm', array('model' => $model, 'type' => $type,'wechatId'=>$wechatId,'responseId'=>$responseId));
 ?>

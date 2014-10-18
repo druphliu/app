@@ -229,9 +229,11 @@
         $("#endMsg").val($("#editor4").html());
         $("#pauseMsg").val($("#editor5").html());
         if (typeKeywords) {
+            var type = '<?php echo GiftModel::GIFT_TYPE?>';
+            var responseId = '<?php echo $responseId?>';
             var wechatId = '<?php echo $wechatId?>';
             var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-            return keywordsCheck(wechatId, url, 'GiftModel');
+            return keywordsCheck(wechatId, type, url, 'GiftModel', responseId);
         }
     })
 

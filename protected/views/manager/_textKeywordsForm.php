@@ -81,10 +81,12 @@
         }).prev().addClass('wysiwyg-style2');
     });
     $("#submit").click(function () {
+        var type = '<?php echo TextreplayModel::TEXT_REPLAY_TYPE?>';
+        var responseId = '<?php echo $responseId?>';
         var wechatId = '<?php echo $wechatId?>';
         var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
         $("#TextreplayModel_content").val($("#editor").html());
-        return keywordsCheck(wechatId,url,'TextreplayModel');
+        return keywordsCheck(wechatId,type,url,'TextreplayModel',responseId);
     })
 
 

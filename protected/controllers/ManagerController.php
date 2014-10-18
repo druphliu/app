@@ -169,7 +169,7 @@ class ManagerController extends WechatManagerController
 
         $view = 'keywordsReplayCreate';
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
-        $this->render($view, array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id));
+        $this->render($view, array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id,'responseId'=>0));
     }
 
     public function actionKeyWordsUpdate($id)
@@ -255,7 +255,7 @@ class ManagerController extends WechatManagerController
 
         $view = 'keywordsReplayCreate';
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
-        $this->render($view, array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id));
+        $this->render($view, array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id,'responseId'=>$id));
     }
 
     public function actionKeyWordsDelete($id)
