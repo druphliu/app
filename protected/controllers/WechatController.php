@@ -34,6 +34,7 @@ class WechatController extends MemberController
                 ShowMessage::success('添加成功！', Yii::app()->createUrl('wechat/index'));
             }
         }
+        Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render('add', array('model' => $model));
     }
 
@@ -53,6 +54,7 @@ class WechatController extends MemberController
                 ShowMessage::success('修改成功！', Yii::app()->createUrl('wechat/index'));
             }
         }
+        Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render('update', array('model' => $model));
     }
 

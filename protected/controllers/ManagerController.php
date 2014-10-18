@@ -168,6 +168,7 @@ class ManagerController extends WechatManagerController
         }
 
         $view = 'keywordsReplayCreate';
+        Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render($view, array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id));
     }
 
@@ -253,6 +254,7 @@ class ManagerController extends WechatManagerController
         }
 
         $view = 'keywordsReplayCreate';
+        Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render($view, array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id));
     }
 

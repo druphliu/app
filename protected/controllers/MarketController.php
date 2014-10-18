@@ -78,6 +78,7 @@ class MarketController extends WechatManagerController
                 ShowMessage::success('添加成功', Yii::app()->createUrl('market/gift'));
             }
         }
+        Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render('giftCreate', array('model' => $model, 'type' => $type ? $type : GiftModel::TYPE_KEYWORDS,
             'wechatId' => $this->wechatInfo->id));
     }
@@ -165,6 +166,7 @@ class MarketController extends WechatManagerController
                 ShowMessage::success('编辑成功', Yii::app()->createUrl('market/gift'));
             }
         }
+        Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render('giftUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id));
     }
 
