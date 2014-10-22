@@ -71,7 +71,7 @@ class OpenPlatformModel extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'wechatId' => 'Wechat',
-			'name' => 'Name',
+			'name' => '平台名称',
 			'token' => 'Token',
 			'apiUrl' => 'Api Url',
 			'status' => 'Status',
