@@ -122,8 +122,9 @@ $this->breadcrumbs = array(
                 async: false,
                 success: function (data) {
                     if (data.result == 0) {
-                        window.location.href = '';
+                        alert('检测失败');
                     }
+                    window.location.href = '';
                 }
             });
         })

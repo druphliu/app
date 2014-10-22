@@ -181,18 +181,14 @@ class ApiController extends Controller
         } else {
             $userHasGet = GiftCodeModel::model()->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
             if ($userHasGet) {
-                $content = $giftInfo->template ? str_replace('{code}', $userHasGet->code, $giftInfo->template) : $userHasGet->code;
+                $content = $giftInfo->RTemplate ? str_replace('{code}', $userHasGet->code, $giftInfo->RTemplate) : $userHasGet->code;
             } else {
                 $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
                 if ($codeInfo) {
                     //update
                     $codeInfo->openId = $openId;
                     $codeInfo->save();
-                    if ($giftInfo->template) {
-                        $content = $giftInfo->template ? str_replace('{code}', $codeInfo->code, $giftInfo->template) : $codeInfo->code;
-                    } else {
-                        $content = $codeInfo->code;
-                    }
+                    $content = $giftInfo->template ? str_replace('{code}', $codeInfo->code, $giftInfo->template) : $codeInfo->code;
                 } else {
                     $content = $giftInfo->codeOverMsg ? $giftInfo->codeOverMsg : "抱歉,领完了";
                 }

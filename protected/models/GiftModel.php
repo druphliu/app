@@ -9,6 +9,7 @@
  * @property string $type
  * @property integer $wechatId
  * @property string $template
+ * @property string $RTemplate
  * @property string $created_at
  * @property integer $status
  * @property string $unstartMsg
@@ -60,11 +61,11 @@ class GiftModel extends CActiveRecord
 			array('wechatId, status', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>150),
 			array('type', 'length', 'max'=>8),
-			array('template, unstartMsg, endMsg, codeOverMsg, pauseMsg', 'length', 'max'=>255),
+			array('template, unstartMsg, endMsg, codeOverMsg, pauseMsg, RTemplate', 'length', 'max'=>255),
 			array('startTime, endTime', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, type, wechatId, template, created_at, status, unstartMsg, endMsg, codeOverMsg, pauseMsg, startTime, endTime', 'safe', 'on'=>'search'),
+			array('id, title, type, wechatId, template, RTemplate, created_at, status, unstartMsg, endMsg, codeOverMsg, pauseMsg, startTime, endTime', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -92,6 +93,7 @@ class GiftModel extends CActiveRecord
 			'type' => '领取方式',
 			'wechatId' => 'Wechat',
 			'template' => '回复模版',
+            'RTemplate'=>'重复领取回复模版',
 			'created_at' => 'Created At',
 			'status' => 'Status',
 			'unstartMsg' => '未开始回复',
@@ -122,6 +124,7 @@ class GiftModel extends CActiveRecord
 		$criteria->compare('type',$this->type,true);
 		$criteria->compare('wechatId',$this->wechatId);
 		$criteria->compare('template',$this->template,true);
+        $criteria->compare('RTemplate',$this->codeOverMsg,true);
 		$criteria->compare('created_at',$this->created_at,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('unstartMsg',$this->unstartMsg,true);
@@ -135,4 +138,18 @@ class GiftModel extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    protected function beforeSave()
+    {
+        if(parent::beforeSave()){
+            $this->template = strip_tags($this->template,'<a>');
+            $this->unstartMsg = strip_tags($this->unstartMsg,'<a>');
+            $this->codeOverMsg = strip_tags($this->codeOverMsg,'<a>');
+            $this->endMsg = strip_tags($this->endMsg,'<a>');;
+            $this->pauseMsg = strip_tags($this->pauseMsg,'<a>');
+            $this->RTemplate = strip_tags($this->RTemplate,'<a>');
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

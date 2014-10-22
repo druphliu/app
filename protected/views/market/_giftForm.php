@@ -145,6 +145,19 @@
             </div>
         </div>
         <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'RTemplate', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <div class="col-sm-5">
+                    <div class="wysiwyg-editor" id="editor6"
+                         style="height: 115px"><?php echo $model->RTemplate ?></div>
+                </div>
+                <?php echo $form->hiddenField($model, 'RTemplate', array('id' => 'RTemplate')); ?>
+                <?php echo $form->error($model, 'RTemplate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                <i>可用标签:{code}</i>
+            </div>
+        </div>
+        <div class="space-4"></div>
         <div class="clearfix form-actions">
             <div class="col-md-offset-3 col-md-9">
                 <?php echo BootStrapUI::saveButton(); ?>
@@ -220,10 +233,17 @@
                 {name: 'unlink', className: 'btn-pink'}
             ]
         }).prev().addClass('wysiwyg-style2');
+        $('#editor6').ace_wysiwyg({
+            toolbar: [
+                {name: 'createLink', className: 'btn-pink'},
+                {name: 'unlink', className: 'btn-pink'}
+            ]
+        }).prev().addClass('wysiwyg-style2');
     });
     $("#submit").click(function () {
         var typeKeywords = <?php if($type==GiftModel::TYPE_KEYWORDS){echo 1;}else{echo 0;}?>;
         $("#template").val($("#editor1").html());
+        $("#RTemplate").val($("#editor6").html());
         $("#unstartMsg").val($("#editor2").html());
         $("#codeOverMsg").val($("#editor3").html());
         $("#endMsg").val($("#editor4").html());
