@@ -22,7 +22,7 @@ class AjaxController extends Controller
             $keywordArray = explode(',', $keyword);
             foreach ($keywordArray as $k) {
                 $keywords = Yii::app()->db->createCommand()
-                    ->select('name, isAccurate,type, responseId' )
+                    ->select('name, isAccurate,type, responseId')
                     ->from('keywords')
                     ->where(array('and', 'wechatId=' . $wechatId,
                         array('like', 'name', array('%' . $k . '%'))))
@@ -84,5 +84,31 @@ class AjaxController extends Controller
         $model->status = in_array($status, array(0, 1)) ? $status : 0;
         $model->save();
         echo json_encode(array('result' => 0));
+    }
+
+    public function actionOpenReplayStatus($id)
+    {
+        $status = Yii::app()->request->getParam('status');
+        $model = OpenReplayModel::model()->findByPk($id);
+        $model->status = in_array($status, array(0, 1)) ? $status : 0;
+        $model->save();
+        echo json_encode(array('result' => 0));
+    }
+
+    public function actionOpenStatus($id)
+    {
+        $result = 0;
+        $model = OpenPlatformModel::model()->findByPk($id);
+        if ($model) {
+            $echostr = 'hello';
+            $wechatApi = new WechatApi($model->token);
+            $url = $wechatApi->buildSignUrl($model->apiUrl,array('echostr'=>$echostr));
+            $content = HttpRequest::sendHttpRequest($url);
+            if ($content['content'] == $echostr)
+                $result = 1;
+            $model->status = $result;
+            $model->save();
+        }
+        echo json_encode(array('result' => $result));
     }
 }

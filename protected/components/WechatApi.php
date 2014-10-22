@@ -27,6 +27,22 @@ class WechatApi
         return $response;
     }
 
+    public function buildSignUrl($apiUrl, $params=array())
+    {
+        $url = $apiUrl;
+        $token = $this->token;
+        $timestamp = "13123123";
+        $nonce = 'asdad';
+        $tmpArr = array($token, $timestamp, $nonce);
+        sort($tmpArr);
+        $tmpStr = implode($tmpArr);
+        $signature = sha1($tmpStr);
+        $data = array_merge(array('signature' => $signature, 'timestamp' => $timestamp, 'nonce' => $nonce), $params);
+        if (strpos($url, '?')) $url .= '&' . http_build_query($data);
+        else $url .= '?' . http_build_query($data);
+        return $url;
+    }
+
     private function checkSignature()
     {
         $signature = $_GET["signature"];

@@ -85,6 +85,11 @@ class ApiController extends Controller
                 //礼包领取
                 $response = $this->_getGiftReplay($keyword->responseId, $request->from_user_name);
                 break;
+            case OpenReplayModel::OPEN_TYPE:
+                //转接
+                $response = $this->_getOpenReplay($keyword->responseId);
+                return $response;
+                break;
         }
         $xml = $response->_to_xml($request);
         return $xml;
@@ -126,6 +131,11 @@ class ApiController extends Controller
                 case GiftModel::GIFT_TYPE:
                     //礼包领取
                     $response = $this->_getGiftReplay($responseId, $request->from_user_name);
+                    break;
+                case OpenReplayModel::OPEN_TYPE:
+                    //转接
+                    $response = $this->_getOpenReplay($responseId);
+                    return $response;
                     break;
             }
         }
@@ -190,6 +200,18 @@ class ApiController extends Controller
         }
         $responseObj = new WeChatTextResponse($content);
         return $responseObj;
+    }
+
+    private function _getOpenReplay($responseId)
+    {
+        $post_string = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $openReplayInfo = OpenReplayModel::model()->with('open_openPlatForm')->findByPk($responseId);
+        $apiUrl = $openReplayInfo->open_openPlatForm->apiUrl;
+        $token = $openReplayInfo->open_openPlatForm->token;
+        $wechatApi = new WechatApi($token);
+        $url = $wechatApi->buildSignUrl($apiUrl);
+        $result = HttpRequest::sendHttpRequest($url, $post_string, 'POST', array("Content-type: text/xml"));
+        return $result['content'] ? $result['content'] : '';
     }
     // Uncomment the following methods and override them if needed
     /*

@@ -1,22 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "keywords".
+ * This is the model class for table "openplatform".
  *
- * The followings are the available columns in table 'keywords':
+ * The followings are the available columns in table 'openplatform':
  * @property integer $id
- * @property string $name
- * @property integer $responseId
- * @property string $type
- * @property integer $isAccurate
  * @property integer $wechatId
+ * @property string $name
+ * @property string $token
+ * @property string $apiUrl
+ * @property integer $status
+ * @property integer $created_at
  */
-class KeywordsModel extends CActiveRecord
+class OpenPlatformModel extends CActiveRecord
 {
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return KeywordsModel the static model class
+	 * @return OpenPlatformModel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -28,7 +30,7 @@ class KeywordsModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'keywords';
+		return 'openplatform';
 	}
 
 	/**
@@ -39,13 +41,13 @@ class KeywordsModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
-			array('responseId, isAccurate, wechatId', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>150),
-			array('type', 'length', 'max'=>10),
+			array('wechatId, name, token, apiUrl, created_at', 'required'),
+			array('wechatId, status, created_at', 'numerical', 'integerOnly'=>true),
+			array('name, token', 'length', 'max'=>150),
+			array('apiUrl', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, responseId, type, isAccurate, wechatId', 'safe', 'on'=>'search'),
+			array('id, wechatId, name, token, apiUrl, status, created_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,6 +59,7 @@ class KeywordsModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+
 		);
 	}
 
@@ -67,11 +70,12 @@ class KeywordsModel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'responseId' => 'Response',
-			'type' => 'Type',
-			'isAccurate' => 'Is Accurate',
 			'wechatId' => 'Wechat',
+			'name' => 'Name',
+			'token' => 'Token',
+			'apiUrl' => 'Api Url',
+			'status' => 'Status',
+			'created_at' => 'Created At',
 		);
 	}
 
@@ -87,11 +91,12 @@ class KeywordsModel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('responseId',$this->responseId);
-		$criteria->compare('type',$this->type,true);
-		$criteria->compare('isAccurate',$this->isAccurate);
 		$criteria->compare('wechatId',$this->wechatId);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('token',$this->token,true);
+		$criteria->compare('apiUrl',$this->apiUrl,true);
+		$criteria->compare('status',$this->status);
+		$criteria->compare('created_at',$this->created_at);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

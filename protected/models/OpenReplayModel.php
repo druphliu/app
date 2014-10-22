@@ -1,22 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "keywords".
+ * This is the model class for table "openreplay".
  *
- * The followings are the available columns in table 'keywords':
+ * The followings are the available columns in table 'openreplay':
  * @property integer $id
- * @property string $name
- * @property integer $responseId
+ * @property integer $openId
  * @property string $type
- * @property integer $isAccurate
  * @property integer $wechatId
+ * @property string $name
+ * @property integer $status
  */
-class KeywordsModel extends CActiveRecord
+class OpenReplayModel extends CActiveRecord
 {
+    const OPEN_TYPE = 'open';
+
+    public $action;
+    public $keywords;
+    public $isAccurate;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return KeywordsModel the static model class
+	 * @return OpenReplayModel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -28,7 +34,7 @@ class KeywordsModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'keywords';
+		return 'openreplay';
 	}
 
 	/**
@@ -40,12 +46,11 @@ class KeywordsModel extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('responseId, isAccurate, wechatId', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>150),
-			array('type', 'length', 'max'=>10),
+			array('openId, wechatId', 'numerical', 'integerOnly'=>true),
+			array('type', 'length', 'max'=>8),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, responseId, type, isAccurate, wechatId', 'safe', 'on'=>'search'),
+			array('id, openId, type, wechatId', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,6 +62,9 @@ class KeywordsModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'open_keywords' => array(self::HAS_MANY, 'KeywordsModel', 'responseId'),
+            'open_menuaction' => array(self::HAS_MANY, 'MenuactionModel', 'responseId'),
+            'open_openPlatForm'=>array(self::BELONGS_TO,'OpenPlatformModel','openId')
 		);
 	}
 
@@ -67,10 +75,8 @@ class KeywordsModel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'responseId' => 'Response',
+			'openId' => 'Open',
 			'type' => 'Type',
-			'isAccurate' => 'Is Accurate',
 			'wechatId' => 'Wechat',
 		);
 	}
@@ -87,10 +93,8 @@ class KeywordsModel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('responseId',$this->responseId);
+		$criteria->compare('openId',$this->openId);
 		$criteria->compare('type',$this->type,true);
-		$criteria->compare('isAccurate',$this->isAccurate);
 		$criteria->compare('wechatId',$this->wechatId);
 
 		return new CActiveDataProvider($this, array(

@@ -15,6 +15,10 @@ class MemberMenu extends CWidget
             array('name' => '关注回复', 'url' => 'manager/subscribeReplay', 'act' => 'manager_subscribeReplay', 'list_acl' => array()),
             array('name' => '关键词回复', 'url' => 'manager/keyWords', 'act' => 'manager_keyWords', 'list_acl' => array()),
         )),
+        '外接平台管理' => array('controller' => 'open', 'act' => 'open', 'class' => 'fa fa-openid', 'action' => array(
+                array('name' => '平台列表', 'act' => 'open_index', 'list_acl' => array(), 'url' => 'open/index'),
+                array('name' => '回复转接管理', 'act' => 'open_replay', 'list_acl' => array(), 'url' => 'open/replay')
+            )),
         '营销管理' => array('controller' => 'market', 'act' => 'market', 'class' => 'fa fa-bullhorn', 'action' => array(
             array('name' => '礼包领取', 'url' => 'market/gift', 'act' => 'market_gift', 'list_acl' => array()),
         )),
@@ -41,7 +45,7 @@ class MemberMenu extends CWidget
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
         $userAllowAction = array('wechat', 'user', 'vip');
-        $mangerAllowAction = array('manager','market');
+        $mangerAllowAction = array('manager', 'market', 'open');
         if (in_array($controllerId, $userAllowAction)) {
             $menuList = self::$userMenu;
         } else if (in_array($controllerId, $mangerAllowAction)) {
