@@ -97,11 +97,13 @@ class OpenController extends WechatManagerController
                 'pageVar' => 'page'
             ),
         ));
-        $this->render('replay', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(), 'type' => $type));
+        $this->render('replay', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(),
+            'type' => $type, 'wechatInfo' => $this->wechatInfo));
     }
 
     public function actionReplayAdd()
     {
+        $open = array();
         $type = Yii::app()->request->getParam('type');
         $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
         $openList = OpenPlatformModel::model()->findAll('wechatId=:wechatId', array(':wechatId' => $this->wechatInfo->id));

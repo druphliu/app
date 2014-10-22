@@ -32,7 +32,8 @@ class MarketController extends WechatManagerController
                 'pageVar' => 'page'
             ),
         ));
-        $this->render('gift', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(), 'type' => $type));
+        $this->render('gift', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(),
+            'type' => $type,'wechatInfo'=>$this->wechatInfo));
     }
 
     public function actionGiftCreate()

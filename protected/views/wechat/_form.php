@@ -59,6 +59,32 @@
             </div>
         </div>
         <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'isAuth', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <?php echo $form->checkBox($model, 'isAuth', array('class' => 'col-xs-8 col-sm-1','id'=>'isAuth')); ?>
+                <?php echo $form->error($model, 'isAuth', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+            </div>
+        </div>
+        <div id="AuthForm" <?php if(!$model->isAuth){?>style="display: none"<?php }?>>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'appid', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textField($model, 'appid', array('class' => 'col-xs-8 col-sm-4','id'=>'isAuth')); ?>
+                    <?php echo $form->error($model, 'appid', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model, 'secret', array('class' => BootStrapUI::formLabelClass)); ?>
+                <div class="col-sm-9">
+                    <?php echo $form->textField($model, 'secret', array('class' => 'col-xs-8 col-sm-4','id'=>'isAuth')); ?>
+                    <?php echo $form->error($model, 'secret', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                </div>
+            </div>
+        </div>
+        <div class="space-4"></div>
         <div class="clearfix form-actions">
             <div class="col-md-offset-3 col-md-9">
                 <?php echo BootStrapUI::saveButton(); ?>
@@ -70,3 +96,14 @@
         <?php $this->endWidget(); ?>
     </div>
 </div>
+<script>
+    $().ready(function(){
+        $("#isAuth").click(function(){
+            if($(this).is(':checked')){
+                $("#AuthForm").show();
+            }else{
+                $("#AuthForm").hide();
+            }
+        })
+    })
+</script>

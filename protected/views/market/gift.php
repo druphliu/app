@@ -28,11 +28,13 @@ $this->breadcrumbs=array(
                                     关键词礼包列表
                                 </a>
                             </li>
+                            <?php if($wechatInfo->isAuth){?>
                             <li class="<?php if($type==GiftModel::TYPE_MENU){?>active<?php }?>">
                                 <a href="<?php echo Yii::app()->createUrl('market/gift',array('type'=>GiftModel::TYPE_MENU))?>" >
                                     菜单礼包列表
                                 </a>
                             </li>
+                            <?php }?>
                             <li>
                                 <a href="<?php echo Yii::app()->createUrl('market/giftCreate',array('type'=>$type))?>" class="btn btn-primary">添加</a>
                             </li>

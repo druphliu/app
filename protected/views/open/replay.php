@@ -28,11 +28,13 @@ $this->breadcrumbs = array(
                                     关键词转接列表
                                 </a>
                             </li>
+                            <?php if($wechatInfo->isAuth){?>
                             <li class="<?php if ($type == GiftModel::TYPE_MENU) { ?>active<?php } ?>">
                                 <a href="<?php echo Yii::app()->createUrl('open/replay', array('type' => GiftModel::TYPE_MENU)) ?>">
                                     菜单转接列表
                                 </a>
                             </li>
+                            <?php }?>
                             <li>
                                 <a href="<?php echo Yii::app()->createUrl('open/replayAdd', array('type' => $type)) ?>"
                                    class="btn btn-primary">添加</a>
