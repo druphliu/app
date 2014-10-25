@@ -27,7 +27,7 @@ class MemberController extends CController{
             if (Yii::app()->user->isGuest) {
                 $this->redirect(array('site/login'));
             } else {
-                $userInfo = UserModel::model()->find('username=:username', array(':username' => Yii::app()->user->name));
+                $userInfo = MemberModel::model()->find('username=:username', array(':username' => Yii::app()->user->name));
                 foreach (GroupModel::model()->findAll() as $g) {
                     $group[$g->id] = $g;
                 };

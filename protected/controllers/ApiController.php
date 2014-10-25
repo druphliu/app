@@ -152,7 +152,7 @@ class ApiController extends Controller
     {
         $responseInfo = TextreplayModel::model()->findByPk($responseId);
         $content = $responseInfo->content;
-        $responseObj = new WeChatTextResponse($content);
+        $responseObj = new WeChatTextResponse(str_replace(array('<br>', '</br>'), chr(13), $content));
         return $responseObj;
     }
 

@@ -12,7 +12,7 @@
  * @property integer $created_at
  * @property integer $updated_at
  */
-class UserModel extends CActiveRecord
+class MemberModel extends CActiveRecord
 {
     public $repswd;
     public $newpswd;
@@ -22,7 +22,7 @@ class UserModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'user';
+		return 'member';
 	}
 
 	/**

@@ -17,7 +17,7 @@ class UserIdentity extends CUserIdentity
 	 */
 	public function authenticate()
 	{
-        $user_info = UserModel::model()->find("username=:username", array(":username" => $this->username));
+        $user_info = MemberModel::model()->find("username=:username", array(":username" => $this->username));
         if ($user_info) {
             if ($user_info['pswd'] != md5($this->password)) {
                 $this->errorCode = self::ERROR_PASSWORD_INVALID;
