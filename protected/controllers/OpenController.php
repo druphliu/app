@@ -13,7 +13,8 @@ class OpenController extends WechatManagerController
         $this->layout = '/layouts/memberList';
         $dataProvider = new CActiveDataProvider('OpenPlatformModel', array(
             'criteria' => array(
-                'order' => 't.id DESC'
+                'order' => 't.id DESC',
+                'condition'=>'wechatId='.$this->wechatInfo->id,
             ),
             //'pagination' => false,
             'pagination' => array(
