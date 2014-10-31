@@ -179,11 +179,12 @@ class ApiController extends Controller
         } elseif ($giftInfo->status == 0) {
             $content = $giftInfo->pauseMsg ? $giftInfo->pauseMsg : "抱歉,活动暂时停止";
         } else {
-            $userHasGet = GiftCodeModel::model()->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
+            $codeTableName = GiftModel::model()->getCodeTableName($giftInfo->wechatId);
+            $userHasGet = GiftCodeModel::model($codeTableName)->find('giftId=:giftId and openId=:openId', array(':giftId' => $giftInfo->id, ':openId' => $openId));
             if ($userHasGet) {
                 $content = $giftInfo->RTemplate ? str_replace('{code}', $userHasGet->code, $giftInfo->RTemplate) : $userHasGet->code;
             } else {
-                $codeInfo = GiftCodeModel::model()->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
+                $codeInfo = GiftCodeModel::model($codeTableName)->find('giftId=:giftId and openId is null', array(':giftId' => $giftInfo->id));
                 if ($codeInfo) {
                     //update
                     $codeInfo->openId = $openId;

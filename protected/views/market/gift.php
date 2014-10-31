@@ -55,7 +55,7 @@ $this->breadcrumbs=array(
                                             <th>ID</th>
                                             <th>活动名称</th>
                                             <th><?php if($type==GiftModel::TYPE_KEYWORDS){?>关键词<?php }else{?>菜单动作<?php }?></th>
-                                            <th><?php if($type==GiftModel::TYPE_KEYWORDS){?>是否精准匹配<?php }?></th>
+                                            <?php if($type==GiftModel::TYPE_KEYWORDS){?><th>是否精准匹配</th><?php }?>
                                             <th>创建时间</th>
                                             <th>开始时间</th>
                                             <th>结束时间</th>

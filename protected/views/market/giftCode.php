@@ -61,7 +61,7 @@ $this->breadcrumbs = array(
                                                 <td class="center">
                                                     <label>
                                                         <input type="checkbox" class="ace" name="id"
-                                                               value="<?= $d->id ?>">
+                                                               value="<?= $d['id'] ?>">
                                                         <span class="lbl"></span>
                                                     </label>
                                                 </td>
@@ -69,9 +69,9 @@ $this->breadcrumbs = array(
                                                     <?= $i ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $d->code; //substr_replace($d->code, '*****', 4, 5) ?>
+                                                    <?php echo $d['code']; //substr_replace($d->code, '*****', 4, 5) ?>
                                                 </td>
-                                                <td><?php if ($d->openId) { ?>
+                                                <td><?php if ($d['openId']) { ?>
                                                         <span class="label label-sm label-success">是</span>
                                                     <?php } else { ?>
                                                         <span class="label label-sm label-warning">否</span>
@@ -80,7 +80,7 @@ $this->breadcrumbs = array(
                                                 <td style="width:23%">
                                                     <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
                                                         <a class="btn btn-xs btn-danger  bootbox-confirm"
-                                                           rel="<?= Yii::app()->createUrl('market/giftCodeDelete/id/' . $d->id) ?>">
+                                                           rel="<?= Yii::app()->createUrl('market/giftCodeDelete/id/' . $d['id']) ?>">
                                                             <i class="fa fa-remove bigger-120">删除</i>
                                                         </a>
                                                     </div>
