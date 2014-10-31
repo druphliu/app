@@ -1,9 +1,7 @@
 <?php
 
 /**
- * This is the model class for table "giftcode".
  *
- * The followings are the available columns in table 'giftcode':
  * @property integer $id
  * @property integer $giftId
  * @property string $code
@@ -12,22 +10,37 @@
  */
 class GiftCodeModel extends CActiveRecord
 {
-	/**
+    private static $tableName ;
+
+    public function __construct($table_name = '') {
+
+        if($table_name === null) {
+            parent::__construct(null);
+        } else {
+            self::$tableName = $table_name ;
+            parent::__construct();
+        }
+
+    }
+
+    /**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
 	 * @return GiftCodeModel the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($table_name)
 	{
-		return parent::model($className);
-	}
+        self::$tableName = $table_name ;
+
+        return parent::model(__CLASS__);
+    }
 
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'giftcode';
+        return self::$tableName;
 	}
 
 	/**
