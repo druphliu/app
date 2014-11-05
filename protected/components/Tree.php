@@ -163,7 +163,9 @@ class Tree {
                 if($a['parentId']){
                     $this->treeList[$a['parentId']]['child'][] = $a;
                 }else{
+                    $child = isset($this->treeList[$a['id']]['child'])?$this->treeList[$a['id']]['child']:array();
                     $this->treeList[$a['id']] = $a;
+                    $this->treeList[$a['id']]['child'] = $child;
                 }
             }
         }

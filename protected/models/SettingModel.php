@@ -40,7 +40,6 @@ class SettingModel extends CActiveRecord
 			array('key, value, wechatId, created_at', 'required'),
 			array('wechatId, created_at', 'numerical', 'integerOnly'=>true),
 			array('key', 'length', 'max'=>15),
-			array('value', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('key, value, wechatId, created_at', 'safe', 'on'=>'search'),

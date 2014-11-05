@@ -110,7 +110,7 @@ class GlobalParams
               50001 	用户未授权该api*/
     );
     const WECHAT_RESPONSE_OK = 0;
-    const APP_ID = '';
-    const APP_SECRET = '';
+    const APP_ID = 'wx0c3037e0a311908e';
+    const APP_SECRET = 'cb9577372e1f7e13d4a9c648d0c4ba7c';
     const MENU_UPDATE_URL = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s';
 } 

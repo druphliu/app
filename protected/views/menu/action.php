@@ -37,8 +37,8 @@ $this->breadcrumbs = array(
                                         <thead>
                                         <tr>
                                             <th><a href="#" class="">菜单名称</a></th>
-                                            <th><a href="#" class="">菜单值</a></th>
                                             <th><a href="#" class="">类型</a></th>
+                                            <th><a href="#" class="">菜单值</a></th>
                                             <th>操作</th>
                                         </tr>
                                         </thead>
@@ -51,8 +51,8 @@ $this->breadcrumbs = array(
                                                     <td></td>
                                                     <td></td>
                                                 <?php } else { ?>
-                                                    <td><?php echo $m['type'] == GlobalParams::TYPE_URL ? '' : $m['action'] ?></td>
                                                     <td><?php echo isset(GlobalParams::$typeList[$m['type']]) ? GlobalParams::$typeList[$m['type']] : '无' ?></td>
+                                                    <td><?php echo $m['type'] == GlobalParams::TYPE_URL ? '' : $m['action'] ?></td>
                                                 <?php } ?>
                                                 <td>
                                                     <div
@@ -77,8 +77,8 @@ $this->breadcrumbs = array(
                                                 <?php foreach ($m['child'] as $ch) { ?>
                                                     <tr class="treegrid-<?php echo $ch['id'] ?> treegrid-parent-<?php echo $m['id'] ?>">
                                                         <td><?php echo $ch['name'] ?></td>
-                                                        <td><?php echo $ch['type'] == GlobalParams::TYPE_URL ? '' : $ch['action'] ?></td>
                                                         <td><?php echo isset(GlobalParams::$typeList[$ch['type']]) ? GlobalParams::$typeList[$ch['type']] : '无' ?></td>
+                                                        <td><?php echo $ch['type'] == GlobalParams::TYPE_URL ? '<a href="'.$ch['action'].'" target="_blank">'.$ch['action'].'</a>' : $ch['action'] ?></td>
                                                         <td>
                                                             <div
                                                                 class="visible-md visible-lg hidden-sm hidden-xs action-buttons">

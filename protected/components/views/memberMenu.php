@@ -42,7 +42,7 @@
                 </ul>
             </li>
         <?php } else { ?>
-            <li class="<?php if (strpos($menu['url'], $this->controller->getAction()->id) !== false) { ?>active<?php } ?>">
+            <li class="<?php if (strpos($menu['url'], $this->controller->id.'/'.$this->controller->getAction()->id) !== false) { ?>active<?php } ?>">
                 <a href="<?php echo Yii::app()->createUrl($menu['url']) ?>">
                     <i class="<?= $menu['class'] ?>"></i>
                     <span class="menu-text"> <?= $name ?> </span>

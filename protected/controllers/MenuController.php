@@ -66,14 +66,10 @@ class MenuController extends WechatManagerController
 
     public function actionAction()
     {
-        $setting = SettingModel::model()->find('`key`=:key',array(":key"=>GlobalParams::SETTING_KEY_MENU));
+        $setting = SettingModel::model()->find('`key`=:key', array(":key" => GlobalParams::SETTING_KEY_MENU));
         $this->layout = '/layouts/memberList';
-        $sql = "select * from " . MenuactionModel::model()->tableName() . " where wechatId=" . $this->wechatInfo->id;
-        $command = Yii::app()->db->createCommand($sql);
-        $menus = $command->queryAll();
-        $menu = MenuactionModel::model()->getTree($menus);
-        //  $menu = MenuactionModel::model()->findAll('wechatId=:wechatId',array(':wechatId'=>$this->wechatInfo->id));
-        $this->render('action', array('menu' => $menu, 'wechatId' => $this->wechatInfo->id,'setting'=>$setting));
+        $menu = MenuactionModel::model()->getTree($this->wechatInfo->id);
+        $this->render('action', array('menu' => $menu, 'wechatId' => $this->wechatInfo->id, 'setting' => $setting));
     }
 
     public function actionCreate()
@@ -89,7 +85,7 @@ class MenuController extends WechatManagerController
                     $msg = '二级菜单名称不能超过7个汉字';
                 };
                 //当前菜单的子菜单个数
-                $count = MenuactionModel::model()->count('wechatId = :wechatId and parentId=:parentId', array(':wechatId' => $this->wechatInfo->id, ':parentId' => $parentId));
+                $count = MenuModel::model()->count('wechatId = :wechatId and parentId=:parentId', array(':wechatId' => $this->wechatInfo->id, ':parentId' => $parentId));
                 if ($count >= 5) {
                     $status = -1;
                     $msg = '二级菜单不能超过5个';
@@ -100,21 +96,24 @@ class MenuController extends WechatManagerController
                     $msg = '一级菜单名称不能超过4个汉字';
                 };
                 //一级菜单个数
-                $count = MenuactionModel::model()->count('wechatId = :wechatId and parentId=:parentId', array(':wechatId' => $this->wechatInfo->id, ':parentId' => 0));
+                $count = MenuModel::model()->count('wechatId = :wechatId and parentId=:parentId', array(':wechatId' => $this->wechatInfo->id, ':parentId' => 0));
                 if ($count >= 3) {
                     $status = -1;
                     $msg = '一级菜单不能超过3个';
                 }
             }
             if ($status == 1) {
-                $model = new MenuactionModel();
+                $modelAction = new MenuactionModel();
+                $modelAction->action = $_POST['type'] == GlobalParams::TYPE_URL ? $_POST['url'] : $_POST['action'];
+                $model = new MenuModel();
                 $model->name = $name;
-                $model->action = $_POST['action'];
                 $model->wechatId = $this->wechatInfo->id;
                 $model->type = $_POST['type'];
                 $model->parentId = $_POST['parentId'] ? $_POST['parentId'] : 0;
-                if ($model->validate()) {
+                if ($model->validate() && $modelAction->validate()) {
                     $model->save();
+                    $modelAction->menuId = $model->id;
+                    $modelAction->save();
                 } else {
                     $status = -1;
                     $error = $model->getErrors();
@@ -138,29 +137,17 @@ class MenuController extends WechatManagerController
 
     public function actionUpdate($id)
     {
-        $model = MenuactionModel::model()->findByPk($id);
+        $model = MenuModel::model()->with('menu_action')->findByPk($id);
         if ($_POST) {
             $status = 1;
             $msg = '更新成功';
             $model->name = $_POST['name'];
-            $model->action = $_POST['action'];
             $model->type = $_POST['type'];
             $model->parentId = $_POST['parentId'] ? $_POST['parentId'] : 0;
-            if ($model->validate()) {
-                if ($model->type == GlobalParams::TYPE_URL) {
-                    //保存URL了数据
-                    $modelUrl = UrlModel::model()->findByPk($model->responseId);
-                    if ($modelUrl) {
-                        $modelUrl->url = $_POST['url'];
-                    } else {
-                        $modelUrl = new UrlModel();
-                        $modelUrl->url = $_POST['url'];
-                        $modelUrl->type = GlobalParams::TYPE_URL;
-                        $modelUrl->wechatId = $this->wechatInfo->id;
-                    }
-                    $modelUrl->save();
-                    $model->responseId = $modelUrl->id;
-                }
+            $modelAction = MenuactionModel::model()->findByPk($model->menu_action->id);
+            $modelAction->action = $_POST['type'] == GlobalParams::TYPE_URL ? $_POST['url'] : $_POST['action'];
+            if ($model->validate() && $modelAction->validate()) {
+                $modelAction->save();
                 $model->save();
             } else {
                 $status = -1;
@@ -175,12 +162,8 @@ class MenuController extends WechatManagerController
         } else {
             $result['name'] = $model->name;
             $result['type'] = $model->type;
-            $result['action'] = $model->action;
-            $result['url'] = '';
-            if ($model->type == GlobalParams::TYPE_URL) {
-                $modelUrl = UrlModel::model()->findByPk($model->responseId);
-                $result['url'] = $modelUrl->url;
-            }
+            $result['action'] = $model->menu_action->action;
+            $result['url'] = $model->menu_action->action;
             echo json_encode($result);
         }
     }
@@ -189,10 +172,7 @@ class MenuController extends WechatManagerController
     {
         $option = '';
         $parentId = Yii::app()->request->getParam('parentId');
-        $sql = "select * from " . MenuactionModel::model()->tableName() . " where wechatId=" . $this->wechatInfo->id;
-        $command = Yii::app()->db->createCommand($sql);
-        $menus = $command->queryAll();
-        $menu = MenuactionModel::model()->getTree($menus);
+        $menu = MenuactionModel::model()->getTree($this->wechatInfo->id);
         if (count($menu) < 3) {
             $option = '<option value="0">一级菜单</option>';
         }

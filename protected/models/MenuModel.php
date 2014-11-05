@@ -1,20 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "menuaction".
+ * This is the model class for table "menu".
  *
- * The followings are the available columns in table 'menuaction':
+ * The followings are the available columns in table 'menu':
  * @property integer $id
- * @property integer $menuId
- * @property string $action
- * @property integer $responseId
+ * @property integer $wechatId
+ * @property string $type
+ * @property string $name
+ * @property integer $parentId
  */
-class MenuactionModel extends CActiveRecord
+class MenuModel extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return MenuactionModel the static model class
+	 * @return MenuModel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -26,7 +27,7 @@ class MenuactionModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'menuaction';
+		return 'menu';
 	}
 
 	/**
@@ -37,11 +38,13 @@ class MenuactionModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('menuId, responseId', 'numerical', 'integerOnly'=>true),
-			array('action', 'length', 'max'=>125),
+			array('wechatId', 'required'),
+			array('wechatId, parentId', 'numerical', 'integerOnly'=>true),
+			array('type', 'length', 'max'=>10),
+			array('name', 'length', 'max'=>15),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, menuId, action, responseId', 'safe', 'on'=>'search'),
+			array('id, wechatId, type, name, parentId', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,7 +56,7 @@ class MenuactionModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-            'action_menu'=>array(self::BELONGS_TO,'MenuModel','menuId')
+            'menu_action'=>array(self::HAS_ONE,'MenuactionModel','menuId')
 		);
 	}
 
@@ -64,9 +67,10 @@ class MenuactionModel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'menuId' => 'Menu',
-			'action' => 'Action',
-			'responseId' => 'Response',
+			'wechatId' => 'Wechat',
+			'type' => 'Type',
+			'name' => 'Name',
+			'parentId' => 'Parent',
 		);
 	}
 
@@ -82,20 +86,13 @@ class MenuactionModel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('menuId',$this->menuId);
-		$criteria->compare('action',$this->action,true);
-		$criteria->compare('responseId',$this->responseId);
+		$criteria->compare('wechatId',$this->wechatId);
+		$criteria->compare('type',$this->type,true);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('parentId',$this->parentId);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-    public function getTree($wechatId){
-        $sql = "select m.name,m.id,m.type,m.parentId,a.action,a.responseId from " . MenuModel::model()->tableName() . " m left join ".
-            MenuactionModel::model()->tableName()." a on m.id=a.menuId  where m.wechatId=" . $wechatId;
-        $command = Yii::app()->db->createCommand($sql);
-        $data = $command->queryAll();
-        $tree = new Tree($data);
-        return $tree->get_tree_list();
-    }
 }

@@ -136,11 +136,11 @@ class AjaxController extends Controller
         $wechatId = Yii::app()->request->getParam('wechatId');
         $result = 'true';
         $msg = "";
-        $actionExit = MenuactionModel::model()->find('wechatId=:wechatId and action=:action and type<>:type',
+        $actionExit = MenuactionModel::model()->with('action_menu')->find('action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type',
             array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL));
         if ($actionExit) {
             $result = 'false';
-            $msg = '菜单值与菜单' . $actionExit->name . '冲突了';
+            $msg = '菜单值与菜单' . $actionExit->action_menu->name . '冲突了';
         }
         echo $result;
     }
@@ -162,7 +162,7 @@ class AjaxController extends Controller
                 if ($token['status'] == WechatToken::OK) {
                     $tokenValue = $token['result'];
                     //update token
-                    $tokenModel->value = $token['result'];
+                    $tokenModel->value = $tokenValue;
                     $tokenModel->created_at = time();
                     $tokenModel->save();
                 } else {
@@ -173,16 +173,12 @@ class AjaxController extends Controller
             }
             if ($tokenValue) {
                 //更新菜单
-                $sql = "select * from " . MenuactionModel::model()->tableName() . " where wechatId=" . $wechatId;
-                $command = Yii::app()->db->createCommand($sql);
-                $menus = $command->queryAll();
-                $menu = MenuactionModel::model()->getTree($menus);
+                $menu = MenuactionModel::model()->getTree($wechatId);
                 foreach ($menu as $m) {
                     if (isset($m['child'])) {
                         foreach ($m['child'] as $ch) {
                             if ($ch['type'] == GlobalParams::TYPE_URL) {
-                                $urlInfo = UrlModel::model()->findByPk($ch['responseId']);
-                                $subV = array('type' => 'view', 'url' => $urlInfo->url);
+                                $subV = array('type' => 'view', 'url' => $ch['action']);
                             } else {
                                 $subV = array('type' => 'click', 'key' => $ch['action']);
                             }
@@ -210,6 +206,13 @@ class AjaxController extends Controller
             $resultData = json_decode($result['content']);
             $status = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? 1 : -1;
             $msg = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? '' : GlobalParams::$wechatErrorCode[$resultData->errcode];
+            if($status==1){
+                $settingMenuModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
+                    array(':wechatId' => $wechatId, ':key' => GlobalParams::SETTING_KEY_MENU));
+                $settingMenuModel->created_at = time();
+                $settingMenuModel->value = $menuValue;
+                $settingMenuModel->save();
+            }
         };
         echo json_encode(array('status' => $status, 'msg' => $msg));
     }
