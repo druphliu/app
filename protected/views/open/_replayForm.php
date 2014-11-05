@@ -37,7 +37,7 @@
             <div class="form-group">
                 <?php echo $form->labelEx($model, 'action', array('class' => BootStrapUI::formLabelClass)); ?>
                 <div class="col-sm-9">
-                    <?php echo $form->textField($model, 'action', array('class' => 'col-xs-10 col-sm-5')); ?>
+                    <?php echo $form->dropDownList($model, 'action',$menuList, array('class' => 'col-xs-5 col-sm-2')); ?>
                     <?php echo $form->error($model, 'action', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
                 </div>
             </div>

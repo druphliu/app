@@ -55,7 +55,7 @@ $this->breadcrumbs = array(
                                             </th>
                                             <th>ID</th>
                                             <th>平台名称</th>
-                                            <th><?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>关键词<?php } else { ?>菜单动作<?php } ?></th>
+                                            <th><?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>关键词<?php } else { ?>菜单名<?php } ?></th>
                                             <?php if ($type == GiftModel::TYPE_KEYWORDS) { ?><th>是否精准匹配</th><?php } ?>
                                             <th width="25%"></th>
                                         </tr>
@@ -89,7 +89,7 @@ $this->breadcrumbs = array(
                                                     <?php } else { ?>
                                                         <?php foreach ($d->open_menuaction as $menuaction) { ?>
                                                             <span
-                                                                class="label label-sm label-primary arrowed arrowed-right"><?= $menuaction->action ?></span>
+                                                                class="label label-sm label-primary arrowed arrowed-right"><?= $menuaction->action_menu->name ?></span>
                                                         <?php } ?>
                                                     <?php } ?>
                                                 </td>

@@ -63,7 +63,7 @@ class OpenReplayModel extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'open_keywords' => array(self::HAS_MANY, 'KeywordsModel', 'responseId'),
-            'open_menuaction' => array(self::HAS_MANY, 'MenuactionModel', 'responseId'),
+            'open_menuaction' => array(self::HAS_MANY, 'MenuactionModel', 'responseId','with'=>'action_menu'),
             'open_openPlatForm'=>array(self::BELONGS_TO,'OpenPlatformModel','openId')
 		);
 	}
@@ -81,7 +81,7 @@ class OpenReplayModel extends CActiveRecord
             'name'=>'名称',
             'keywords'=>'关键字',
             'isAccurate'=>'是否精准匹配',
-            'action'=>'菜单关键字'
+            'action'=>'菜单名'
 		);
 	}
 

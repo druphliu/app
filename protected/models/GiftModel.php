@@ -90,7 +90,7 @@ class GiftModel extends CActiveRecord
         // class name for the relations automatically generated below.
         return array(
             'gift_keywords' => array(self::HAS_MANY, 'KeywordsModel', 'responseId'),
-            'gift_menuaction' => array(self::HAS_MANY, 'MenuactionModel', 'responseId')
+            'gift_menuaction' => array(self::HAS_MANY, 'MenuactionModel','responseId','with'=>'action_menu'),
         );
     }
 
@@ -116,7 +116,7 @@ class GiftModel extends CActiveRecord
             'endTime' => '结束时间',
             'keywords' => '关键词',
             'isAccurate' => '是否精准匹配',
-            'action' => '菜单值'
+            'action' => '菜单名'
         );
     }
 

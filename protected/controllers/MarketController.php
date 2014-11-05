@@ -8,21 +8,20 @@ class MarketController extends WechatManagerController
         $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
         switch ($type) {
             case GiftModel::TYPE_KEYWORDS:
-                $with = 'gift_keywords';
+                $with = array('gift_keywords');
                 $whereType = "and t.type='" . GiftModel::TYPE_KEYWORDS . "'
                 and gift_keywords.type='" . GiftModel::GIFT_TYPE . "'";
                 break;
             case GiftModel::TYPE_MENU:
-                $with = 'gift_menuaction';
-                $whereType = "and t.type='" . GiftModel::TYPE_MENU . "'
-                and gift_menuaction.type='" . GiftModel::GIFT_TYPE . "'";
+                $with = array('gift_menuaction');
+                $whereType = "and t.type='" . GiftModel::TYPE_MENU . "'";
                 break;
         }
         $this->layout = '/layouts/memberList';
         $dataProvider = new CActiveDataProvider('GiftModel', array(
             'criteria' => array(
                 'order' => 't.id DESC',
-                'with' => array($with),
+                'with' => $with,
                 'condition' => "t.wechatId = {$this->wechatInfo->id} $whereType",
                 'together' => true
             ),
@@ -38,8 +37,13 @@ class MarketController extends WechatManagerController
 
     public function actionGiftCreate()
     {
+        $menuList = array();
         $type = Yii::app()->request->getParam('type');
-        $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
+        $type = $type ? $type : GlobalParams::TYPE_KEYWORDS;
+        if ($type == GlobalParams::TYPE_MENU) {
+            //取menu的下拉列表
+            $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id,GlobalParams::TYPE_GIFT);
+        }
         $model = new GiftModel();
         if (isset($_POST['GiftModel'])) {
             $model->type = $type;
@@ -50,7 +54,7 @@ class MarketController extends WechatManagerController
                 //创建礼包码表
                 $result = GiftModel::model()->createCodeTable($this->wechatInfo->id);
                 switch ($type) {
-                    case GiftModel::TYPE_KEYWORDS:
+                    case GlobalParams::TYPE_KEYWORDS:
                         $keywords = $_POST['GiftModel']['keywords'];
                         $isAccurate = $_POST['GiftModel']['isAccurate'];
                         $keywordsArray = explode(',', $keywords);
@@ -64,17 +68,9 @@ class MarketController extends WechatManagerController
                             $keywordsModel->save();
                         }
                         break;
-                    case GiftModel::TYPE_MENU:
-                        $action = $_POST['GiftModel']['action'];
-                        $menuAction = MenuactionModel::model()->find('type=:type and action=:action',
-                            array(':type' => GiftModel::GIFT_TYPE, ':action' => $action));
-                        if ($menuAction) {
-                            ShowMessage::error('菜单动作已经被应用了');
-                        }
-                        $menuActionModel = new MenuactionModel();
-                        $menuActionModel->wechatId = $this->wechatInfo->id;
-                        $menuActionModel->type = GiftModel::GIFT_TYPE;
-                        $menuActionModel->action = $action;
+                    case GlobalParams::TYPE_MENU:
+                        $menuId = $_POST['GiftModel']['action'];
+                        $menuActionModel = MenuactionModel::model()->find('menuId=:menuId', array(':menuId' => $menuId));
                         $menuActionModel->responseId = $model->id;
                         $menuActionModel->save();
                         break;
@@ -89,11 +85,12 @@ class MarketController extends WechatManagerController
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render('giftCreate', array('model' => $model, 'type' => $type ? $type : GiftModel::TYPE_KEYWORDS,
-            'wechatId' => $this->wechatInfo->id, 'responseId' => 0));
+            'wechatId' => $this->wechatInfo->id, 'responseId' => 0, 'menuList' => $menuList));
     }
 
     public function actionGiftUpdate($id)
     {
+        $menuList = array();
         $keyword = $common = '';
         $model = GiftModel::model()->findByPk($id);
         switch ($model->type) {
@@ -112,9 +109,11 @@ class MarketController extends WechatManagerController
                 $model->isAccurate = $isAccurate;
                 break;
             case GiftModel::TYPE_MENU:
-                $action = MenuactionModel::model()->find('type=:type and responseId=:responseId',
-                    array(':type' => GiftModel::GIFT_TYPE, ':responseId' => $id));
-                $oldAction = $model->action = $action->action;
+                $action = MenuactionModel::model()->with('action_menu')->find('action_menu.wechatId=:wechatId and responseId=:responseId',
+                    array(':wechatId' => $this->wechatInfo->id, ':responseId' => $id));
+                $oldAction = $model->action = isset($action->menuId) ? $action->menuId : 0;
+                //取menu的下拉列表
+                $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id,GlobalParams::TYPE_GIFT);
                 break;
         }
         if (isset($_POST['GiftModel'])) {
@@ -161,13 +160,18 @@ class MarketController extends WechatManagerController
                         $newAction = $_POST['GiftModel']['action'];
                         if ($oldAction != $newAction) {
                             //检测menu action是否被其他使用
-                            $actionExist = MenuactionModel::model()->find('wechatId=:wechatId and action=:action', array(':wechatId' => $this->wechatInfo->id, ':action' => $newAction));
-                            if ($actionExist) {
-                                ShowMessage::error('此菜单动作已经被使用了');
+//                            $actionExist = MenuactionModel::model()->find('wechatId=:wechatId and action=:action', array(':wechatId' => $this->wechatInfo->id, ':action' => $newAction));
+//                            if ($actionExist) {
+//                                ShowMessage::error('此菜单动作已经被使用了');
+//                            }
+                            if ($oldAction) {
+                                $actionModel = MenuactionModel::model()->find('menuId=:menuId', array(':menuId' => $oldAction));
+                                $actionModel->responseId = 0;
+                                $actionModel->save(); //原来菜单responseId置为0
                             }
-                            $actionModel = MenuactionModel::model()->find('type=:type and action=:action', array(':type' => GiftModel::GIFT_TYPE, ':action' => $oldAction));
-                            $actionModel->action = $newAction;
-                            $actionModel->save();
+                            $newActionModel = MenuactionModel::model()->find('menuId=:menuId', array(':menuId' => $newAction));
+                            $newActionModel->responseId = $model->id;
+                            $newActionModel->save();
                         }
                         break;
                 }
@@ -183,7 +187,7 @@ class MarketController extends WechatManagerController
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
-        $this->render('giftUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id, 'responseId' => $id));
+        $this->render('giftUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id, 'responseId' => $id, 'menuList' => $menuList));
     }
 
     public function actionGiftStart($id)
@@ -205,7 +209,7 @@ class MarketController extends WechatManagerController
     public function actionGiftDelete($id)
     {
         $model = GiftModel::model()->findByPk($id);
-        $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME,$this->wechatInfo->id);
+        $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
         GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));
         //删除关键字或者menu action
         switch ($model->type) {
@@ -223,10 +227,10 @@ class MarketController extends WechatManagerController
     public function actionGiftCodes($id)
     {
         $this->layout = '/layouts/memberList';
-        $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME,$this->wechatInfo->id);
-        $whereSql = 'giftId='.$id;
-        $count = Yii::app()->db->createCommand('SELECT COUNT(*) FROM '.$codeTable.' where '.$whereSql)->queryScalar();
-        $sql = 'SELECT * FROM '.$codeTable.' where '.$whereSql;
+        $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
+        $whereSql = 'giftId=' . $id;
+        $count = Yii::app()->db->createCommand('SELECT COUNT(*) FROM ' . $codeTable . ' where ' . $whereSql)->queryScalar();
+        $sql = 'SELECT * FROM ' . $codeTable . ' where ' . $whereSql;
         $dataProvider = new CSqlDataProvider($sql, array(
             'totalItemCount' => $count,
             'sort' => array(
