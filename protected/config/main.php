@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'My Web Application',
+	'name'=>'微信营销管理平台',
     'language'=>'zh_cn',
 
 	// preloading 'log' component
@@ -34,6 +34,10 @@ return array(
 
 	// application components
 	'components'=>array(
+        'request'=>array(
+            'enableCsrfValidation'=>false,
+            'enableCookieValidation'=>true,
+        ),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
@@ -61,7 +65,7 @@ return array(
             'username' => 'root',
             'password' => '',
             'charset' => 'utf8',
-            'tablePrefix'=>'app_'
+            'tablePrefix'=>''
         ),
 
 		'errorHandler'=>array(

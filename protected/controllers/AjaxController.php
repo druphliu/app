@@ -8,6 +8,9 @@
  */
 class AjaxController extends Controller
 {
+    /**
+     * 关键字重复检测
+     */
     public function actionCheckKeywords()
     {
         $exitKeywords = '';
@@ -77,6 +80,10 @@ class AjaxController extends Controller
         echo json_encode(array('result' => $result, 'msg' => $msg));
     }
 
+    /**
+     * 礼包码活动开关
+     * @param $id
+     */
     public function actionGiftStatus($id)
     {
         $status = Yii::app()->request->getParam('status');
@@ -86,6 +93,10 @@ class AjaxController extends Controller
         echo json_encode(array('result' => 0));
     }
 
+    /**
+     * 转接回复开关
+     * @param $id
+     */
     public function actionOpenReplayStatus($id)
     {
         $status = Yii::app()->request->getParam('status');
@@ -95,6 +106,10 @@ class AjaxController extends Controller
         echo json_encode(array('result' => 0));
     }
 
+    /**
+     * 转接平台状态检查
+     * @param $id
+     */
     public function actionOpenStatus($id)
     {
         $result = 0;
@@ -102,7 +117,7 @@ class AjaxController extends Controller
         if ($model) {
             $echostr = 'hello';
             $wechatApi = new WechatApi($model->token);
-            $url = $wechatApi->buildSignUrl($model->apiUrl,array('echostr'=>$echostr));
+            $url = $wechatApi->buildSignUrl($model->apiUrl, array('echostr' => $echostr));
             $content = HttpRequest::sendHttpRequest($url);
             if ($content['content'] == $echostr)
                 $result = 1;
@@ -110,5 +125,92 @@ class AjaxController extends Controller
             $model->save();
         }
         echo json_encode(array('result' => $result));
+    }
+
+    /**
+     * 菜单值重复检查
+     */
+    public function actionCheckAction()
+    {
+        $action = Yii::app()->request->getParam('action');
+        $wechatId = Yii::app()->request->getParam('wechatId');
+        $result = 'true';
+        $msg = "";
+        $actionExit = MenuactionModel::model()->find('wechatId=:wechatId and action=:action and type<>:type',
+            array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL));
+        if ($actionExit) {
+            $result = 'false';
+            $msg = '菜单值与菜单' . $actionExit->name . '冲突了';
+        }
+        echo $result;
+    }
+
+    /**
+     * 更新菜单
+     */
+    public function actionUpdateMenu()
+    {
+        $status = -1;
+        $msg = '参数有误';
+        $wechatId = Yii::app()->request->getParam('wechatId');
+        if ($wechatId) {
+            $tokenModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
+                array(':wechatId' => $wechatId, ':key' => GlobalParams::SETTING_KEY_ACCESS_TOKEN));
+            if ($tokenModel && (time() - $tokenModel->created_at) > WechatToken::EXPIRES_IN) {
+                $tokenObj = new WechatToken(GlobalParams::APP_ID, GlobalParams::APP_SECRET);
+                $token = $tokenObj->getToken();
+                if ($token['status'] == WechatToken::OK) {
+                    $tokenValue = $token['result'];
+                    //update token
+                    $tokenModel->value = $token['result'];
+                    $tokenModel->created_at = time();
+                    $tokenModel->save();
+                } else {
+                    $msg = $token['result'];
+                }
+            } else {
+                $tokenValue = $tokenModel->value;
+            }
+            if ($tokenValue) {
+                //更新菜单
+                $sql = "select * from " . MenuactionModel::model()->tableName() . " where wechatId=" . $wechatId;
+                $command = Yii::app()->db->createCommand($sql);
+                $menus = $command->queryAll();
+                $menu = MenuactionModel::model()->getTree($menus);
+                foreach ($menu as $m) {
+                    if (isset($m['child'])) {
+                        foreach ($m['child'] as $ch) {
+                            if ($ch['type'] == GlobalParams::TYPE_URL) {
+                                $urlInfo = UrlModel::model()->findByPk($ch['responseId']);
+                                $subV = array('type' => 'view', 'url' => $urlInfo->url);
+                            } else {
+                                $subV = array('type' => 'click', 'key' => $ch['action']);
+                            }
+                            $subV['name'] = $ch['name'];
+                            $sub[] = $subV;
+                        }
+                        $t = array(
+                            'name' => $m['name'],
+                            'sub_button' => $sub);
+                    } else {
+                        if ($m['type'] == GlobalParams::TYPE_URL) {
+                            $urlInfo = UrlModel::model()->findByPk($m['responseId']);
+                            $t = array('type' => 'view', 'url' => $urlInfo->url);
+                        } else {
+                            $t = array('type' => 'click', 'key' => $m['action']);
+                        }
+                        $t['name'] = $m['name'];
+                    }
+                    $buttonValue['button'][] = $t;
+                }
+            }
+            $menuValue = stripslashes(preg_replace("#\\\u([0-9a-f]+)#ie", "iconv('UCS-2', 'UTF-8', pack('H4', '\\1'))", json_encode($buttonValue)));
+            $url = sprintf(GlobalParams::MENU_UPDATE_URL, $tokenValue);
+            $result = HttpRequest::sendHttpRequest($url, $menuValue, 'POST');
+            $resultData = json_decode($result['content']);
+            $status = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? 1 : -1;
+            $msg = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? '' : GlobalParams::$wechatErrorCode[$resultData->errcode];
+        };
+        echo json_encode(array('status' => $status, 'msg' => $msg));
     }
 }

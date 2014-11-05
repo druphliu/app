@@ -81,7 +81,7 @@ class OpenReplayModel extends CActiveRecord
             'name'=>'名称',
             'keywords'=>'关键字',
             'isAccurate'=>'是否精准匹配',
-            'action'=>'菜单动作'
+            'action'=>'菜单关键字'
 		);
 	}
 

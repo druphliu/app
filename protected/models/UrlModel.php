@@ -1,26 +1,20 @@
 <?php
 
 /**
- * This is the model class for table "menuaction".
+ * This is the model class for table "url".
  *
- * The followings are the available columns in table 'menuaction':
+ * The followings are the available columns in table 'url':
  * @property integer $id
  * @property integer $wechatId
- * @property string $action
+ * @property string $url
  * @property string $type
- * @property string $name
- * @property integer $parentId
- * @property integer $responseId
  */
-class MenuactionModel extends CActiveRecord
+class UrlModel extends CActiveRecord
 {
-    const TYPE_URL = 'url';
-    const TYPPE_TEXT = 'text';
-
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return MenuactionModel the static model class
+	 * @return UrlModel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -32,7 +26,7 @@ class MenuactionModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'menuaction';
+		return 'url';
 	}
 
 	/**
@@ -43,13 +37,13 @@ class MenuactionModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('wechatId,type,name', 'required'),
-			array('wechatId, responseId', 'numerical', 'integerOnly'=>true),
-			array('action', 'length', 'max'=>30),
-			array('type', 'length', 'max'=>10),
+			array('wechatId, url', 'required'),
+			array('wechatId', 'numerical', 'integerOnly'=>true),
+			array('url', 'length', 'max'=>255),
+			array('type', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, wechatId, action, type, responseId', 'safe', 'on'=>'search'),
+			array('id, wechatId, url, type', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,9 +66,8 @@ class MenuactionModel extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'wechatId' => 'Wechat',
-			'action' => 'Action',
+			'url' => 'Url',
 			'type' => 'Type',
-			'responseId' => 'Response',
 		);
 	}
 
@@ -91,17 +84,11 @@ class MenuactionModel extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('wechatId',$this->wechatId);
-		$criteria->compare('action',$this->action,true);
+		$criteria->compare('url',$this->url,true);
 		$criteria->compare('type',$this->type,true);
-		$criteria->compare('responseId',$this->responseId);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-
-    public function getTree($data){
-        $tree = new Tree($data);
-        return $tree->get_tree_list();
-    }
 }

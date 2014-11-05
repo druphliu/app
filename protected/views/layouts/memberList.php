@@ -11,7 +11,7 @@
 <?php $this->beginContent('//layouts/mainMember'); ?>
 <?php echo $content ?>
 <?php $this->endContent() ?>
-<script src="<?php echo Yii::app()->request->baseUrl;?>/assets/js/bootbox.min.js"></script>
+
 
 <script>
     $().ready(function () {

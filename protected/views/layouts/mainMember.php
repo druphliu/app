@@ -431,6 +431,7 @@
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/ace-elements.min.js"></script>
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/ace.min.js"></script>
 
+        <script src="<?php echo Yii::app()->request->baseUrl;?>/assets/js/bootbox.min.js"></script>
                 <?php echo $content; ?>
 
                 <!-- PAGE CONTENT ENDS -->

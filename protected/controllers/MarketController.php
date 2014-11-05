@@ -235,7 +235,7 @@ class MarketController extends WechatManagerController
                 )
             ),
             'pagination' => array(
-                'pageSize' => 10
+                'pageSize' => Page::SIZE
             )
         ));
         $this->render('giftCode', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(), 'giftId' => $id));

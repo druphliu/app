@@ -372,11 +372,9 @@
                             prev.append(list);
                             this.setParent(prev);
                         } else {
-                            if(list.children(opt.itemNodeName).length<=4){//add by druphliu@gmail.com 子层5个限制
                                 // else append to next level up
                                 list = prev.children(opt.listNodeName).last();
                                 list.append(this.placeEl);
-                            }
                         }
                     }
                 }
