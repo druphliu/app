@@ -130,8 +130,10 @@ class MenuController extends WechatManagerController
 
     public function actionDelete($id)
     {
-        MenuactionModel::model()->deleteByPk($id);
-        MenuactionModel::model()->deleteAll('parentId=:parentId', array(':parentId' => $id));
+        $sql = 'delete a,b from ' . MenuactionModel::model()->tableName() . ' as a left join ' . MenuModel::model()->tableName() . '
+       as b on a.menuId=b.id where b.id=' . $id . ' or b.parentId=' . $id;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->execute();
         ShowMessage::success('删除成功');
     }
 

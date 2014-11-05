@@ -188,6 +188,7 @@ class AjaxController extends Controller
                         $t = array(
                             'name' => $m['name'],
                             'sub_button' => $sub);
+                        unset($sub);
                     } else {
                         if ($m['type'] == GlobalParams::TYPE_URL) {
                             $urlInfo = UrlModel::model()->findByPk($m['responseId']);
