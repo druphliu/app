@@ -96,15 +96,22 @@ class MenuModel extends CActiveRecord
         ));
     }
 
-    public function getMenuDropDownList($wechatId,$type)
+    public function getMenuDropDownList($wechatId, $type)
     {
         $result = array();
-        $sql = "select name,id from " . MenuModel::model()->tableName() . ' where wechatId=' . $wechatId . " and type='" . $type."'";
-        $command = Yii::app()->db->createCommand($sql);
-        $dataReader = $command->query();
-        while (($row = $dataReader->read()) !== false) {
-            $result[$row['id']] = $row['name'];
+        $menu = MenuactionModel::model()->getTree($wechatId);
+        foreach ($menu as $m) {
+            if ($m['child']) {
+                foreach ($m['child'] as $ch) {
+                    if ($ch['type'] == $type) {
+                        $result[$ch['id']] = $ch['name'];
+                    }
+                }
+            } elseif ($m['type'] == $type) {
+                $result[$m['id']] = $m['name'];
+            }
         }
         return $result;
     }
+
 }

@@ -164,8 +164,7 @@ class MenuController extends WechatManagerController
         } else {
             $result['name'] = $model->name;
             $result['type'] = $model->type;
-            $result['action'] = $model->menu_action->action;
-            $result['url'] = $model->menu_action->action;
+            $result['url'] = $result['action'] = isset($model->menu_action->action) ? $model->menu_action->action : '';
             echo json_encode($result);
         }
     }
@@ -175,7 +174,7 @@ class MenuController extends WechatManagerController
         $option = '';
         $parentId = Yii::app()->request->getParam('parentId');
         $menu = MenuactionModel::model()->getTree($this->wechatInfo->id);
-        if (count($menu) < 3) {
+        if (count($menu) < 3 || isset($_GET['parentId'])) {
             $option = '<option value="0">一级菜单</option>';
         }
         foreach ($menu as $m) {

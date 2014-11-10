@@ -107,7 +107,7 @@ $this->breadcrumbs = array(
                             </div>
                             <div>
                                 上次更新时间<?php echo date('Y-m-d H:i:s', $setting->created_at) ?>
-                                <a class="btn" id="update">更新</a>
+                                <a class="btn" id="update"><i class="fa fa-check bigger-120">更新</i></a>
                             </div>
                         </div>
                     </div>
@@ -212,12 +212,16 @@ $this->breadcrumbs = array(
                 function (data) {
                     if (TYPE_URL == data.type) {
                         $("#URL_TAB").removeClass('hide');
-                        $("#ACTION_TAB").removeClass('hide').addClass('hide');
+                        $("#ACTION_TAB").addClass('hide');
+                    }else{
+                        $("#URL_TAB").addClass('hide');
+                        $("#ACTION_TAB").removeClass('hide');
                     }
+                    $("#type").find('option:selected').removeAttr("selected");
+                    $("#type").find("option[value='" + data.type + "']").attr("selected", true);
                     $("#name").val(data.name);
                     $("#action").val(data.action);
                     $("#url").val(data.url);
-                    $("#type").find("option[value='" + data.type + "']").attr("selected", true);
                 }
             )
         });
@@ -304,6 +308,11 @@ $this->breadcrumbs = array(
             }
         });
         $("#update").click(function () {
+            var obj = $(this);
+            obj.attr('disabled',true);
+            var i = $(this).find('i');
+            var html = i.html();
+            i.removeClass().html('<i class="fa fa-spinner fa-spin bigger-140"></i>' + html + '中');
             var url = '<?php echo Yii::app()->createUrl("ajax/updateMenu",array('wechatId'=>$wechatId))?>';
             $.getJSON(
                 url,
@@ -313,8 +322,11 @@ $this->breadcrumbs = array(
                     }else{
                         alert(data.msg)
                     }
+                    obj.removeAttr('disabled');
+                    i.removeClass().addClass('fa fa-check bigger-120"').html(html);
                 }
-            )
+            );
+
         })
     });
 </script>
