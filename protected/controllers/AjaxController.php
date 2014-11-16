@@ -134,10 +134,18 @@ class AjaxController extends Controller
     {
         $action = Yii::app()->request->getParam('action');
         $wechatId = Yii::app()->request->getParam('wechatId');
+        $actionId = Yii::app()->request->getParam('actionId');
         $result = 'true';
         $msg = "";
-        $actionExit = MenuactionModel::model()->with('action_menu')->find('action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type',
-            array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL));
+        $criteria=new CDbCriteria;
+        if($actionId){
+            $criteria->condition='action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type and t.id<>:id';
+            $criteria->params=array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL,':id'=>$actionId);
+        }else{
+            $criteria->condition='action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type';
+            $criteria->params=array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL);
+        }
+        $actionExit = MenuactionModel::model()->with('action_menu')->find($criteria);
         if ($actionExit) {
             $result = 'false';
             $msg = '菜单值与菜单' . $actionExit->action_menu->name . '冲突了';

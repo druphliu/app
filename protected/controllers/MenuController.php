@@ -165,6 +165,7 @@ class MenuController extends WechatManagerController
             $result['name'] = $model->name;
             $result['type'] = $model->type;
             $result['url'] = $result['action'] = isset($model->menu_action->action) ? $model->menu_action->action : '';
+            $result['actionId'] = isset($model->menu_action->id) ? $model->menu_action->id : 0;
             echo json_encode($result);
         }
     }

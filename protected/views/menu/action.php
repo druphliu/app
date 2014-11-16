@@ -158,6 +158,7 @@ $this->breadcrumbs = array(
                         <?php echo CHtml::label('菜单值', 'action', array('class' => 'col-sm-3 col-lg-2 control-label required')) ?>
                         <div class="col-sm-5 col-lg-4 controls">
                             <?php echo CHtml::textField('action', '', array('class' => 'form-control input-sm')) ?>
+                            <?php echo CHtml::hiddenField('actionId', '', array('class' => 'form-control input-sm')) ?>
                         </div>
                     </div>
                 </div>
@@ -222,6 +223,7 @@ $this->breadcrumbs = array(
                     $("#name").val(data.name);
                     $("#action").val(data.action);
                     $("#url").val(data.url);
+                    $("#actionId").val(data.actionId);
                 }
             )
         });
@@ -257,7 +259,10 @@ $this->breadcrumbs = array(
                             action: function () {
                                 return $("#action").val();
                             },
-                            wechatId:<?php echo $wechatId?>
+                            wechatId:<?php echo $wechatId?>,
+                            actionId:function(){
+                                return $("#actionId").val();
+                            }
                         }
                     }
                 }
