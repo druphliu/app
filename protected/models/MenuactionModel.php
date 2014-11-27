@@ -91,7 +91,7 @@ class MenuactionModel extends CActiveRecord
 		));
 	}
     public function getTree($wechatId){
-        $sql = "select m.name,m.id,m.type,m.parentId,a.action,a.responseId from " . MenuModel::model()->tableName() . " m left join ".
+        $sql = "select m.name,m.id,m.type,m.parentId,a.action,a.responseId,a.id as actionId from " . MenuModel::model()->tableName() . " m left join ".
             MenuactionModel::model()->tableName()." a on m.id=a.menuId  where m.wechatId=" . $wechatId;
         $command = Yii::app()->db->createCommand($sql);
         $data = $command->queryAll();

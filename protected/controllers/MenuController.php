@@ -10,7 +10,6 @@ class MenuController extends WechatManagerController
         $command = Yii::app()->db->createCommand($sql);
         $menus = $command->queryAll();
         $menu = MenuactionModel::model()->getTree($menus);
-
         if ($_POST) {
             $output = json_decode($_POST['output']);
             foreach ($output as $a) {
@@ -145,18 +144,23 @@ class MenuController extends WechatManagerController
             $msg = '更新成功';
             $model->name = $_POST['name'];
             $model->type = $_POST['type'];
-            $model->parentId = $_POST['parentId'] ? $_POST['parentId'] : 0;
-            $modelAction = MenuactionModel::model()->findByPk($model->menu_action->id);
-            $modelAction->action = $_POST['type'] == GlobalParams::TYPE_URL ? $_POST['url'] : $_POST['action'];
-            if ($model->validate() && $modelAction->validate()) {
-                $modelAction->save();
-                $model->save();
-            } else {
+            if (!$model->parentId && $_POST['parentId']) {
                 $status = -1;
-                $error = $model->getErrors();
-                if ($error) {
-                    foreach ($error as $e) {
-                        $msg .= $e[0];
+                $msg = '此菜单含有子菜单，不能做此修改';
+            } else {
+                $model->parentId = $_POST['parentId'] ? $_POST['parentId'] : 0;
+                $modelAction = MenuactionModel::model()->findByPk($model->menu_action->id);
+                $modelAction->action = $_POST['type'] == GlobalParams::TYPE_URL ? $_POST['url'] : $_POST['action'];
+                if ($model->validate() && $modelAction->validate()) {
+                    $modelAction->save();
+                    $model->save();
+                } else {
+                    $status = -1;
+                    $error = $model->getErrors();
+                    if ($error) {
+                        foreach ($error as $e) {
+                            $msg .= $e[0];
+                        }
                     }
                 }
             }
@@ -170,6 +174,105 @@ class MenuController extends WechatManagerController
         }
     }
 
+    public function actionTextReplay()
+    {
+        $responseId = Yii::app()->request->getParam('responseId');
+        $actionId = Yii::app()->request->getParam('actionId');
+        $content = '';
+        $status = 1;
+        if ($responseId) {
+            $model = TextReplayModel::model()->findByPk($responseId);
+            $content = $model->content;
+        }
+        if (isset($_POST['content']) && $actionId) {
+            $model = isset($model) ? $model : new TextReplayModel();
+            $model->wechatId = $this->wechatInfo->id;
+            $model->type = globalParams::TYPE_TEXT;
+            $model->content = $_POST['content'];
+            if ($model->validate()) {
+                $model->save();
+                $actionModel = MenuactionModel::model()->findByPk($actionId);
+                $actionModel->responseId = $model->id;
+                $actionModel->save();
+                $status = 1;
+                $content = '编辑成功';
+            } else {
+                $status = -1;
+                foreach ($model->getErrors() as $e) {
+                    $content .= $e[0];
+                }
+            }
+        }
+        echo json_encode(array('status' => $status, 'content' => $content));
+    }
+
+    public function actionImageTextReplay($actionId)
+    {
+        $focus = $imageTextList = array();
+        $this->layout = '//layouts/iframe';
+        $actionModel = MenuactionModel::model()->findByPk($actionId);
+        if (isset($_POST['count'])) {
+            $validate = true;
+            $msg = '';
+            $count = $_POST['count'];
+            for ($i = 1; $i <= $count; $i++) {
+                $title = $_POST['title' . $i];
+                $summary = $_POST['summary' . $i];
+                $imgUrl = $_POST['src' . $i];
+                $url = $_POST['url' . $i];
+                $id = isset($_POST['id' . $i]) ? $_POST['id' . $i] : 0;
+                $formName = 'form' . $i;
+                $$formName = $id ? ImagetextreplayModel::model()->findByPk($id) : new ImagetextreplayModel();
+                $$formName->wechatId = $this->wechatInfo->id;
+                $$formName->type = GlobalParams::TYPE_MENU;
+                $$formName->title = $title;
+                $$formName->description = $summary;
+                $$formName->imgUrl = $imgUrl;
+                $$formName->url = $url;
+                if (!$$formName->validate()) {
+                    $validate = false;
+                    foreach ($$formName->getErrors() as $e) {
+                        $msg .= $e[0];
+                    }
+                };
+            }
+            if ($validate) {
+                $responseId = 0;
+                for ($i = 1; $i <= $count; $i++) {
+                    $formName = 'form' . $i;
+                    $$formName->parentId = $responseId;
+                    $$formName->save();
+                    if ($i == 1) {
+                        $responseId = $$formName->id;
+                        $actionModel->responseId = $responseId;
+                        $actionModel->save();
+                    }
+                }
+                echo json_encode(array('status' => 1, 'msg' => $msg));
+            } else {
+                echo json_encode(array('status' => -1, 'msg' => $msg));
+            }
+        } else {
+            $responseId = $actionModel->responseId;
+            $imageTextList = array();
+            if ($responseId) {
+                $focus = ImagetextreplayModel::model()->findByPk($responseId);
+                $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array( ':parentId' => $responseId));
+            }
+            $this->render('imageText', array('imageTextList' => $imageTextList,'focus'=>$focus));
+        }
+
+    }
+
+    public function actionDeleteImgList($id){
+        $status = -1;
+        $textImg = ImagetextreplayModel::model()->findByPk($id);
+        if($textImg){
+            $textImg->delete();
+            $status = 1;
+        }
+        echo json_encode(array('status'=>$status));
+    }
     public function actionGetDropDownList()
     {
         $option = '';

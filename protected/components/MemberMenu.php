@@ -54,6 +54,9 @@ class MemberMenu extends CWidget
             $actionArray = explode(',', $group[$userInfo['groupId']]->action);
             $menuList = self::$menuList;
             foreach ($menuList as $k => $m) {
+                if(!Yii::app()->session['isAuth'] && $m['act']=='menu'){
+                    unset($menuList[$k]);//非认证帐号不显示菜单功能
+                }
                 if (!in_array($m['act'], $actionArray)) {
                     unset($menuList[$k]);
                 }

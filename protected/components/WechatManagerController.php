@@ -38,6 +38,7 @@ class WechatManagerController extends MemberController
             if ($paramId)
                 Yii::app()->session['wechatId'] = $paramId;
             $this->wechatInfo = $this->_getWechatInfo($wechatId);
+            Yii::app()->session['isAuth'] = $this->wechatInfo->isAuth;
         }
         return true;
     }

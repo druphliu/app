@@ -11,6 +11,7 @@
  * @property string $description
  * @property integer $wechatId
  * @property string $url
+ * @property string $parentId
  */
 class ImagetextreplayModel extends CActiveRecord
 {
@@ -46,7 +47,7 @@ class ImagetextreplayModel extends CActiveRecord
 		// will receive user inputs.
 		return array(
             array('wechatId, type, title, url, imgUrl', 'required'),
-			array('wechatId', 'numerical', 'integerOnly'=>true),
+			array('wechatId, parentId', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>9),
 			array('title', 'length', 'max'=>100),
 			array('imgUrl, description, url', 'length', 'max'=>200),

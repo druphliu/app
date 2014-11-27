@@ -137,13 +137,13 @@ class AjaxController extends Controller
         $actionId = Yii::app()->request->getParam('actionId');
         $result = 'true';
         $msg = "";
-        $criteria=new CDbCriteria;
-        if($actionId){
-            $criteria->condition='action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type and t.id<>:id';
-            $criteria->params=array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL,':id'=>$actionId);
-        }else{
-            $criteria->condition='action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type';
-            $criteria->params=array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL);
+        $criteria = new CDbCriteria;
+        if ($actionId) {
+            $criteria->condition = 'action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type and t.id<>:id';
+            $criteria->params = array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL, ':id' => $actionId);
+        } else {
+            $criteria->condition = 'action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type';
+            $criteria->params = array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL);
         }
         $actionExit = MenuactionModel::model()->with('action_menu')->find($criteria);
         if ($actionExit) {
@@ -164,65 +164,71 @@ class AjaxController extends Controller
         if ($wechatId) {
             $tokenModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
                 array(':wechatId' => $wechatId, ':key' => GlobalParams::SETTING_KEY_ACCESS_TOKEN));
-            if ($tokenModel && (time() - $tokenModel->created_at) > WechatToken::EXPIRES_IN) {
-                $tokenObj = new WechatToken(GlobalParams::APP_ID, GlobalParams::APP_SECRET);
-                $token = $tokenObj->getToken();
-                if ($token['status'] == WechatToken::OK) {
-                    $tokenValue = $token['result'];
-                    //update token
-                    $tokenModel->value = $tokenValue;
-                    $tokenModel->created_at = time();
-                    $tokenModel->save();
-                } else {
-                    $msg = $token['result'];
-                }
-            } else {
-                $tokenValue = $tokenModel->value;
-            }
-            if ($tokenValue) {
-                //更新菜单
-                $menu = MenuactionModel::model()->getTree($wechatId);
-                foreach ($menu as $m) {
-                    if (isset($m['child'])) {
-                        foreach ($m['child'] as $ch) {
-                            if ($ch['type'] == GlobalParams::TYPE_URL) {
-                                $subV = array('type' => 'view', 'url' => $ch['action']);
-                            } else {
-                                $subV = array('type' => 'click', 'key' => $ch['action']);
-                            }
-                            $subV['name'] = $ch['name'];
-                            $sub[] = $subV;
-                        }
-                        $t = array(
-                            'name' => $m['name'],
-                            'sub_button' => $sub);
-                        unset($sub);
+            if ($tokenModel) {
+                if ((time() - $tokenModel->created_at) > WechatToken::EXPIRES_IN) {
+                    $tokenObj = new WechatToken(GlobalParams::APP_ID, GlobalParams::APP_SECRET);
+                    $token = $tokenObj->getToken();
+                    if ($token['status'] == WechatToken::OK) {
+                        $tokenValue = $token['result'];
+                        //update token
+                        $tokenModel->value = $tokenValue;
+                        $tokenModel->created_at = time();
+                        $tokenModel->save();
                     } else {
-                        if ($m['type'] == GlobalParams::TYPE_URL) {
-                            $urlInfo = UrlModel::model()->findByPk($m['responseId']);
-                            $t = array('type' => 'view', 'url' => $urlInfo->url);
-                        } else {
-                            $t = array('type' => 'click', 'key' => $m['action']);
-                        }
-                        $t['name'] = $m['name'];
+                        $msg = $token['result'];
                     }
-                    $buttonValue['button'][] = $t;
+                } else {
+                    $tokenValue = $tokenModel->value;
                 }
-            }
-            $menuValue = stripslashes(preg_replace("#\\\u([0-9a-f]+)#ie", "iconv('UCS-2', 'UTF-8', pack('H4', '\\1'))", json_encode($buttonValue)));
-            $url = sprintf(GlobalParams::MENU_UPDATE_URL, $tokenValue);
-            $result = HttpRequest::sendHttpRequest($url, $menuValue, 'POST');
-            $resultData = json_decode($result['content']);
-            $status = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? 1 : -1;
-            $msg = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? '' : GlobalParams::$wechatErrorCode[$resultData->errcode];
-            if($status==1){
-                $settingMenuModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
-                    array(':wechatId' => $wechatId, ':key' => GlobalParams::SETTING_KEY_MENU));
-                $settingMenuModel->created_at = time();
-                $settingMenuModel->value = $menuValue;
-                $settingMenuModel->save();
+                if ($tokenValue) {
+                    //更新菜单
+                    $menu = MenuactionModel::model()->getTree($wechatId);
+                    foreach ($menu as $m) {
+                        if (isset($m['child'])) {
+                            foreach ($m['child'] as $ch) {
+                                if ($ch['type'] == GlobalParams::TYPE_URL) {
+                                    $subV = array('type' => 'view', 'url' => $ch['action']);
+                                } else {
+                                    $subV = array('type' => 'click', 'key' => $ch['action']);
+                                }
+                                $subV['name'] = $ch['name'];
+                                $sub[] = $subV;
+                            }
+                            $t = array(
+                                'name' => $m['name'],
+                                'sub_button' => $sub);
+                            unset($sub);
+                        } else {
+                            if ($m['type'] == GlobalParams::TYPE_URL) {
+                                $urlInfo = UrlModel::model()->findByPk($m['responseId']);
+                                $t = array('type' => 'view', 'url' => $urlInfo->url);
+                            } else {
+                                $t = array('type' => 'click', 'key' => $m['action']);
+                            }
+                            $t['name'] = $m['name'];
+                        }
+                        $buttonValue['button'][] = $t;
+                    }
+                }
+                $menuValue = stripslashes(preg_replace("#\\\u([0-9a-f]+)#ie", "iconv('UCS-2', 'UTF-8', pack('H4', '\\1'))", json_encode($buttonValue)));
+                $url = sprintf(GlobalParams::MENU_UPDATE_URL, $tokenValue);
+                $result = HttpRequest::sendHttpRequest($url, $menuValue, 'POST');
+                $resultData = json_decode($result['content']);
+                $status = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? 1 : -1;
+                $msg = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? '' : GlobalParams::$wechatErrorCode[$resultData->errcode];
+                if ($status == 1) {
+                    $settingMenuModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
+                        array(':wechatId' => $wechatId, ':key' => GlobalParams::SETTING_KEY_MENU));
+                    $settingMenuModel->created_at = time();
+                    $settingMenuModel->value = $menuValue;
+                    $settingMenuModel->save();
+                }
+            }else{
+                $status = -1;
+                $msg = '还未添加菜单';
             }
         };
         echo json_encode(array('status' => $status, 'msg' => $msg));
     }
+
 }
