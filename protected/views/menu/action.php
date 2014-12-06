@@ -80,7 +80,11 @@ $this->breadcrumbs = array(
                                                                        data-url="<?php echo Yii::app()->createUrl('menu/imageTextReplay/actionId/' . $m['actionId']); ?>">
                                                                         <i class="fa fa-file-text"></i>查看回复</a>
                                                                 <?php } elseif ($m['type'] == GlobalParams::TYPE_OPEN) { ?>
-                                                                    <a href=""><i class="fa fa-openid"></i>查看转接</a>
+                                                                    <a class="open"
+                                                                        href="javascript:void(0)"
+                                                                       data-id="<?php echo $m['actionId'] ?>"
+                                                                       data-url="<?php echo Yii::app()->createUrl('menu/open', array('responseId' => $m['responseId'])); ?>"
+                                                                        ><i class="fa fa-openid"></i>查看转接</a>
                                                                 <?php } elseif ($m['type'] == GlobalParams::TYPE_URL) { ?>
                                                                     <a href="<?php echo $m['action'] ?>"
                                                                        target="_blank"><i class="fa fa-external-link">
@@ -129,7 +133,11 @@ $this->breadcrumbs = array(
                                                                            data-url="<?php echo Yii::app()->createUrl('menu/imageTextReplay/actionId/' . $ch['actionId']); ?>">
                                                                             <i class="fa fa-file-text"></i>查看回复</a>
                                                                     <?php } elseif ($ch['type'] == GlobalParams::TYPE_OPEN) { ?>
-                                                                        <a href=""><i class="fa fa-openid"></i>查看转接</a>
+                                                                        <a class="open"
+                                                                            href="javascript:void(0)"
+                                                                           data-id="<?php echo $ch['actionId'] ?>"
+                                                                           data-url="<?php echo Yii::app()->createUrl('menu/open', array('responseId' => $ch['responseId'])); ?>"
+                                                                            ><i class="fa fa-openid"></i>查看转接</a>
                                                                     <?php } elseif ($ch['type'] == GlobalParams::TYPE_URL) { ?>
                                                                         <a href="<?php echo $ch['action'] ?>"
                                                                            target="_blank"><i
@@ -148,8 +156,9 @@ $this->breadcrumbs = array(
                                 </div>
                             </div>
                             <div>
-                                上次更新时间<?php echo date('Y-m-d H:i:s', $setting->created_at) ?>
+                                <?php if(isset($setting)){?> 上次更新时间<?php echo date('Y-m-d H:i:s', $setting->created_at) ?><?php }?>
                                 <a class="btn" id="update"><i class="fa fa-check bigger-120">更新</i></a>
+                                <a class="btn btn-warning" id="delete"><i class="fa fa-trash-o bigger-120">删除</i></a>
                             </div>
                         </div>
                     </div>
@@ -259,6 +268,25 @@ $this->breadcrumbs = array(
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Text Image Replay -->
+<div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="openModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" style="width: 1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="openModalLabel">查看转接</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
@@ -408,7 +436,7 @@ $(document).ready(function () {
         var i = $(this).find('i');
         var html = i.html();
         i.removeClass().html('<i class="fa fa-spinner fa-spin bigger-140"></i>' + html + '中');
-        var url = '<?php echo Yii::app()->createUrl("ajax/updateMenu",array('wechatId'=>$wechatId))?>';
+        var url = '<?php echo Yii::app()->createUrl("ajax/updateMenu/wechatId/".$wechatId)?>';
         $.getJSON(
             url,
             function (data) {
@@ -421,7 +449,30 @@ $(document).ready(function () {
                 i.removeClass().addClass('fa fa-check bigger-120"').html(html);
             }
         );
-
+    });
+    $("#delete").click(function(){
+        bootbox.confirm("确定要删除?", function(result) {
+            if(result) {
+                var obj = $("#delete");
+                obj.attr('disabled', true);
+                var i = obj.find('i');
+                var html = i.html();
+                i.removeClass().html('<i class="fa fa-spinner fa-spin bigger-140"></i>' + html + '中');
+                var url = '<?php echo Yii::app()->createUrl("ajax/deleteMenu/wechatId/".$wechatId)?>';
+                $.getJSON(
+                    url,
+                    function (data) {
+                        if (data.status == 1) {
+                            alert('删除成功');
+                        } else {
+                            alert(data.msg)
+                        }
+                        obj.removeAttr('disabled');
+                        i.removeClass().addClass('fa fa-trash-o bigger-120"').html(html);
+                    }
+                );
+            }
+        });
     });
     $(".textReplay").click(function () {
         var Url = $(this).attr('data-url');
@@ -433,6 +484,16 @@ $(document).ready(function () {
                 $("#postUrl").val(Url);
                 $("#content").val(data.content);
                 $('#textModal').modal('show');
+            }
+        );
+    });
+    $(".open").click(function () {
+        var Url = $(this).attr('data-url');
+        var actionId = $(this).attr('data-id');
+        $.getJSON(
+            Url,
+            function (data) {
+                $('#openModal').modal('show');
             }
         );
     });

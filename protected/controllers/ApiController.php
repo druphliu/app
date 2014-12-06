@@ -68,9 +68,9 @@ class ApiController extends Controller
                 $keyword = $k;
             }
         }
-        $type = $keyword ? $keyword->type : TextreplayModel::TEXT_REPLAY_TYPE;
+        $type = $keyword ? $keyword->type : TextReplayModel::TEXT_REPLAY_TYPE;
         switch ($type) {
-            case TextreplayModel::TEXT_REPLAY_TYPE:
+            case TextReplayModel::TEXT_REPLAY_TYPE:
                 if ($keyword) {
                     $response = $this->_getTextReplay($keyword->responseId);
                 } else {
@@ -79,7 +79,7 @@ class ApiController extends Controller
                 }
                 break;
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $response = $this->_getImageTextReplay($keyword->responseId);
+                $response = $this->_getImageTextReplay($keyword->responseId,GlobalParams::TYPE_KEYWORDS);
                 break;
             case GiftModel::GIFT_TYPE:
                 //礼包领取
@@ -98,9 +98,9 @@ class ApiController extends Controller
     private function subscribeResponse($wechatInfo, $request)
     {
         $subscribeInfo = SubscribereplayModel::model()->find('wechatId=:wechatId', array(':wechatId' => $wechatInfo->id));
-        $type = $subscribeInfo ? $subscribeInfo->type : TextreplayModel::TEXT_REPLAY_TYPE;
+        $type = $subscribeInfo ? $subscribeInfo->type : TextReplayModel::TEXT_REPLAY_TYPE;
         switch ($type) {
-            case TextreplayModel::TEXT_REPLAY_TYPE:
+            case TextReplayModel::TEXT_REPLAY_TYPE:
                 if ($subscribeInfo) {
                     $response = $this->_getTextReplay($subscribeInfo->responseId);
                 } else {
@@ -109,7 +109,7 @@ class ApiController extends Controller
                 }
                 break;
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $response = $this->_getImageTextReplay($subscribeInfo->responseId);
+                $response = $this->_getImageTextReplay($subscribeInfo->responseId,GlobalParams::TYPE_SUBSCRIBE);
                 break;
         }
         $xml = $response->_to_xml($request);
@@ -118,21 +118,21 @@ class ApiController extends Controller
 
     private function menuResponse($key, $request)
     {
-        $menuInfo = MenuactionModel::model()->find('action=:action', array(':action' => $key));
+        $menuInfo = MenuactionModel::model()->with('action_menu')->find('action=:action', array(':action' => $key));
         if ($menuInfo) {
             $responseId = $menuInfo->responseId;
-            switch ($menuInfo->type) {
-                case TextreplayModel::TEXT_REPLAY_TYPE:
+            switch ($menuInfo->action_menu->type) {
+                case GlobalParams::TYPE_TEXT:
                     $response = $this->_getTextReplay($responseId);
                     break;
-                case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                    $response = $this->_getImageTextReplay($responseId);
+                case GlobalParams::TYPE_IMAGE_TEXT:
+                    $response = $this->_getImageTextReplay($responseId,GlobalParams::TYPE_MENU);
                     break;
-                case GiftModel::GIFT_TYPE:
+                case GlobalParams::TYPE_GIFT:
                     //礼包领取
                     $response = $this->_getGiftReplay($responseId, $request->from_user_name);
                     break;
-                case OpenReplayModel::OPEN_TYPE:
+                case GlobalParams::TYPE_OPEN:
                     //转接
                     $response = $this->_getOpenReplay($responseId);
                     return $response;
@@ -150,7 +150,7 @@ class ApiController extends Controller
      */
     private function _getTextReplay($responseId)
     {
-        $responseInfo = TextreplayModel::model()->findByPk($responseId);
+        $responseInfo = TextReplayModel::model()->findByPk($responseId);
         $content = $responseInfo->content;
         $responseObj = new WeChatTextResponse(str_replace(array('<br>', '</br>'), chr(13), $content));
         return $responseObj;
@@ -161,11 +161,17 @@ class ApiController extends Controller
      * @param $responseId
      * @return WeChatArticleResponse
      */
-    private function _getImageTextReplay($responseId)
+    private function _getImageTextReplay($responseId,$type)
     {
         $responseInfo = ImagetextreplayModel::model()->findByPk($responseId);
         $responseObj = new WeChatArticleResponse();
         $responseObj->add_article($responseInfo->title, $responseInfo->description, $responseInfo->imgUrl, $responseInfo->url);
+        $list = ImagetextreplayModel::model()->findAll('type=:type and parentId=:parentId', array(':type' => $type, ':parentId' => $responseId));
+        if($list){
+            foreach($list as $article){
+                $responseObj->add_article($article->title,$article->description, $article->imgUrl, $article->url);
+            }
+        }
         return $responseObj;
     }
 

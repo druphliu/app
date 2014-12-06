@@ -113,4 +113,5 @@ class GlobalParams
     const APP_ID = 'wx0c3037e0a311908e';
     const APP_SECRET = 'cb9577372e1f7e13d4a9c648d0c4ba7c';
     const MENU_UPDATE_URL = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s';
+    const MENU_DELETE_URL = 'https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=%s';
 } 

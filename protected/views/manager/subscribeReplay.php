@@ -16,8 +16,9 @@ $this->breadcrumbs = array(
         </small>
     </h1>
 </div>
-<?php if ($type == TextreplayModel::TEXT_REPLAY_TYPE){
+<?php if ($type == TextReplayModel::TEXT_REPLAY_TYPE){
     echo $this->renderPartial('_textSubscribeForm', array('model' => $model));
 }else {
-    echo $this->renderPartial('_imageTextSubscribeForm', array('model' => $model));
+    echo $this->renderPartial('/menu/imageText', array('focus' => $model,'imageTextList'=>$imageTextList));
+    //echo $this->renderPartial('_imageTextSubscribeForm', array('model' => $model));
 }?>

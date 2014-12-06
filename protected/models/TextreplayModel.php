@@ -9,7 +9,7 @@
  * @property string $type
  * @property string $content
  */
-class TextreplayModel extends CActiveRecord
+class TextReplayModel extends CActiveRecord
 {
     const TEXT_REPLAY_TYPE = 'text';
 
@@ -19,7 +19,7 @@ class TextreplayModel extends CActiveRecord
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
-     * @return TextreplayModel the static model class
+     * @return TextReplayModel the static model class
      */
     public static function model($className = __CLASS__)
     {

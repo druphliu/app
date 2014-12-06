@@ -48,9 +48,8 @@ class ImagetextreplayModel extends CActiveRecord
 		return array(
             array('wechatId, type, title, url, imgUrl', 'required'),
 			array('wechatId, parentId', 'numerical', 'integerOnly'=>true),
-			array('type', 'length', 'max'=>9),
 			array('title', 'length', 'max'=>100),
-			array('imgUrl, description, url', 'length', 'max'=>200),
+			//array('imgUrl, description, url', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, type, title, imgUrl, description, wechatId, url', 'safe', 'on'=>'search'),

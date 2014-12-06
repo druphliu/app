@@ -187,7 +187,7 @@ class MenuController extends WechatManagerController
         if (isset($_POST['content']) && $actionId) {
             $model = isset($model) ? $model : new TextReplayModel();
             $model->wechatId = $this->wechatInfo->id;
-            $model->type = globalParams::TYPE_TEXT;
+            $model->type = GlobalParams::TYPE_TEXT;
             $model->content = $_POST['content'];
             if ($model->validate()) {
                 $model->save();
@@ -208,9 +208,16 @@ class MenuController extends WechatManagerController
 
     public function actionImageTextReplay($actionId)
     {
-        $focus = $imageTextList = array();
+        $focus = $imageTextList = $dataList = array();
         $this->layout = '//layouts/iframe';
         $actionModel = MenuactionModel::model()->findByPk($actionId);
+        $responseId = $actionModel->responseId;
+        $imageTextList = array();
+        if ($responseId) {
+            $focus = ImagetextreplayModel::model()->findByPk($responseId);
+            $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $responseId));
+            $dataList = CHtml::listData($imageTextList, 'id', 'id');
+        }
         if (isset($_POST['count'])) {
             $validate = true;
             $msg = '';
@@ -222,7 +229,12 @@ class MenuController extends WechatManagerController
                 $url = $_POST['url' . $i];
                 $id = isset($_POST['id' . $i]) ? $_POST['id' . $i] : 0;
                 $formName = 'form' . $i;
-                $$formName = $id ? ImagetextreplayModel::model()->findByPk($id) : new ImagetextreplayModel();
+                if ($id) {
+                    $$formName = ImagetextreplayModel::model()->findByPk($id);
+                    if(in_array($id,$dataList))
+                        unset($dataList[$id]);
+                }
+                $$formName = isset($$formName) ? $$formName : new ImagetextreplayModel();
                 $$formName->wechatId = $this->wechatInfo->id;
                 $$formName->type = GlobalParams::TYPE_MENU;
                 $$formName->title = $title;
@@ -248,31 +260,33 @@ class MenuController extends WechatManagerController
                         $actionModel->save();
                     }
                 }
+                //删除已经删除的数据
+                if($dataList){
+                    foreach($dataList as $id){
+                        ImagetextreplayModel::model()->deleteByPk($id);
+                    }
+                }
                 echo json_encode(array('status' => 1, 'msg' => $msg));
             } else {
                 echo json_encode(array('status' => -1, 'msg' => $msg));
             }
-        } else {
-            $responseId = $actionModel->responseId;
-            $imageTextList = array();
-            if ($responseId) {
-                $focus = ImagetextreplayModel::model()->findByPk($responseId);
-                $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array( ':parentId' => $responseId));
-            }
-            $this->render('imageText', array('imageTextList' => $imageTextList,'focus'=>$focus));
+            return;
         }
+        $this->render('imageText', array('imageTextList' => $imageTextList, 'focus' => $focus));
 
     }
 
-    public function actionDeleteImgList($id){
+    public function actionDeleteImgList($id)
+    {
         $status = -1;
         $textImg = ImagetextreplayModel::model()->findByPk($id);
-        if($textImg){
+        if ($textImg) {
             $textImg->delete();
             $status = 1;
         }
-        echo json_encode(array('status'=>$status));
+        echo json_encode(array('status' => $status));
     }
+
     public function actionGetDropDownList()
     {
         $option = '';
@@ -281,10 +295,12 @@ class MenuController extends WechatManagerController
         if (count($menu) < 3 || isset($_GET['parentId'])) {
             $option = '<option value="0">一级菜单</option>';
         }
-        foreach ($menu as $m) {
-            if (!(isset($m['child']) && count($m['child']) >= 5)) {
-                $select = $m['id'] == $parentId ? 'selected="selected"' : '';
-                $option .= '<option value="' . $m['id'] . '" ' . $select . '>' . $m['name'] . '</option>';
+        if($menu){
+            foreach ($menu as $m) {
+                if (!(isset($m['child']) && count($m['child']) >= 5)) {
+                    $select = $m['id'] == $parentId ? 'selected="selected"' : '';
+                    $option .= '<option value="' . $m['id'] . '" ' . $select . '>' . $m['name'] . '</option>';
+                }
             }
         }
         echo $option;
