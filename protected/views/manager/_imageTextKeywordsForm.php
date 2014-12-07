@@ -146,21 +146,49 @@
         <?php echo CHtml::endForm() ?>
     </div>
 </div>
+
 <!--add project global -->
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/global.js"></script>
 <script>
     $().ready(function () {
         <?php if(isset($model['title'])){$i=1;?>
-        var list = comm = '';
-        var location = '[{"title": "<?php echo $model['title']?>","summary":"<?php echo $model['description']?>","src":"<?php echo $model['imgUrl']?>","url":"<?php echo $model['url']?>","id":<?php echo $i?>,"filedId":<?php echo $model['id']?>}';
+        var list = comm = title = summary = src = url = '';
+        var id = filedId = 0;
+        title = "<?php echo addslashes($model['title'])?>";
+        summary = "<?php echo addslashes($model['description'])?>";
+        src = "<?php echo $model['imgUrl']?>";
+        url = "<?php echo $model['url']?>";
+        id = <?php echo $i?>;
+        filedId = <?php echo $model['id']?>;
+        var location = [];
+        var item = {};
+        item.title = title;
+        item.summary = summary;
+        item.url = url;
+        item.src = src;
+        item.id = id;
+        item.filedId = filedId;
+        location.push(item);
         <?php if ($imageTextList) {?>
         <?php foreach ($imageTextList as $list) { $i++;?>
-        list += comm + '{"title": "<?php echo $list['title']?>","summary":"<?php echo $list['description']?>","src":"<?php echo $list['imgUrl']?>","url":"<?php echo $list['url']?>","id":<?php echo $i?>,"filedId":<?php echo $list['id']?>}';
-        comm = ",";
+        item = {};
+        title = "<?php echo addslashes($list['title'])?>";
+        summary = "<?php echo addslashes($list['description'])?>";
+        src = "<?php echo $list['imgUrl']?>";
+        url = "<?php echo $list['url']?>";
+        id = <?php echo $i?>;
+        filedId = <?php echo $list['id']?>;
+        item.title = title;
+        item.summary = summary;
+        item.url = url;
+        item.src = src;
+        item.id = id;
+        item.filedId = filedId;
+        location.push(item);
         <?php }?>
         <?php }?>
-        list = list ? location + "," + list + "]" : location + "]";
-        $.localStorage('editImageText', JSON.stringify(list));
+        list = JSON.stringify(location);
+        $.localStorage('editImageText', list);
         <?php }else{?>
         $.localStorage('editImageText', '');
         <?php }?>

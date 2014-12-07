@@ -129,15 +129,42 @@
 <script>
     $().ready(function(){
         <?php if(isset($focus['title'])){$i=1;?>
-        var list=comm='';
-        var location = '[{"title": "<?php echo $focus['title']?>","summary":"<?php echo $focus['description']?>","src":"<?php echo $focus['imgUrl']?>","url":"<?php echo $focus['url']?>","id":<?php echo $i?>,"filedId":<?php echo $focus['id']?>}';
+        var list = comm = title = summary = src = url = '';
+        var id = filedId = 0;
+        title = "<?php echo addslashes($focus['title'])?>";
+        summary = "<?php echo addslashes($focus['description'])?>";
+        src = "<?php echo $focus['imgUrl']?>";
+        url = "<?php echo $focus['url']?>";
+        id = <?php echo $i?>;
+        filedId = <?php echo $focus['id']?>;
+        var location = [];
+        var item = {};
+        item.title = title;
+        item.summary = summary;
+        item.url = url;
+        item.src = src;
+        item.id = id;
+        item.filedId = filedId;
+        location.push(item);
         <?php if ($imageTextList) {?>
         <?php foreach ($imageTextList as $list) { $i++;?>
-            list +=comm+'{"title": "<?php echo $list['title']?>","summary":"<?php echo $list['description']?>","src":"<?php echo $list['imgUrl']?>","url":"<?php echo $list['url']?>","id":<?php echo $i?>,"filedId":<?php echo $list['id']?>}';
-            comm = ",";
+        tem = {};
+        title = "<?php echo addslashes($list['title'])?>";
+        summary = "<?php echo addslashes($list['description'])?>";
+        src = "<?php echo $list['imgUrl']?>";
+        url = "<?php echo $list['url']?>";
+        id = <?php echo $i?>;
+        filedId = <?php echo $list['id']?>;
+        item.title = title;
+        item.summary = summary;
+        item.url = url;
+        item.src = src;
+        item.id = id;
+        item.filedId = filedId;
+        location.push(item);
         <?php }?>
         <?php }?>
-         list = list?location+","+list+"]":location+"]";
+        list= JSON.stringify();
         $.localStorage('editImageText',list);
         <?php }else{?>
         $.localStorage('editImageText', '');

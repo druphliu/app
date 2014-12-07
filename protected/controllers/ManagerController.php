@@ -289,21 +289,21 @@ class ManagerController extends WechatManagerController
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords', array('type' => ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));
                 if ($count > 1) {
                     for ($i = 2; $i <= $count; $i++) {
-                        $id = isset($_POST['id' . $i]) ? $_POST['id' . $i] : 0;
+                        $id = $_POST['id' . $i] ? $_POST['id' . $i] : 0;
                         if ($id) {
-                            ${'model' . $id} = ImagetextreplayModel::model()->findByPk($id);
+                            ${'model' . $i} = ImagetextreplayModel::model()->findByPk($id);
                             if (in_array($id, $listData))
                                 unset($listData[$id]);
                         }
-                        ${'model' . $id} = ${'model' . $id} ? ${'model' . $id} : new ImagetextreplayModel();
-                        ${'model' . $id}->title = $_POST['title' . $i];
-                        ${'model' . $id}->description = $_POST['summary' . $i];
-                        ${'model' . $id}->type = GlobalParams::TYPE_KEYWORDS;
-                        ${'model' . $id}->imgUrl = $_POST['src' . $i];
-                        ${'model' . $id}->url = $_POST['url' . $i];
-                        ${'model' . $id}->wechatId = $this->wechatInfo->id;
-                        ${'model' . $id}->parentId = $model->id;
-                        $validate &= ${'model' . $id}->validate();
+                        ${'model' . $i} = isset(${'model' . $id}) ? ${'model' . $id} : new ImagetextreplayModel();
+                        ${'model' . $i}->title = $_POST['title' . $i];
+                        ${'model' . $i}->description = $_POST['summary' . $i];
+                        ${'model' . $i}->type = GlobalParams::TYPE_KEYWORDS;
+                        ${'model' . $i}->imgUrl = $_POST['src' . $i];
+                        ${'model' . $i}->url = $_POST['url' . $i];
+                        ${'model' . $i}->wechatId = $this->wechatInfo->id;
+                        ${'model' . $i}->parentId = $model->id;
+                        $validate &= ${'model' . $i}->validate();
                     }
                 }
             } elseif (isset($_POST['TextReplayModel'])) {
@@ -347,7 +347,7 @@ class ManagerController extends WechatManagerController
                 $model->save();
                 if (isset($_POST['ImagetextreplayModel'])) {
                     for ($i = 2; $i <= $count; $i++) {
-                        ${'model' . $id}->save();
+                        ${'model' . $i}->save();
                     }
                     if ($listData) {
                         foreach ($listData as $id) {
