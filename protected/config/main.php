@@ -7,8 +7,9 @@
 // CWebApplication properties can be configured here.
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-    'name' => '微信营销管理平台',
+    'name' => '微信营销运营平台',
     'language' => 'zh_cn',
+    'defaultController' => 'wechat',
 
     // preloading 'log' component
     'preload' => array('log'),
