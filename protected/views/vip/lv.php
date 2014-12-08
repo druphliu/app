@@ -2,7 +2,7 @@
 /* @var $this VipController */
 
 $this->breadcrumbs=array(
-    array('name' => '首页', 'url' => array('site/index')),
+    array('name' => '首页', 'url' => array('wechat/index')),
     array('name' => '会员升级', 'url' => array('index')),
     array('name' => '充值升级'),
 );

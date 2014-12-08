@@ -2,7 +2,7 @@
 /* @var $this GroupController */
 
 $this->breadcrumbs=array(
-    array('name' => '首页', 'url' => array('site/index')),
+    array('name' => '首页', 'url' => array('wechat/index')),
     array('name' => '基础设置'),
     array('name' => '关键词回复'),
 );

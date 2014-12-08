@@ -2,8 +2,8 @@
 /* @var $this GroupController */
 
 $this->breadcrumbs = array(
-    array('name' => '首页', 'url' => array('site/index')),
-    array('name' => '帐号管理', 'url' => array('site/index')),
+    array('name' => '首页', 'url' => array('wechat/index')),
+    array('name' => '帐号管理', 'url' => array('wechat/index')),
     array('name' => '菜单管理')
 )
 ?>

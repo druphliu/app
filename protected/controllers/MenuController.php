@@ -272,7 +272,7 @@ class MenuController extends WechatManagerController
             }
             return;
         }
-        $this->render('imageText', array('imageTextList' => $imageTextList, 'focus' => $focus));
+        $this->render('/layouts/imageText', array('imageTextList' => $imageTextList, 'focus' => $focus));
 
     }
 

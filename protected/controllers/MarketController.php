@@ -209,15 +209,17 @@ class MarketController extends WechatManagerController
     public function actionGiftDelete($id)
     {
         $model = GiftModel::model()->findByPk($id);
-        $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
-        GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));
+       /* $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
+        GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));*/
         //删除关键字或者menu action
         switch ($model->type) {
             case GiftModel::TYPE_KEYWORDS:
                 KeywordsModel::model()->deleteAll('responseId=:responseId and type=:type', array(':responseId' => $id, ':type' => GiftModel::GIFT_TYPE));
                 break;
             case GiftModel::TYPE_MENU:
-                MenuactionModel::model()->deleteAll('responseId=:responseId and type=:type', array(':responseId' => $id, ':type' => GiftModel::GIFT_TYPE));
+                $menuactionModel = MenuactionModel::model()->find('responseId=:responseId',array('responseId'=>$model->id));
+                $menuactionModel->responseId = 0;
+                $menuactionModel->save();
                 break;
         }
         $model->delete();

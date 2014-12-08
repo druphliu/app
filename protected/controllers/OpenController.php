@@ -104,13 +104,10 @@ class OpenController extends WechatManagerController
 
     public function actionReplayAdd()
     {
-        $open = $menuList = array();
+        $menuList = array();
         $type = Yii::app()->request->getParam('type');
         $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
-        $openList = OpenPlatformModel::model()->findAll('wechatId=:wechatId', array(':wechatId' => $this->wechatInfo->id));
-        foreach ($openList as $op) {
-            $open[$op->id] = $op->name;
-        }
+        $open = array('' => '请选择') + CHtml::listData(OpenPlatformModel::model()->findAll('wechatId=:wechatId and status=:status', array(':wechatId' => $this->wechatInfo->id, ':status' => 1)), 'id', 'name');
         if ($type == GlobalParams::TYPE_MENU) {
             //取menu的下拉列表
             $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id, GlobalParams::TYPE_OPEN);
@@ -163,10 +160,7 @@ class OpenController extends WechatManagerController
         $model = OpenReplayModel::model()->findByPk($id);
         if ($model->wechatId != $this->wechatInfo->id)
             return;
-        $openList = OpenPlatformModel::model()->findAll('wechatId=:wechatId', array(':wechatId' => $this->wechatInfo->id));
-        foreach ($openList as $op) {
-            $open[$op->id] = $op->name;
-        }
+        $open = array('' => '请选择') + CHtml::listData(OpenPlatformModel::model()->findAll('wechatId=:wechatId and status=:status', array(':wechatId' => $this->wechatInfo->id, ':status' => 1)), 'id', 'name');
         switch ($model->type) {
             //获取关联表数据
             case GiftModel::TYPE_KEYWORDS:
@@ -184,7 +178,7 @@ class OpenController extends WechatManagerController
                 break;
             case GiftModel::TYPE_MENU:
                 //取menu的下拉列表
-                $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id,GlobalParams::TYPE_GIFT);
+                $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id, GlobalParams::TYPE_OPEN);
                 $action = MenuactionModel::model()->with('action_menu')->find('action_menu.wechatId=:wechatId and responseId=:responseId',
                     array(':wechatId' => $this->wechatInfo->id, ':responseId' => $id));
                 $oldAction = $model->action = isset($action->menuId) ? $action->menuId : 0;
@@ -257,7 +251,7 @@ class OpenController extends WechatManagerController
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
-        $this->render('replayUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id, 'responseId' => $id, 'open' => $open,'menuList'=>$menuList));
+        $this->render('replayUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id, 'responseId' => $id, 'open' => $open, 'menuList' => $menuList));
     }
 
     public function actionReplayDelete($id)

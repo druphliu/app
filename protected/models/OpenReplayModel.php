@@ -45,7 +45,7 @@ class OpenReplayModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
+			array('name,openId', 'required'),
 			array('openId, wechatId', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>8),
 			// The following rule is used by search().

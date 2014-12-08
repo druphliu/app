@@ -2,7 +2,7 @@
 /* @var $this GroupController */
 
 $this->breadcrumbs = array(
-    array('name' => '首页', 'url' => array('site/index')),
+    array('name' => '首页', 'url' => array('wechat/index')),
     array('name' => '基础设置'),
     array('name' => '关注回复'),
 );
@@ -19,6 +19,6 @@ $this->breadcrumbs = array(
 <?php if ($type == TextReplayModel::TEXT_REPLAY_TYPE){
     echo $this->renderPartial('_textSubscribeForm', array('model' => $model));
 }else {
-    echo $this->renderPartial('/menu/imageText', array('focus' => $model,'imageTextList'=>$imageTextList));
+    echo $this->renderPartial('/layouts/imageText', array('focus' => $model,'imageTextList'=>$imageTextList));
     //echo $this->renderPartial('_imageTextSubscribeForm', array('model' => $model));
 }?>

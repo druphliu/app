@@ -2,17 +2,17 @@
 /* @var $this GroupController */
 
 $this->breadcrumbs = array(
-    array('name' => '首页', 'url' => array('site/index')),
-    array('name' => '营销管理'),
-    array('name' => '礼包管理'),
+    array('name' => '首页', 'url' => array('wechat/index')),
+    array('name' => '外接平台管理', 'url' => array('open/index')),
+    array('name' => '回复转接管理'),
 );
 ?>
 <div class="page-header">
     <h1>
-        营销管理
+        外接平台管理
         <small>
             <i class="fa fa-angle-double-right"></i>
-            礼包管理
+            回复转接管理
         </small>
     </h1>
 </div>
