@@ -10,21 +10,51 @@ class HandleController extends CController
 {
     public function actionIndex()
     {
+        $logTable = 'scratch_log';
         $table = 'scratch_awards';
-        $probability = 0;
+        $disable = 1;
+        $probability = $remainCount = 0;
         $return = $encryption = '';
         $rand = rand(1, 100000);
         $code = Yii::app()->request->getParam('code');
         list($openId, $scratchId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
         $scratch = ScratchModel::model()->findByPk($scratchId);
-        $button = Yii::app()->params['siteUrl'].'/'.Yii::app()->params['scratchPath'].'/'.$scratch->wechatId.'/'.$scratch->button;
+        //活动是否开始
+        if ($scratch->startTime > date('Y-m-d H:i:s')) {
+            $disable = false;
+        } elseif ($scratch->endTime < date('Y-m-d H:i:s')) {
+            $disable = false;
+        } elseif ($scratch->status == 0) {
+            $disable = false;
+        }
+        $totalCount = $scratch->times;
+        $button = Yii::app()->params['siteUrl'] . '/wechat/' . Yii::app()->params['scratchPath'] . '/' . $scratch->wechatId . '/' . $scratch->button;
         $awards = unserialize($scratch->awards);
         $return['grade'] = -1;
         $return['name'] = '谢谢参与';
+        //次数限制
+        if ($totalCount == -1) {//本活动只能参与一次
+            $count = ScratchLogModel::model($logTable)->count('openId=:openId and scratchId=:scratchId',
+                array(':openId' => $openId, ':scratchId' => $scratchId));
+            if ($count > 0)
+                $disable = 0;
+        }
+
+        if ($totalCount > 0) {
+            $start = strtotime(date('Y-m-d')) - 1;
+            $end = strtotime(date('Y-m-d',strtotime('1 days')))-1;
+            $count = ScratchLogModel::model($logTable)->count('openId=:openId and scratchId=:scratchId and datetime>:start and datetime<:end',
+                array(':openId' => $openId, ':scratchId' => $scratchId, ':start' => $start, ':end' => $end));
+            if ($count >= $totalCount)
+                $disable = 0;
+            else
+                $remainCount = $totalCount - $count;
+        }
+
         //查看当前用户是否已中奖
         $awardInfo = ScratchAwardsModel::model($table)->find('scratchId=:scratchId and openId=:openId and status<>0',
             array(':scratchId' => $scratchId, ':openId' => $openId));
-        if (!$awardInfo) {
+        if (!$awardInfo && $disable) {
             foreach ($awards as $k => $v) {
                 $probability += $v['probability'] * 1000;
                 $award[$k] = array('name' => $v['name'], 'num' => $probability);
@@ -104,11 +134,13 @@ class HandleController extends CController
             }
         }
         $encryption = Globals::authcode($openId . '|' . $return['grade'] . '|' . $scratchId, 'ENCODE');
-        $this->renderPartial('active', array('scratch' => $scratch, 'prize' => $return, 'encryption' => $encryption,'button'=>$button));
+        $this->renderPartial('active', array('scratch' => $scratch, 'prize' => $return, 'encryption' => $encryption,
+            'button' => $button, 'disable' => $disable, 'remainCount' => $remainCount, 'totalCount' => $totalCount));
     }
 
     public function actionConfirm()
     {//status 更新为1,表明用户已经参
+        $logTable = 'scratch_log';
         $status = false;
         $encryption = $_POST['encryption'];
         $table = 'scratch_awards';
@@ -120,6 +152,11 @@ class HandleController extends CController
             $code->save();
             $status = true;
         }
+        $log = new ScratchLogModel($logTable);
+        $log->datetime = time();
+        $log->openId = $openid;
+        $log->scratchId = $scratchId;
+        $log->save();
         echo json_encode(array('status' => $status));
     }
 

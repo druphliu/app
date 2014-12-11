@@ -53,7 +53,7 @@ class ApiController extends Controller
 
     private function textResponse($wechatId, $request)
     {
-        $keyword = '';
+        $keyword = $legalType = '';
         $message = trim($request->content);
         //刮刮卡预处理
         if (mb_strpos($message, '正版') !== false) {
@@ -114,7 +114,7 @@ class ApiController extends Controller
         switch ($type) {
             case TextReplayModel::TEXT_REPLAY_TYPE:
                 if ($subscribeInfo) {
-                    $response = $this->_getTextReplay($subscribeInfo->responseId,$request->from_user_name);
+                    $response = $this->_getTextReplay($subscribeInfo->responseId, $request->from_user_name);
                 } else {
                     $content = '感谢您关注' . $wechatInfo->name;
                     $response = new WeChatTextResponse($content);
@@ -164,11 +164,11 @@ class ApiController extends Controller
      * @param $responseId
      * @return WeChatTextResponse
      */
-    private function _getTextReplay($responseId,$openId='')
+    private function _getTextReplay($responseId, $openId = '')
     {
         $responseInfo = TextReplayModel::model()->findByPk($responseId);
         $content = $responseInfo->content;
-        $content = str_replace('fromUsername',$openId,$content);
+        $content = str_replace('fromUsername', $openId, $content);
         $responseObj = new WeChatTextResponse(str_replace(array('<br>', '</br>'), chr(13), $content));
         return $responseObj;
     }
@@ -234,10 +234,42 @@ class ApiController extends Controller
         return $result['content'] ? $result['content'] : '';
     }
 
-    private function _getScratch($responseId, $openId, $type = Globals::CODE_TYPE_LEGAL)
+    private function _getScratch($responseId, $openId, $type)
     {
+        $disable = 1;
+        $logTable = 'scratch_log';
         Yii::import('application.modules.scratch.models.ScratchModel');
+        Yii::import('application.modules.scratch.models.ScratchLogModel');
         $scratch = ScratchModel::model()->findByPk($responseId);
+        if (!$type) {
+            $keywords = KeywordsModel::model()->find('type=:type and responseId=:responseId',
+                array(':type' => Globals::TYPE_SCRATCH, ':responseId' => $responseId));
+            $content = '参与' . $scratch->title . '请回复:正版(混版)' . $keywords->name;
+            $responseObj = new WeChatTextResponse($content);
+            return $responseObj;
+        }
+        //查看刮卡次数
+        $totalCount = $scratch->times;
+        if ($totalCount == -1) {//本活动只能参与一次
+            $count = ScratchLogModel::model($logTable)->count('openId=:openId and scratchId=:scratchId',
+                array(':openId' => $openId, ':scratchId' => $scratch->id));
+            if ($count > 0)
+                $disable = 0;
+        }
+
+        if ($totalCount > 0) {
+            $start = strtotime(date('Y-m-d')) - 1;
+            $end = strtotime(date('Y-m-d', strtotime('1 days'))) - 1;
+            $count = ScratchLogModel::model($logTable)->count('openId=:openId and scratchId=:scratchId and datetime>:start and datetime<:end',
+                array(':openId' => $openId, ':scratchId' => $scratch->id, ':start' => $start, ':end' => $end));
+            if ($count >= $totalCount)
+                $disable = 0;
+        }
+        if ($disable == 0) {
+            $content = $totalCount == -1 ? '你本次活动的参与次数已完' : '今天的刮奖次数已完，明天再来吧';
+            $responseObj = new WeChatTextResponse($content);
+            return $responseObj;
+        }
         if ($scratch->startTime > date('Y-m-d H:i:s')) {
             $content = $scratch->unstartMsg ? $scratch->unstartMsg : "抱歉,还未开始呢";
         } elseif ($scratch->endTime < date('Y-m-d H:i:s')) {
@@ -249,7 +281,7 @@ class ApiController extends Controller
             $code = Globals::authcode($string, 'ENCODE');
             $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('scratch/handle', array('code' => $code));
             $responseObj = new WeChatArticleResponse();
-            $responseObj->add_article($scratch->title, '', Yii::app()->params['siteUrl'].'/'.Yii::app()->params['scratchPath'].'/'.$scratch->wechatId.'/'.$scratch->backgroundPic, $url);
+            $responseObj->add_article($scratch->title, '', Yii::app()->params['siteUrl'] . '/wechat/' . Yii::app()->params['scratchPath'] . '/' . $scratch->wechatId . '/' . $scratch->backgroundPic, $url);
         }
         $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
         return $responseObj;

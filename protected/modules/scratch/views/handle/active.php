@@ -81,6 +81,7 @@
             src="<?php echo Yii::app()->Params['scratchPath'] . '/' . $scratch->wechatId . '/' . $scratch->backgroundPic ?>">
 
         <div id="prize">
+            <?php if(!$disable){?><img src="<?php echo $button?>"><?php }?>
         </div>
         <div id="scratchpad">
         </div>
@@ -136,23 +137,33 @@
                 <div class="Detail">
                     <?php $award = unserialize($scratch->awards) ?>
                     <p>
-                        一等奖： <?php echo $award[1]['name'] ?>。奖品数量：10
+                        一等奖： <?php echo $award[1]['name'] ?>
                     </p>
 
                     <p>
-                        二等奖： <?php echo $award[2]['name'] ?> 。奖品数量：20
+                        二等奖： <?php echo $award[2]['name'] ?>
                     </p>
 
                     <p>
-                        三等奖： <?php echo $award[3]['name'] ?> 。奖品数量：30
-                    </p>
-
-                    <p>
-                        四等奖： <?php echo $award[4]['name'] ?> 。奖品数量：40
+                        三等奖： <?php echo $award[3]['name'] ?>
                     </p>
                 </div>
             </div>
         </div>
+        <?php if($totalCount!=0){?>
+            <div class="boxcontent boxwhite">
+                <div class="box">
+                    <div class="Detail">
+                        <?php if($totalCount==-1){?>
+                            本次活动你只可参与<span class="red" >1</span>次，请把握机会哦!
+                        <?php }else{?>
+                            今天可以参与<span class="red"><?php echo $totalCount?></span>次,目前还剩
+                            <span class="red"><?php echo $remainCount?></span>次
+                        <?php }?>
+                    </div>
+                </div>
+            </div>
+        <?php }?>
     </div>
     <div style="clear:both;">
     </div>
@@ -165,68 +176,80 @@
     var num = 0;
     var goon = true;
     $(function () {
-        $("#scratchpad").wScratchPad({
-            width: 150,
-            height: 40,
-            color: "#a9a9a7",
-            image2: "<?php echo $button; ?>",
-            scratchMove: function () {
-                var grade = <?php echo $prize['grade']?>;
-                switch (grade) {
-                    case 1:
-                        var award = "一等奖";
-                        var sncode = '<?php echo $prize['name']?>';
-                        zjl = true;
-                        break;
-                    case 2:
-                        var award = "二等奖";
-                        var sncode = '<?php echo $prize['name']?>';
-                        zjl = true;
-                        break;
-                    case 3:
-                        var award = "三等奖";
-                        var sncode = '<?php echo $prize['name']?>';
-                        zjl = true;
-                        break;
-                    case 4:
-                        var award = "四等奖";
-                        var sncode = '<?php echo $prize['name']?>';
-                        zjl = true;
-                        break;
-                    case 0:
-                        var award = "游戏礼包";
-                        var sncode = '<?php echo $prize['name']?>';
-                        zjl = true;
-                        break;
-                    default :
-                        var award = "谢谢参与";
-                        break;
+        var disable = <?php echo $disable?>;
+        var msg = '<?php if($totalCount>0){?>今天刮卡次数已用完，明天再来吧<?php }else{?>本次活动你已参与了<?php }?>'
+        if (!disable) {
+            $("#scratchpad").mousedown(function () {
+                alert(msg);
+                return;
+            })
+        } else {
+            $("#scratchpad").wScratchPad({
+                width: 150,
+                height: 40,
+                color: "#a9a9a7",
+                image2: "<?php echo $button; ?>",
+                scratchMove: function () {
 
-                }console.log(sncode);
-                document.getElementById('prize').innerHTML = award;
-                sncode ? document.getElementById('sncode').innerHTML = sncode : '';
-                $("#theAward").html(award);
-                if (zjl && goon) {
-                    //$("#zjl").fadeIn();
-                    goon = false;
-                    var url = '<?php echo Yii::app()->createUrl("scratch/handle/confirm")?>';
+                    var grade = <?php echo $prize['grade']?>;
+                    switch (grade) {
+                        case 1:
+                            var award = "一等奖";
+                            var sncode = '<?php echo $prize['name']?>';
+                            zjl = true;
+                            break;
+                        case 2:
+                            var award = "二等奖";
+                            var sncode = '<?php echo $prize['name']?>';
+                            zjl = true;
+                            break;
+                        case 3:
+                            var award = "三等奖";
+                            var sncode = '<?php echo $prize['name']?>';
+                            zjl = true;
+                            break;
+                        case 4:
+                            var award = "四等奖";
+                            var sncode = '<?php echo $prize['name']?>';
+                            zjl = true;
+                            break;
+                        case 0:
+                            var award = "游戏礼包";
+                            var sncode = '<?php echo $prize['name']?>';
+                            zjl = true;
+                            break;
+                        default :
+                            var award = "谢谢参与";
+                            zjl = true;
+                            break;
 
-                    $.ajax({
-                        type : "post",
-                        url : url,
-                        data : 'encryption=<?php echo $encryption?>',
-                        dataType:'json',
-                        success : function(data){
-                            if (data.status == true) {
-                                $("#zjl").slideToggle(500);
+                    }
+                    document.getElementById('prize').innerHTML = award;
+                    sncode ? document.getElementById('sncode').innerHTML = sncode : '';
+                    $("#theAward").html(award);
+                    if (zjl && goon) {
+                        //$("#zjl").fadeIn();
+                        goon = false;
+                        var url = '<?php echo Yii::app()->createUrl("scratch/handle/confirm")?>';
+
+                        $.ajax({
+                            type: "post",
+                            url: url,
+                            data: 'encryption=<?php echo $encryption?>',
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.status == true) {
+                                    $("#zjl").slideToggle(500);
+                                }
                             }
-                        }
-                    });
-                    //$("#outercont").slideUp(500)
+                        });
+                        //$("#outercont").slideUp(500)
 
+                    }
                 }
-            }
-        });
+            });
+        }
+
     });
 
     $("#save-btn").bind("click", function () {
