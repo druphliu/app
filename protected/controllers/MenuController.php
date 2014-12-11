@@ -65,7 +65,7 @@ class MenuController extends WechatManagerController
 
     public function actionAction()
     {
-        $setting = SettingModel::model()->find('`key`=:key', array(":key" => GlobalParams::SETTING_KEY_MENU));
+        $setting = SettingModel::model()->find('`key`=:key', array(":key" => Globals::SETTING_KEY_MENU));
         $this->layout = '/layouts/memberList';
         $menu = MenuactionModel::model()->getTree($this->wechatInfo->id);
         $this->render('action', array('menu' => $menu, 'wechatId' => $this->wechatInfo->id, 'setting' => $setting));
@@ -103,7 +103,7 @@ class MenuController extends WechatManagerController
             }
             if ($status == 1) {
                 $modelAction = new MenuactionModel();
-                $modelAction->action = $_POST['type'] == GlobalParams::TYPE_URL ? $_POST['url'] : $_POST['action'];
+                $modelAction->action = $_POST['type'] == Globals::TYPE_URL ? $_POST['url'] : $_POST['action'];
                 $model = new MenuModel();
                 $model->name = $name;
                 $model->wechatId = $this->wechatInfo->id;
@@ -150,7 +150,7 @@ class MenuController extends WechatManagerController
             } else {
                 $model->parentId = $_POST['parentId'] ? $_POST['parentId'] : 0;
                 $modelAction = MenuactionModel::model()->findByPk($model->menu_action->id);
-                $modelAction->action = $_POST['type'] == GlobalParams::TYPE_URL ? $_POST['url'] : $_POST['action'];
+                $modelAction->action = $_POST['type'] == Globals::TYPE_URL ? $_POST['url'] : $_POST['action'];
                 if ($model->validate() && $modelAction->validate()) {
                     $modelAction->save();
                     $model->save();
@@ -187,7 +187,7 @@ class MenuController extends WechatManagerController
         if (isset($_POST['content']) && $actionId) {
             $model = isset($model) ? $model : new TextReplayModel();
             $model->wechatId = $this->wechatInfo->id;
-            $model->type = GlobalParams::TYPE_TEXT;
+            $model->type = Globals::TYPE_TEXT;
             $model->content = $_POST['content'];
             if ($model->validate()) {
                 $model->save();
@@ -236,7 +236,7 @@ class MenuController extends WechatManagerController
                 }
                 $$formName = isset($$formName) ? $$formName : new ImagetextreplayModel();
                 $$formName->wechatId = $this->wechatInfo->id;
-                $$formName->type = GlobalParams::TYPE_MENU;
+                $$formName->type = Globals::TYPE_MENU;
                 $$formName->title = $title;
                 $$formName->description = $summary;
                 $$formName->imgUrl = $imgUrl;

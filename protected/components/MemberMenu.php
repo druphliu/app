@@ -21,6 +21,7 @@ class MemberMenu extends CWidget
             )),
         '营销管理' => array('controller' => 'market', 'act' => 'market', 'class' => 'fa fa-bullhorn', 'action' => array(
             array('name' => '礼包领取', 'url' => 'market/gift', 'act' => 'market_gift', 'list_acl' => array()),
+            array('name' => '刮刮乐', 'url' => 'scratch', 'act' => 'scratch_index', 'list_acl' => array()),
         )),
         '菜单管理' => array('controller' => 'menu', 'act' => 'menu', 'class' => 'fa fa-windows','url' => 'menu/action', 'action' => array(
 
@@ -45,7 +46,7 @@ class MemberMenu extends CWidget
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
         $userAllowAction = array('wechat', 'user', 'vip');
-        $mangerAllowAction = array('manager', 'market', 'open','menu');
+        $mangerAllowAction = array('manager', 'market', 'open','menu','scratch');
         if (in_array($controllerId, $userAllowAction)) {
             $menuList = self::$userMenu;
         } else if (in_array($controllerId, $mangerAllowAction)) {

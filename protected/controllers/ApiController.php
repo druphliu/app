@@ -55,6 +55,14 @@ class ApiController extends Controller
     {
         $keyword = '';
         $message = trim($request->content);
+        //刮刮卡预处理
+        if (mb_strpos($message, '正版') !== false) {
+            $legalType = Globals::CODE_TYPE_LEGAL;
+            $message = mb_substr($message, 6);
+        } elseif (mb_strpos($message, '混版') !== false) {
+            $legalType = Globals::CODE_TYPE_UNLEGAL;
+            $message = mb_substr($message, 6);
+        }
         //find keywords
         $keywords = KeywordsModel::model()->findAll("wechatId=:wechatId and name like concat('%',:name,'%')",
             array(':wechatId' => $wechatId, ':name' => $message));
@@ -79,7 +87,7 @@ class ApiController extends Controller
                 }
                 break;
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $response = $this->_getImageTextReplay($keyword->responseId,GlobalParams::TYPE_KEYWORDS);
+                $response = $this->_getImageTextReplay($keyword->responseId, Globals::TYPE_KEYWORDS);
                 break;
             case GiftModel::GIFT_TYPE:
                 //礼包领取
@@ -89,6 +97,10 @@ class ApiController extends Controller
                 //转接
                 $response = $this->_getOpenReplay($keyword->responseId);
                 return $response;
+                break;
+            case Globals::TYPE_SCRATCH:
+                //刮刮乐
+                $response = $this->_getScratch($keyword->responseId, $request->from_user_name, $legalType);
                 break;
         }
         $xml = $response->_to_xml($request);
@@ -102,14 +114,14 @@ class ApiController extends Controller
         switch ($type) {
             case TextReplayModel::TEXT_REPLAY_TYPE:
                 if ($subscribeInfo) {
-                    $response = $this->_getTextReplay($subscribeInfo->responseId);
+                    $response = $this->_getTextReplay($subscribeInfo->responseId,$request->from_user_name);
                 } else {
                     $content = '感谢您关注' . $wechatInfo->name;
                     $response = new WeChatTextResponse($content);
                 }
                 break;
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $response = $this->_getImageTextReplay($subscribeInfo->responseId,GlobalParams::TYPE_SUBSCRIBE);
+                $response = $this->_getImageTextReplay($subscribeInfo->responseId, Globals::TYPE_SUBSCRIBE);
                 break;
         }
         $xml = $response->_to_xml($request);
@@ -122,20 +134,24 @@ class ApiController extends Controller
         if ($menuInfo) {
             $responseId = $menuInfo->responseId;
             switch ($menuInfo->action_menu->type) {
-                case GlobalParams::TYPE_TEXT:
+                case Globals::TYPE_TEXT:
                     $response = $this->_getTextReplay($responseId);
                     break;
-                case GlobalParams::TYPE_IMAGE_TEXT:
-                    $response = $this->_getImageTextReplay($responseId,GlobalParams::TYPE_MENU);
+                case Globals::TYPE_IMAGE_TEXT:
+                    $response = $this->_getImageTextReplay($responseId, Globals::TYPE_MENU);
                     break;
-                case GlobalParams::TYPE_GIFT:
+                case Globals::TYPE_GIFT:
                     //礼包领取
                     $response = $this->_getGiftReplay($responseId, $request->from_user_name);
                     break;
-                case GlobalParams::TYPE_OPEN:
+                case Globals::TYPE_OPEN:
                     //转接
                     $response = $this->_getOpenReplay($responseId);
                     return $response;
+                    break;
+                case Globals::TYPE_SCRATCH:
+                    //刮刮乐
+                    $response = $this->_getScratch($responseId, $request->from_user_name);
                     break;
             }
         }
@@ -148,10 +164,11 @@ class ApiController extends Controller
      * @param $responseId
      * @return WeChatTextResponse
      */
-    private function _getTextReplay($responseId)
+    private function _getTextReplay($responseId,$openId='')
     {
         $responseInfo = TextReplayModel::model()->findByPk($responseId);
         $content = $responseInfo->content;
+        $content = str_replace('fromUsername',$openId,$content);
         $responseObj = new WeChatTextResponse(str_replace(array('<br>', '</br>'), chr(13), $content));
         return $responseObj;
     }
@@ -161,15 +178,15 @@ class ApiController extends Controller
      * @param $responseId
      * @return WeChatArticleResponse
      */
-    private function _getImageTextReplay($responseId,$type)
+    private function _getImageTextReplay($responseId, $type)
     {
         $responseInfo = ImagetextreplayModel::model()->findByPk($responseId);
         $responseObj = new WeChatArticleResponse();
         $responseObj->add_article($responseInfo->title, $responseInfo->description, $responseInfo->imgUrl, $responseInfo->url);
         $list = ImagetextreplayModel::model()->findAll('type=:type and parentId=:parentId', array(':type' => $type, ':parentId' => $responseId));
-        if($list){
-            foreach($list as $article){
-                $responseObj->add_article($article->title,$article->description, $article->imgUrl, $article->url);
+        if ($list) {
+            foreach ($list as $article) {
+                $responseObj->add_article($article->title, $article->description, $article->imgUrl, $article->url);
             }
         }
         return $responseObj;
@@ -215,6 +232,27 @@ class ApiController extends Controller
         $url = $wechatApi->buildSignUrl($apiUrl);
         $result = HttpRequest::sendHttpRequest($url, $post_string, 'POST', array("Content-type: text/xml"));
         return $result['content'] ? $result['content'] : '';
+    }
+
+    private function _getScratch($responseId, $openId, $type = Globals::CODE_TYPE_LEGAL)
+    {
+        Yii::import('application.modules.scratch.models.ScratchModel');
+        $scratch = ScratchModel::model()->findByPk($responseId);
+        if ($scratch->startTime > date('Y-m-d H:i:s')) {
+            $content = $scratch->unstartMsg ? $scratch->unstartMsg : "抱歉,还未开始呢";
+        } elseif ($scratch->endTime < date('Y-m-d H:i:s')) {
+            $content = $scratch->endMsg ? $scratch->endMsg : "抱歉,你来晚了";
+        } elseif ($scratch->status == 0) {
+            $content = $scratch->pauseMsg ? $scratch->pauseMsg : "抱歉,活动暂时停止";
+        } else {
+            $string = $openId . '|' . $responseId . '|' . $type;
+            $code = Globals::authcode($string, 'ENCODE');
+            $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('scratch/handle', array('code' => $code));
+            $responseObj = new WeChatArticleResponse();
+            $responseObj->add_article($scratch->title, '', Yii::app()->params['siteUrl'].'/'.Yii::app()->params['scratchPath'].'/'.$scratch->wechatId.'/'.$scratch->backgroundPic, $url);
+        }
+        $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
+        return $responseObj;
     }
     // Uncomment the following methods and override them if needed
     /*

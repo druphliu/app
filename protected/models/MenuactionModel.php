@@ -38,7 +38,6 @@ class MenuactionModel extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('menuId, responseId', 'numerical', 'integerOnly'=>true),
-			array('action', 'length', 'max'=>125),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, menuId, action, responseId', 'safe', 'on'=>'search'),

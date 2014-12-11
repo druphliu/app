@@ -46,8 +46,8 @@ $this->breadcrumbs = array(
                                                         <td></td>
                                                         <td></td>
                                                     <?php } else { ?>
-                                                        <td><?php echo isset(GlobalParams::$typeList[$m['type']]) ? GlobalParams::$typeList[$m['type']] : '无' ?></td>
-                                                        <td><?php echo $m['type'] == GlobalParams::TYPE_URL ? '' : $m['action'] ?></td>
+                                                        <td><?php echo isset(Globals::$typeList[$m['type']]) ? Globals::$typeList[$m['type']] : '无' ?></td>
+                                                        <td><?php echo $m['type'] == Globals::TYPE_URL ? '' : $m['action'] ?></td>
                                                     <?php } ?>
                                                     <td>
                                                         <div
@@ -66,26 +66,26 @@ $this->breadcrumbs = array(
                                                                 <i class="fa fa-pencil bigger-130"></i>
                                                             </a>
                                                             <?php if (!$m['child']) { ?>
-                                                                <?php if ($m['type'] == GlobalParams::TYPE_GIFT) { ?>
+                                                                <?php if ($m['type'] == Globals::TYPE_GIFT) { ?>
                                                                     <a>
                                                                         <i class="fa fa-bullhorn"></i>查看礼包</a>
-                                                                <?php } elseif ($m['type'] == GlobalParams::TYPE_TEXT) { ?>
+                                                                <?php } elseif ($m['type'] == Globals::TYPE_TEXT) { ?>
                                                                     <a href="javascript:void(0)" class="textReplay"
                                                                        data-id="<?php echo $m['actionId'] ?>"
                                                                        data-url="<?php echo Yii::app()->createUrl('menu/textReplay', array('responseId' => $m['responseId'])); ?>">
                                                                         <i class="fa fa-file-text-o"></i>查看回复
                                                                     </a>
-                                                                <?php } elseif ($m['type'] == GlobalParams::TYPE_IMAGE_TEXT) { ?>
+                                                                <?php } elseif ($m['type'] == Globals::TYPE_IMAGE_TEXT) { ?>
                                                                     <a href="javascript:void(0)" class="imageTextReplay"
                                                                        data-url="<?php echo Yii::app()->createUrl('menu/imageTextReplay/actionId/' . $m['actionId']); ?>">
                                                                         <i class="fa fa-file-text"></i>查看回复</a>
-                                                                <?php } elseif ($m['type'] == GlobalParams::TYPE_OPEN) { ?>
+                                                                <?php } elseif ($m['type'] == Globals::TYPE_OPEN) { ?>
                                                                     <a class="open"
                                                                         href="javascript:void(0)"
                                                                        data-id="<?php echo $m['actionId'] ?>"
                                                                        data-url="<?php echo Yii::app()->createUrl('menu/open', array('responseId' => $m['responseId'])); ?>"
                                                                         ><i class="fa fa-openid"></i>查看转接</a>
-                                                                <?php } elseif ($m['type'] == GlobalParams::TYPE_URL) { ?>
+                                                                <?php } elseif ($m['type'] == Globals::TYPE_URL) { ?>
                                                                     <a href="<?php echo $m['action'] ?>"
                                                                        target="_blank"><i class="fa fa-external-link">
                                                                             查看连接</i></a>
@@ -98,8 +98,8 @@ $this->breadcrumbs = array(
                                                     <?php foreach ($m['child'] as $ch) { ?>
                                                         <tr class="treegrid-<?php echo $ch['id'] ?> treegrid-parent-<?php echo $m['id'] ?>">
                                                             <td><?php echo $ch['name'] ?></td>
-                                                            <td><?php echo isset(GlobalParams::$typeList[$ch['type']]) ? GlobalParams::$typeList[$ch['type']] : '无' ?></td>
-                                                            <td><?php echo $ch['type'] == GlobalParams::TYPE_URL ? '<a href="' . $ch['action'] . '" target="_blank">' . $ch['action'] . '</a>' : $ch['action'] ?></td>
+                                                            <td><?php echo isset(Globals::$typeList[$ch['type']]) ? Globals::$typeList[$ch['type']] : '无' ?></td>
+                                                            <td><?php echo $ch['type'] == Globals::TYPE_URL ? '<a href="' . $ch['action'] . '" target="_blank">' . $ch['action'] . '</a>' : $ch['action'] ?></td>
                                                             <td>
                                                                 <div
                                                                     class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
@@ -118,27 +118,27 @@ $this->breadcrumbs = array(
                                                                         <i class="fa fa-pencil bigger-130"></i>
                                                                     </a>
 
-                                                                    <?php if ($ch['type'] == GlobalParams::TYPE_GIFT) { ?>
+                                                                    <?php if ($ch['type'] == Globals::TYPE_GIFT) { ?>
                                                                         <a>
                                                                             <i class="fa fa-bullhorn"></i>查看礼包</a>
-                                                                    <?php } elseif ($ch['type'] == GlobalParams::TYPE_TEXT) { ?>
+                                                                    <?php } elseif ($ch['type'] == Globals::TYPE_TEXT) { ?>
                                                                         <a href="javascript:void(0)" class="textReplay"
                                                                            data-id="<?php echo $ch['actionId'] ?>"
                                                                            data-url="<?php echo Yii::app()->createUrl('menu/textReplay', array('responseId' => $ch['responseId'])); ?>">
                                                                             <i class="fa fa-file-text-o"></i>查看回复
                                                                         </a>
-                                                                    <?php } elseif ($ch['type'] == GlobalParams::TYPE_IMAGE_TEXT) { ?>
+                                                                    <?php } elseif ($ch['type'] == Globals::TYPE_IMAGE_TEXT) { ?>
                                                                         <a href="javascript:void(0)"
                                                                            class="imageTextReplay"
                                                                            data-url="<?php echo Yii::app()->createUrl('menu/imageTextReplay/actionId/' . $ch['actionId']); ?>">
                                                                             <i class="fa fa-file-text"></i>查看回复</a>
-                                                                    <?php } elseif ($ch['type'] == GlobalParams::TYPE_OPEN) { ?>
+                                                                    <?php } elseif ($ch['type'] == Globals::TYPE_OPEN) { ?>
                                                                         <a class="open"
                                                                             href="javascript:void(0)"
                                                                            data-id="<?php echo $ch['actionId'] ?>"
                                                                            data-url="<?php echo Yii::app()->createUrl('menu/open', array('responseId' => $ch['responseId'])); ?>"
                                                                             ><i class="fa fa-openid"></i>查看转接</a>
-                                                                    <?php } elseif ($ch['type'] == GlobalParams::TYPE_URL) { ?>
+                                                                    <?php } elseif ($ch['type'] == Globals::TYPE_URL) { ?>
                                                                         <a href="<?php echo $ch['action'] ?>"
                                                                            target="_blank"><i
                                                                                 class="fa fa-external-link">
@@ -196,7 +196,7 @@ $this->breadcrumbs = array(
                     <div class="form-group">
                         <?php echo CHtml::label('菜单类型', 'type', array('class' => 'col-sm-3 col-lg-2 control-label required')) ?>
                         <div class="col-sm-5 col-lg-3 controls">
-                            <?php echo CHtml::dropDownList('type', 0, GlobalParams::$typeList, array('class' => 'form-control input-sm')) ?>
+                            <?php echo CHtml::dropDownList('type', 0, Globals::$typeList, array('class' => 'form-control input-sm')) ?>
                         </div>
                     </div>
                     <div class="form-group hide" id="URL_TAB">
@@ -297,7 +297,7 @@ $this->breadcrumbs = array(
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.validate.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
-    var TYPE_URL = '<?php echo GlobalParams::TYPE_URL?>';
+    var TYPE_URL = '<?php echo Globals::TYPE_URL?>';
     var postUrl = '';
     $('.tree').treegrid({
         expanderExpandedClass: 'fa fa-minus',

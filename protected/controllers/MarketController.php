@@ -39,10 +39,10 @@ class MarketController extends WechatManagerController
     {
         $menuList = array();
         $type = Yii::app()->request->getParam('type');
-        $type = $type ? $type : GlobalParams::TYPE_KEYWORDS;
-        if ($type == GlobalParams::TYPE_MENU) {
+        $type = $type ? $type : Globals::TYPE_KEYWORDS;
+        if ($type == Globals::TYPE_MENU) {
             //取menu的下拉列表
-            $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id,GlobalParams::TYPE_GIFT);
+            $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id,Globals::TYPE_GIFT);
         }
         $model = new GiftModel();
         if (isset($_POST['GiftModel'])) {
@@ -54,7 +54,7 @@ class MarketController extends WechatManagerController
                 //创建礼包码表
                 $result = GiftModel::model()->createCodeTable($this->wechatInfo->id);
                 switch ($type) {
-                    case GlobalParams::TYPE_KEYWORDS:
+                    case Globals::TYPE_KEYWORDS:
                         $keywords = $_POST['GiftModel']['keywords'];
                         $isAccurate = $_POST['GiftModel']['isAccurate'];
                         $keywordsArray = explode(',', $keywords);
@@ -68,7 +68,7 @@ class MarketController extends WechatManagerController
                             $keywordsModel->save();
                         }
                         break;
-                    case GlobalParams::TYPE_MENU:
+                    case Globals::TYPE_MENU:
                         $menuId = $_POST['GiftModel']['action'];
                         $menuActionModel = MenuactionModel::model()->find('menuId=:menuId', array(':menuId' => $menuId));
                         $menuActionModel->responseId = $model->id;
@@ -113,7 +113,7 @@ class MarketController extends WechatManagerController
                     array(':wechatId' => $this->wechatInfo->id, ':responseId' => $id));
                 $oldAction = $model->action = isset($action->menuId) ? $action->menuId : 0;
                 //取menu的下拉列表
-                $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id,GlobalParams::TYPE_GIFT);
+                $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id,Globals::TYPE_GIFT);
                 break;
         }
         if (isset($_POST['GiftModel'])) {

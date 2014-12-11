@@ -140,10 +140,10 @@ class AjaxController extends Controller
         $criteria = new CDbCriteria;
         if ($actionId) {
             $criteria->condition = 'action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type and t.id<>:id';
-            $criteria->params = array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL, ':id' => $actionId);
+            $criteria->params = array(':wechatId' => $wechatId, ':action' => $action, ':type' => Globals::TYPE_URL, ':id' => $actionId);
         } else {
             $criteria->condition = 'action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type';
-            $criteria->params = array(':wechatId' => $wechatId, ':action' => $action, ':type' => GlobalParams::TYPE_URL);
+            $criteria->params = array(':wechatId' => $wechatId, ':action' => $action, ':type' => Globals::TYPE_URL);
         }
         $actionExit = MenuactionModel::model()->with('action_menu')->find($criteria);
         if ($actionExit) {
@@ -168,7 +168,7 @@ class AjaxController extends Controller
                 foreach ($menu as $m) {
                     if (isset($m['child']) && $m['child']) {
                         foreach ($m['child'] as $ch) {
-                            if ($ch['type'] == GlobalParams::TYPE_URL) {
+                            if ($ch['type'] == Globals::TYPE_URL) {
                                 $subV = array('type' => 'view', 'url' => $ch['action']);
                             } else {
                                 $subV = array('type' => 'click', 'key' => $ch['action']);
@@ -181,7 +181,7 @@ class AjaxController extends Controller
                             'sub_button' => $sub);
                         unset($sub);
                     } else {
-                        if ($m['type'] == GlobalParams::TYPE_URL) {
+                        if ($m['type'] == Globals::TYPE_URL) {
                             $urlInfo = UrlModel::model()->findByPk($m['responseId']);
                             $t = array('type' => 'view', 'url' => $urlInfo->url);
                         } else {
@@ -193,17 +193,17 @@ class AjaxController extends Controller
                 }
 
                 $menuValue = stripslashes(urldecode(json_encode($buttonValue)));
-                $url = sprintf(GlobalParams::MENU_UPDATE_URL, $tokenValue);
+                $url = sprintf(Globals::MENU_UPDATE_URL, $tokenValue);
                 $result = HttpRequest::sendHttpRequest($url, $menuValue, 'POST');
                 $resultData = json_decode($result['content']);
-                $status = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? 1 : -1;
-                $msg = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? '' : GlobalParams::$wechatErrorCode[$resultData->errcode];
+                $status = $resultData->errcode == Globals::WECHAT_RESPONSE_OK ? 1 : -1;
+                $msg = $resultData->errcode == Globals::WECHAT_RESPONSE_OK ? '' : Globals::$wechatErrorCode[$resultData->errcode];
                 if ($status == 1) {
                     $settingMenuModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
-                        array(':wechatId' => $wechatId, ':key' => GlobalParams::SETTING_KEY_MENU));
+                        array(':wechatId' => $wechatId, ':key' => Globals::SETTING_KEY_MENU));
                     if(!$settingMenuModel){
                         $settingMenuModel = new SettingModel();
-                        $settingMenuModel->key = GlobalParams::SETTING_KEY_MENU;
+                        $settingMenuModel->key = Globals::SETTING_KEY_MENU;
                         $settingMenuModel->wechatId = $wechatId;
                     }
                     $settingMenuModel->created_at = time();
@@ -226,11 +226,11 @@ class AjaxController extends Controller
         $token = $this->_getToken($wechatId);
         $tokenValue = $token['tokenValue'];
         if ($tokenValue) {
-            $url = sprintf(GlobalParams::MENU_DELETE_URL, $tokenValue);
+            $url = sprintf(Globals::MENU_DELETE_URL, $tokenValue);
             $result = HttpRequest::sendHttpRequest($url);
             $resultData = json_decode($result['content']);
-            $status = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? 1 : -1;
-            $msg = $resultData->errcode == GlobalParams::WECHAT_RESPONSE_OK ? '' : GlobalParams::$wechatErrorCode[$resultData->errcode];
+            $status = $resultData->errcode == Globals::WECHAT_RESPONSE_OK ? 1 : -1;
+            $msg = $resultData->errcode == Globals::WECHAT_RESPONSE_OK ? '' : Globals::$wechatErrorCode[$resultData->errcode];
         } else {
             $msg = '获取token异常';
         }
@@ -242,7 +242,7 @@ class AjaxController extends Controller
         $msg = '参数有误';
         $tokenValue = '';
         $tokenModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
-            array(':wechatId' => $wechatId, ':key' => GlobalParams::SETTING_KEY_ACCESS_TOKEN));
+            array(':wechatId' => $wechatId, ':key' => Globals::SETTING_KEY_ACCESS_TOKEN));
         if ($tokenModel) {
             if ((time() - $tokenModel->created_at) < WechatToken::EXPIRES_IN) {
                 $tokenValue = $tokenModel->value;
@@ -260,7 +260,7 @@ class AjaxController extends Controller
                 if (!$tokenModel) {
                     $tokenModel = new SettingModel();
                     $tokenModel->wechatId = $wechatId;
-                    $tokenModel->key = GlobalParams::SETTING_KEY_ACCESS_TOKEN;
+                    $tokenModel->key = Globals::SETTING_KEY_ACCESS_TOKEN;
                 }
                 $tokenModel->value = $tokenValue;
                 $tokenModel->created_at = time();

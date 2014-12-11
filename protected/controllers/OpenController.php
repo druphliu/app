@@ -108,9 +108,9 @@ class OpenController extends WechatManagerController
         $type = Yii::app()->request->getParam('type');
         $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
         $open = array('' => '请选择') + CHtml::listData(OpenPlatformModel::model()->findAll('wechatId=:wechatId and status=:status', array(':wechatId' => $this->wechatInfo->id, ':status' => 1)), 'id', 'name');
-        if ($type == GlobalParams::TYPE_MENU) {
+        if ($type == Globals::TYPE_MENU) {
             //取menu的下拉列表
-            $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id, GlobalParams::TYPE_OPEN);
+            $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id, Globals::TYPE_OPEN);
         }
         $model = new OpenReplayModel();
         if (isset($_POST['OpenReplayModel'])) {
@@ -178,7 +178,7 @@ class OpenController extends WechatManagerController
                 break;
             case GiftModel::TYPE_MENU:
                 //取menu的下拉列表
-                $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id, GlobalParams::TYPE_OPEN);
+                $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id, Globals::TYPE_OPEN);
                 $action = MenuactionModel::model()->with('action_menu')->find('action_menu.wechatId=:wechatId and responseId=:responseId',
                     array(':wechatId' => $this->wechatInfo->id, ':responseId' => $id));
                 $oldAction = $model->action = isset($action->menuId) ? $action->menuId : 0;

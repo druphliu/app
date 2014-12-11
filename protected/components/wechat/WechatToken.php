@@ -24,7 +24,7 @@ class WechatToken
     {
         $result = HttpRequest::sendHttpRequest($this->url);
         $data = json_decode($result['content']);
-        $result = isset($data->access_token) ? $data->access_token : GlobalParams::$wechatErrorCode[$data->errcode];
+        $result = isset($data->access_token) ? $data->access_token : Globals::$wechatErrorCode[$data->errcode];
         $status = isset($data->access_token) ? self::OK : self::FAILED;
         return array('status' => $status, 'result' => $result);
     }

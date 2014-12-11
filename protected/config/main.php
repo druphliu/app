@@ -30,6 +30,9 @@ return array(
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
             'ipFilters' => array('127.0.0.1', '::1'),
         ),
+        'scratch'=>array(
+            'defaultController' => 'scratch',
+        )
 
     ),
 
@@ -47,12 +50,12 @@ return array(
 
         'authManager' => array(
             'urlManager' => array( /*'urlFormat'=>'path',
-            'showScriptName'=>false,
+            'showScriptName'=>false,*/
             'rules'=>array(
                 '<controller:\w+>/<id:\d+>'=>'<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
                 '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-            ),*/
+            ),
             )
         ),
 
@@ -116,6 +119,7 @@ return array(
         // this is used in contact page
         'adminEmail' => 'webmaster@example.com',
         'siteUrl' => 'http://www.app.com',
+        'scratchPath' => 'upload/market/scratch',
     ),
 
 );

@@ -71,7 +71,7 @@ class ManagerController extends WechatManagerController
                     }
                     $$formName = isset($$formName) ? $$formName : new ImagetextreplayModel();
                     $$formName->wechatId = $this->wechatInfo->id;
-                    $$formName->type = GlobalParams::TYPE_SUBSCRIBE;
+                    $$formName->type = Globals::TYPE_SUBSCRIBE;
                     $$formName->title = $title;
                     $$formName->description = $summary;
                     $$formName->imgUrl = $imgUrl;
@@ -189,7 +189,7 @@ class ManagerController extends WechatManagerController
                         ${'model' . $i} = new ImagetextreplayModel();
                         ${'model' . $i}->title = $_POST['title' . $i];
                         ${'model' . $i}->description = $_POST['summary' . $i];
-                        ${'model' . $i}->type = GlobalParams::TYPE_KEYWORDS;
+                        ${'model' . $i}->type = Globals::TYPE_KEYWORDS;
                         ${'model' . $i}->imgUrl = $_POST['src' . $i];
                         ${'model' . $i}->url = $_POST['url' . $i];
                         ${'model' . $i}->wechatId = $this->wechatInfo->id;
@@ -298,7 +298,7 @@ class ManagerController extends WechatManagerController
                         ${'model' . $i} = isset(${'model' . $id}) ? ${'model' . $id} : new ImagetextreplayModel();
                         ${'model' . $i}->title = $_POST['title' . $i];
                         ${'model' . $i}->description = $_POST['summary' . $i];
-                        ${'model' . $i}->type = GlobalParams::TYPE_KEYWORDS;
+                        ${'model' . $i}->type = Globals::TYPE_KEYWORDS;
                         ${'model' . $i}->imgUrl = $_POST['src' . $i];
                         ${'model' . $i}->url = $_POST['url' . $i];
                         ${'model' . $i}->wechatId = $this->wechatInfo->id;

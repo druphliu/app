@@ -38,7 +38,7 @@ class SiteController extends Controller
      */
     public function actionError()
     {
-        throw new CHttpException(404, '此页面不存在');
+        $this->layout = '/layouts/mainMember';
         if ($error = Yii::app()->errorHandler->error) {
             if (Yii::app()->request->isAjaxRequest)
                 echo $error['message'];
