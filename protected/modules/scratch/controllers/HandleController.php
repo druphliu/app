@@ -91,6 +91,8 @@ class HandleController extends CController
                     $awardModel->code = $return['name'];
                     $awardModel->isentity = isset($awards[$return['grade']]['isentity']) ? $awards[$return['grade']]['isentity'] : 0;
                     $awardModel->status = 0;
+                    $awardModel->type = $type;
+                    $awardModel->datetime = time();
                     $awardModel->save();
                 } else {
                     //奖品达到系统设置个数

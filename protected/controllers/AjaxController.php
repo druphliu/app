@@ -130,27 +130,57 @@ class AjaxController extends Controller
     /**
      * 菜单值重复检查
      */
-    public function actionCheckAction()
+    public function actionCheckMenuName()
     {
-        $action = Yii::app()->request->getParam('action');
+        $name = Yii::app()->request->getParam('name');
         $wechatId = Yii::app()->request->getParam('wechatId');
-        $actionId = Yii::app()->request->getParam('actionId');
+        $id = intval(isset($_POST['id']) ? $_POST['id'] : $_GET['id']);
         $result = 'true';
-        $msg = "";
         $criteria = new CDbCriteria;
-        if ($actionId) {
-            $criteria->condition = 'action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type and t.id<>:id';
-            $criteria->params = array(':wechatId' => $wechatId, ':action' => $action, ':type' => Globals::TYPE_URL, ':id' => $actionId);
-        } else {
-            $criteria->condition = 'action_menu.wechatId=:wechatId and action=:action and action_menu.type<>:type';
-            $criteria->params = array(':wechatId' => $wechatId, ':action' => $action, ':type' => Globals::TYPE_URL);
-        }
-        $actionExit = MenuactionModel::model()->with('action_menu')->find($criteria);
+        $criteria->condition = 'wechatId=:wechatId and name=:name';
+        $criteria->condition = $id ? $criteria->condition . ' and id<>' . $id : $criteria->condition;
+        $criteria->params = array(':wechatId' => $wechatId, ':name' => $name);
+        $actionExit = MenuModel::model()->find($criteria);
         if ($actionExit) {
             $result = 'false';
-            $msg = '菜单值与菜单' . $actionExit->action_menu->name . '冲突了';
         }
         echo $result;
+    }
+    /**
+     * 菜单值重复检查
+     */
+    public function actionCheckMenuKeywords()
+    {
+        $name = Yii::app()->request->getParam('name');
+        $wechatId = Yii::app()->request->getParam('wechatId');
+        $id = intval(isset($_POST['id']) ? $_POST['id'] : $_GET['id']);
+        $result = 'true';
+        /*$criteria = new CDbCriteria;
+        $criteria->condition = 'wechatId=:wechatId and name=:name';
+        $criteria->condition = $id ? $criteria->condition . ' and id<>' . $id : $criteria->condition;
+        $criteria->params = array(':wechatId' => $wechatId, ':name' => $name);
+        $actionExit = MenuModel::model()->find($criteria);
+        if ($actionExit) {
+            $result = 'false';
+        }*/
+        echo $result;
+    }
+
+    /**
+     * 菜单编辑模拟关键系，搜索关键词
+     */
+    public function actionGetKeywords()
+    {
+        $search = isset($_POST['name']) ? $_POST['name'] : $_GET['name'];
+        $callback = $_GET['callback'];
+        $wechatId = isset($_POST['wechatId']) ? $_POST['wechatId'] : $_GET['wechatId'];
+        if (!$search || !$callback) {
+            return;
+        }
+        $sql = "select name,id from " . KeywordsModel::model()->tableName() . " where  wechatId=" . $wechatId . " and  name like '%$search%'";
+        $result = yii::app()->db->createCommand($sql);
+        $keywords = $result->queryAll();
+        echo $callback . "(" . json_encode(array('total' => count($keywords), 'keywords' => $keywords)) . ")";
     }
 
     /**
@@ -164,7 +194,7 @@ class AjaxController extends Controller
         if ($tokenValue) {
             //更新菜单
             $menu = MenuactionModel::model()->getTree($wechatId);
-            if($menu){
+            if ($menu) {
                 foreach ($menu as $m) {
                     if (isset($m['child']) && $m['child']) {
                         foreach ($m['child'] as $ch) {
@@ -201,7 +231,7 @@ class AjaxController extends Controller
                 if ($status == 1) {
                     $settingMenuModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
                         array(':wechatId' => $wechatId, ':key' => Globals::SETTING_KEY_MENU));
-                    if(!$settingMenuModel){
+                    if (!$settingMenuModel) {
                         $settingMenuModel = new SettingModel();
                         $settingMenuModel->key = Globals::SETTING_KEY_MENU;
                         $settingMenuModel->wechatId = $wechatId;
@@ -210,7 +240,7 @@ class AjaxController extends Controller
                     $settingMenuModel->value = $menuValue;
                     $settingMenuModel->save();
                 }
-            }else{
+            } else {
                 $msg = '菜单为空';
             }
 

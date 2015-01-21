@@ -67,8 +67,8 @@ class MenuController extends WechatManagerController
     {
         $setting = SettingModel::model()->find('`key`=:key', array(":key" => Globals::SETTING_KEY_MENU));
         $this->layout = '/layouts/memberList';
-        $menu = MenuactionModel::model()->getTree($this->wechatInfo->id);
-        $this->render('action', array('menu' => $menu, 'wechatId' => $this->wechatInfo->id, 'setting' => $setting));
+        $menu = MenuModel::model()->getTree($this->wechatInfo->id);
+        $this->render('index', array('menu' => $menu, 'wechatId' => $this->wechatInfo->id, 'setting' => $setting));
     }
 
     public function actionCreate()
@@ -102,17 +102,18 @@ class MenuController extends WechatManagerController
                 }
             }
             if ($status == 1) {
-                $modelAction = new MenuactionModel();
-                $modelAction->action = $_POST['type'] == Globals::TYPE_URL ? $_POST['url'] : $_POST['action'];
                 $model = new MenuModel();
                 $model->name = $name;
                 $model->wechatId = $this->wechatInfo->id;
                 $model->type = $_POST['type'];
                 $model->parentId = $_POST['parentId'] ? $_POST['parentId'] : 0;
-                if ($model->validate() && $modelAction->validate()) {
+                if($model->type == Globals::TYPE_KEYWORDS){
+                    $model->keywordsId = $_POST['keywordsId'];
+                }else{
+                    $model->url = $_POST['url'];
+                }
+                if ($model->validate()) {
                     $model->save();
-                    $modelAction->menuId = $model->id;
-                    $modelAction->save();
                 } else {
                     $status = -1;
                     $error = $model->getErrors();
@@ -129,16 +130,14 @@ class MenuController extends WechatManagerController
 
     public function actionDelete($id)
     {
-        $sql = 'delete a,b from ' . MenuactionModel::model()->tableName() . ' as a left join ' . MenuModel::model()->tableName() . '
-       as b on a.menuId=b.id where b.id=' . $id . ' or b.parentId=' . $id;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->execute();
-        ShowMessage::success('删除成功');
+        if(MenuModel::model()->deleteByPk($id)){
+            ShowMessage::success('删除成功');
+        }
     }
 
     public function actionUpdate($id)
     {
-        $model = MenuModel::model()->with('menu_action')->findByPk($id);
+        $model = MenuModel::model()->findByPk($id);
         if ($_POST) {
             $status = 1;
             $msg = '更新成功';
@@ -148,11 +147,10 @@ class MenuController extends WechatManagerController
                 $status = -1;
                 $msg = '此菜单含有子菜单，不能做此修改';
             } else {
-                $model->parentId = $_POST['parentId'] ? $_POST['parentId'] : 0;
-                $modelAction = MenuactionModel::model()->findByPk($model->menu_action->id);
-                $modelAction->action = $_POST['type'] == Globals::TYPE_URL ? $_POST['url'] : $_POST['action'];
-                if ($model->validate() && $modelAction->validate()) {
-                    $modelAction->save();
+                $model->parentId = isset($_POST['parentId']) ? $_POST['parentId'] : 0;
+                $model->keywordsId =isset($_POST['keywordsId']) ? $_POST['keywordsId'] : 0;
+                $model->url =isset($_POST['url']) ? $_POST['url'] : 0;
+                if ($model->validate()) {
                     $model->save();
                 } else {
                     $status = -1;
@@ -168,130 +166,24 @@ class MenuController extends WechatManagerController
         } else {
             $result['name'] = $model->name;
             $result['type'] = $model->type;
-            $result['url'] = $result['action'] = isset($model->menu_action->action) ? $model->menu_action->action : '';
-            $result['actionId'] = isset($model->menu_action->id) ? $model->menu_action->id : 0;
+            $result['keywordsName'] = '';
+            if($model->type==Globals::TYPE_KEYWORDS){
+                $keywords = KeywordsModel::model()->findByPk($model->keywordsId);
+                $result['keywordsName'] = $keywords->name;
+            }
+            $result['url'] = $model->url;
+            $result['keywordsId'] = $model->keywordsId;
+            $result['id']=$model->id;
+
             echo json_encode($result);
         }
-    }
-
-    public function actionTextReplay()
-    {
-        $responseId = Yii::app()->request->getParam('responseId');
-        $actionId = Yii::app()->request->getParam('actionId');
-        $content = '';
-        $status = 1;
-        if ($responseId) {
-            $model = TextReplayModel::model()->findByPk($responseId);
-            $content = $model->content;
-        }
-        if (isset($_POST['content']) && $actionId) {
-            $model = isset($model) ? $model : new TextReplayModel();
-            $model->wechatId = $this->wechatInfo->id;
-            $model->type = Globals::TYPE_TEXT;
-            $model->content = $_POST['content'];
-            if ($model->validate()) {
-                $model->save();
-                $actionModel = MenuactionModel::model()->findByPk($actionId);
-                $actionModel->responseId = $model->id;
-                $actionModel->save();
-                $status = 1;
-                $content = '编辑成功';
-            } else {
-                $status = -1;
-                foreach ($model->getErrors() as $e) {
-                    $content .= $e[0];
-                }
-            }
-        }
-        echo json_encode(array('status' => $status, 'content' => $content));
-    }
-
-    public function actionImageTextReplay($actionId)
-    {
-        $focus = $imageTextList = $dataList = array();
-        $this->layout = '//layouts/iframe';
-        $actionModel = MenuactionModel::model()->findByPk($actionId);
-        $responseId = $actionModel->responseId;
-        $imageTextList = array();
-        if ($responseId) {
-            $focus = ImagetextreplayModel::model()->findByPk($responseId);
-            $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $responseId));
-            $dataList = CHtml::listData($imageTextList, 'id', 'id');
-        }
-        if (isset($_POST['count'])) {
-            $validate = true;
-            $msg = '';
-            $count = $_POST['count'];
-            for ($i = 1; $i <= $count; $i++) {
-                $title = $_POST['title' . $i];
-                $summary = $_POST['summary' . $i];
-                $imgUrl = $_POST['src' . $i];
-                $url = $_POST['url' . $i];
-                $id = isset($_POST['id' . $i]) ? $_POST['id' . $i] : 0;
-                $formName = 'form' . $i;
-                if ($id) {
-                    $$formName = ImagetextreplayModel::model()->findByPk($id);
-                    if(in_array($id,$dataList))
-                        unset($dataList[$id]);
-                }
-                $$formName = isset($$formName) ? $$formName : new ImagetextreplayModel();
-                $$formName->wechatId = $this->wechatInfo->id;
-                $$formName->type = Globals::TYPE_MENU;
-                $$formName->title = $title;
-                $$formName->description = $summary;
-                $$formName->imgUrl = $imgUrl;
-                $$formName->url = $url;
-                if (!$$formName->validate()) {
-                    $validate = false;
-                    foreach ($$formName->getErrors() as $e) {
-                        $msg .= $e[0];
-                    }
-                };
-            }
-            if ($validate) {
-                $responseId = 0;
-                for ($i = 1; $i <= $count; $i++) {
-                    $formName = 'form' . $i;
-                    $$formName->parentId = $responseId;
-                    $$formName->save();
-                    if ($i == 1) {
-                        $responseId = $$formName->id;
-                        $actionModel->responseId = $responseId;
-                        $actionModel->save();
-                    }
-                }
-                //删除已经删除的数据
-                if($dataList){
-                    foreach($dataList as $id){
-                        ImagetextreplayModel::model()->deleteByPk($id);
-                    }
-                }
-                echo json_encode(array('status' => 1, 'msg' => $msg));
-            } else {
-                echo json_encode(array('status' => -1, 'msg' => $msg));
-            }
-            return;
-        }
-        $this->render('/layouts/imageText', array('imageTextList' => $imageTextList, 'focus' => $focus));
-
-    }
-
-    public function actionDeleteImgList($id)
-    {
-        $status = -1;
-        $textImg = ImagetextreplayModel::model()->findByPk($id);
-        if ($textImg) {
-            $textImg->delete();
-            $status = 1;
-        }
-        echo json_encode(array('status' => $status));
     }
 
     public function actionGetDropDownList()
     {
         $option = '';
         $parentId = Yii::app()->request->getParam('parentId');
-        $menu = MenuactionModel::model()->getTree($this->wechatInfo->id);
+        $menu = MenuModel::model()->getTree($this->wechatInfo->id);
         if (count($menu) < 3 || isset($_GET['parentId'])) {
             $option = '<option value="0">一级菜单</option>';
         }
@@ -305,6 +197,7 @@ class MenuController extends WechatManagerController
         }
         echo $option;
     }
+
     // Uncomment the following methods and override them if needed
     /*
     public function filters()

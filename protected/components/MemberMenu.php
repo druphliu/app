@@ -13,7 +13,9 @@ class MemberMenu extends CWidget
         '基础设置' => array('controller' => 'manager', 'act' => 'manager', 'class' => 'fa fa-gears', 'action' => array(
             array('name' => '功能管理', 'url' => 'manager/index', 'act' => 'manager_index', 'list_acl' => array()),
             array('name' => '关注回复', 'url' => 'manager/subscribeReplay', 'act' => 'manager_subscribeReplay', 'list_acl' => array()),
+            array('name' => '默认回复', 'url' => 'manager/defaultReplay', 'act' => 'manager_defaultReplay', 'list_acl' => array()),
             array('name' => '关键词回复', 'url' => 'manager/keyWords', 'act' => 'manager_keyWords', 'list_acl' => array()),
+
         )),
         '外接平台管理' => array('controller' => 'open', 'act' => 'open', 'class' => 'fa fa-openid', 'action' => array(
                 array('name' => '平台列表', 'act' => 'open_index', 'list_acl' => array(), 'url' => 'open/index'),
@@ -22,6 +24,8 @@ class MemberMenu extends CWidget
         '营销管理' => array('controller' => 'market', 'act' => 'market', 'class' => 'fa fa-bullhorn', 'action' => array(
             array('name' => '礼包领取', 'url' => 'market/gift', 'act' => 'market_gift', 'list_acl' => array()),
             array('name' => '刮刮乐', 'url' => 'scratch', 'act' => 'scratch_index', 'list_acl' => array()),
+			array('name' => '大转盘', 'url' => 'wheel', 'act' => 'wheel_index', 'list_acl' => array()),
+            array('name' => '砸金蛋', 'url' => 'egg', 'act' => 'egg_index', 'list_acl' => array()),
         )),
         '菜单管理' => array('controller' => 'menu', 'act' => 'menu', 'class' => 'fa fa-windows','url' => 'menu/action', 'action' => array(
 
@@ -46,7 +50,7 @@ class MemberMenu extends CWidget
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
         $userAllowAction = array('wechat', 'user', 'vip');
-        $mangerAllowAction = array('manager', 'market', 'open','menu','scratch');
+        $mangerAllowAction = array('manager', 'market', 'open','menu','scratch','wheel','egg');
         if (in_array($controllerId, $userAllowAction)) {
             $menuList = self::$userMenu;
         } else if (in_array($controllerId, $mangerAllowAction)) {

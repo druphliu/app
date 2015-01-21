@@ -1,22 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "subscribereplay".
+ * This is the model class for table "basereplay".
  *
- * The followings are the available columns in table 'subscribereplay':
+ * The followings are the available columns in table 'basereplay':
  * @property string $id
  * @property string $type
  * @property integer $wechatId
  * @property integer $responseId
+ * @property string $replayType
  */
-class SubscribereplayModel extends CActiveRecord
+class BasereplayModel extends CActiveRecord
 {
-    const SUBSCRIBE_TYPE = 'subscribe';
-    const KEYWORDS_TYPE ='keywords';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return SubscribereplayModel the static model class
+	 * @return BasereplayModel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -28,7 +27,7 @@ class SubscribereplayModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'subscribereplay';
+		return 'basereplay';
 	}
 
 	/**
@@ -42,9 +41,10 @@ class SubscribereplayModel extends CActiveRecord
 			array('wechatId, responseId', 'required'),
 			array('wechatId, responseId', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>10),
+			array('replayType', 'length', 'max'=>9),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, type, wechatId, responseId', 'safe', 'on'=>'search'),
+			array('id, type, wechatId, responseId, replayType', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,7 +68,8 @@ class SubscribereplayModel extends CActiveRecord
 			'id' => 'ID',
 			'type' => 'Type',
 			'wechatId' => 'Wechat',
-			'responseId' => 'Replay',
+			'responseId' => 'Response',
+			'replayType' => 'Replay Type',
 		);
 	}
 
@@ -87,6 +88,7 @@ class SubscribereplayModel extends CActiveRecord
 		$criteria->compare('type',$this->type,true);
 		$criteria->compare('wechatId',$this->wechatId);
 		$criteria->compare('responseId',$this->responseId);
+		$criteria->compare('replayType',$this->replayType,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

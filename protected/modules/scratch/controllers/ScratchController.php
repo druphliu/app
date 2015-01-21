@@ -148,9 +148,9 @@ class ScratchController extends WechatManagerController
     public function actionCodes($id)
     {
         $this->layout = '//layouts/memberList';
-        $type = Yii::app()->request->getParam('type',Globals::CODE_TYPE_LEGAL);
+        $type = Yii::app()->request->getParam('type', Globals::CODE_TYPE_LEGAL);
         $codeTable = 'scratch_awards';
-        $whereSql = 'scratchId=' . $id .' and type='.$type;
+        $whereSql = 'scratchId=' . $id . ' and type=' . $type;
         $count = Yii::app()->db->createCommand('SELECT COUNT(*) FROM ' . $codeTable . ' where ' . $whereSql)->queryScalar();
         $sql = 'SELECT * FROM ' . $codeTable . ' where ' . $whereSql;
         $dataProvider = new CSqlDataProvider($sql, array(
@@ -172,7 +172,7 @@ class ScratchController extends WechatManagerController
     {
         set_time_limit(0);
         $scratchId = Yii::app()->request->getParam('scratchId');
-        $type = Yii::app()->request->getParam('type',Globals::CODE_TYPE_LEGAL);
+        $type = Yii::app()->request->getParam('type', Globals::CODE_TYPE_LEGAL);
         $file = $_FILES;
         if ($file && $scratchId) {
             $tmpFile = "upload/" . $_FILES["file"]["name"];
@@ -204,5 +204,29 @@ class ScratchController extends WechatManagerController
             $msg = '提交错误';
         }
         echo $msg;
+    }
+
+    public function actionWinnerList($id)
+    {
+        $table = 'scratch_awards';
+        $winnerList = array();
+        $winner = ScratchAwardsModel::model($table)->findAll('scratchId=:scratchId and grade>0 and status>0', array(':scratchId' => $id));
+        foreach ($winner as $w) {
+            $winnerList[] = array('telphone' => $w->telphone, 'grade' => $w->grade, 'code' => $w->code, 'datetime' => date('Y-m-d H:i:s', $w->datetime));
+        }
+        echo json_encode($winnerList);
+    }
+
+    /**
+     * 刮刮乐活动开关
+     * @param $id
+     */
+    public function actionScratchStatus($id)
+    {
+        $status = Yii::app()->request->getParam('status');
+        $model = ScratchModel::model()->findByPk($id);
+        $model->status = in_array($status, array(0, 1)) ? $status : 0;
+        $model->save();
+        echo json_encode(array('result' => 0));
     }
 } 

@@ -34,31 +34,22 @@
         </div>
 
         <div class="space-4"></div>
-        <?php if ($type != GiftModel::TYPE_KEYWORDS) { ?>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'action', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <?php echo $form->dropDownList($model, 'action',$menuList, array('class' => 'col-xs-5 col-sm-2')); ?>
-                    <?php echo $form->error($model, 'action', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                </div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'keywords', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <?php echo $form->textField($model, 'keywords', array('class' => 'col-xs-10 col-sm-5')); ?>
+                <?php echo $form->error($model, 'keywords', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
-        <?php } else { ?>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'keywords', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <?php echo $form->textField($model, 'keywords', array('class' => 'col-xs-10 col-sm-5')); ?>
-                    <?php echo $form->error($model, 'keywords', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'isAccurate', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo $form->checkBox($model, 'isAccurate', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php echo $form->error($model, 'isAccurate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'isAccurate', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->checkBox($model, 'isAccurate', array('class' => 'col-xs-2 col-sm-2')); ?>
-                    <?php echo $form->error($model, 'isAccurate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                </div>
-            </div>
-        <?php } ?>
+        </div>
+
         <div class="space-4"></div>
         <div class="form-group">
             <?php echo $form->labelEx($model, 'startTime', array('class' => BootStrapUI::formLabelClass)); ?>
@@ -241,20 +232,17 @@
         }).prev().addClass('wysiwyg-style2');
     });
     $("#submit").click(function () {
-        var typeKeywords = <?php if($type==GiftModel::TYPE_KEYWORDS){echo 1;}else{echo 0;}?>;
         $("#template").val($("#editor1").html());
         $("#RTemplate").val($("#editor6").html());
         $("#unstartMsg").val($("#editor2").html());
         $("#codeOverMsg").val($("#editor3").html());
         $("#endMsg").val($("#editor4").html());
         $("#pauseMsg").val($("#editor5").html());
-        if (typeKeywords) {
-            var type = '<?php echo GiftModel::GIFT_TYPE?>';
-            var responseId = '<?php echo $responseId?>';
-            var wechatId = '<?php echo $wechatId?>';
-            var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-            return keywordsCheck(wechatId, type, url, 'GiftModel', responseId);
-        }
+        var type = '<?php echo GiftModel::GIFT_TYPE?>';
+        var responseId = '<?php echo $responseId?>';
+        var wechatId = '<?php echo $wechatId?>';
+        var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
+        return keywordsCheck(wechatId, type, url, 'GiftModel', responseId);
     })
 
 </script>

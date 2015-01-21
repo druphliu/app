@@ -9,114 +9,181 @@ class ManagerController extends WechatManagerController
 
     public function actionSubscribeReplay()
     {
-        $validate = true;
         $msg = '';
         $imageTextList = $dataList = array();
         $type = Yii::app()->request->getParam('type');
-        $subscribeInfo = SubscribereplayModel::model()->find('wechatId=:wechatId', array(":wechatId" => $this->wechatInfo->id));
+        $subscribeInfo = BasereplayModel::model()->find('wechatId=:wechatId and replayType=:replayType',
+            array(":wechatId" => $this->wechatInfo->id, ':replayType' => Globals::REPLAY_TYPE_SUBSCRIBE));
         if ($type) {
             switch ($type) {
                 case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                    $model = ImagetextreplayModel::model()->find('wechatId=:wechatId and type=:type', array(':wechatId' => $this->wechatInfo->id, ":type" => SubscribereplayModel::SUBSCRIBE_TYPE));
-                    if ($model) {
+                    if ($subscribeInfo && $subscribeInfo->type == Globals::TYPE_IMAGE_TEXT) {
+                        $model = ImagetextreplayModel::model()->findByPk($subscribeInfo->responseId);
                         $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $model->id));
-                        $dataList = CHtml::listData($imageTextList, 'id', 'id');
                     } else {
                         $model = new ImagetextreplayModel();
                     }
                     break;
                 case TextReplayModel::TEXT_REPLAY_TYPE:
-                    $model = TextReplayModel::model()->find('wechatId=:wechatId and type=:type', array(':wechatId' => $this->wechatInfo->id, ":type" => SubscribereplayModel::SUBSCRIBE_TYPE));
-                    $model = $model ? $model : new TextReplayModel();
+                    if ($subscribeInfo && $subscribeInfo->type == Globals::TYPE_TEXT) {
+                        $model = TextReplayModel::model()->findByPk($subscribeInfo->responseId);
+                    } else {
+                        $model = new TextReplayModel();
+                    }
                     break;
             }
         } else {
-            $type = TextReplayModel::TEXT_REPLAY_TYPE;
+            $type = Globals::TYPE_TEXT;
             if ($subscribeInfo) {
-                switch ($subscribeInfo->type) {
-                    case TextReplayModel::TEXT_REPLAY_TYPE:
-                        $model = TextReplayModel::model()->findByPk($subscribeInfo->responseId);
-                        break;
-                    case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                        $model = ImagetextreplayModel::model()->findByPk($subscribeInfo->responseId);
-                        $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $model->id));
-                        $dataList = CHtml::listData($imageTextList, 'id', 'id');
-                        $type = ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE;
-                        break;
+                if ($subscribeInfo->type == Globals::TYPE_TEXT) {
+                    $model = TextReplayModel::model()->findByPk($subscribeInfo->responseId);
+                } else {
+                    $type = Globals::TYPE_IMAGE_TEXT;
+                    $model = ImagetextreplayModel::model()->findByPk($subscribeInfo->responseId);
+                    $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $model->id));
                 }
             } else {
                 $model = new TextReplayModel();
             }
         }
         if (isset($_POST['TextReplayModel']) || isset($_POST['count'])) {
+            if(!$model->wechatId){
+                $model->wechatId = $this->wechatInfo->id;
+                $model->type = Globals::TYPE_BASE_REPLAY;
+            }
             if ($type == TextReplayModel::TEXT_REPLAY_TYPE) {
                 $model->attributes = $_POST['TextReplayModel'];
+                $validate = $model->validate();
+                $model->save();
             } else {
                 $model->title = $_POST['title1'];
                 $model->imgUrl = $_POST['src1'];
                 $model->description = $_POST['summary1'];
                 $model->url = $_POST['url1'];
-                $count = $_POST['count'];
-                for ($i = 2; $i <= $count; $i++) {
-                    $title = $_POST['title' . $i];
-                    $summary = $_POST['summary' . $i];
-                    $imgUrl = $_POST['src' . $i];
-                    $url = $_POST['url' . $i];
-                    $id = isset($_POST['id' . $i]) ? $_POST['id' . $i] : 0;
-                    $formName = 'form' . $i;
-                    if ($id) {
-                        $$formName = ImagetextreplayModel::model()->findByPk($id);
-                        if (in_array($id, $dataList))
-                            unset($dataList[$id]);
-                    }
-                    $$formName = isset($$formName) ? $$formName : new ImagetextreplayModel();
-                    $$formName->wechatId = $this->wechatInfo->id;
-                    $$formName->type = Globals::TYPE_SUBSCRIBE;
-                    $$formName->title = $title;
-                    $$formName->description = $summary;
-                    $$formName->imgUrl = $imgUrl;
-                    $$formName->url = $url;
-                    if (!$$formName->validate()) {
-                        $validate = false;
-                        foreach ($$formName->getErrors() as $e) {
-                            $msg .= $e[0];
-                        }
-                    };
-                }
-            }
-            $model->type = SubscribereplayModel::SUBSCRIBE_TYPE;
-            $model->wechatId = $this->wechatInfo->id;
-            if ($model->validate() && $validate) {
                 $model->save();
+                $count = $_POST['count'];
+                $validate = $count > 1 ? $this->saveImageText($count, $_POST, $model->id) : $model->validate();
+            }
+            $model->type = Globals::REPLAY_TYPE_SUBSCRIBE;
+            $model->wechatId = $this->wechatInfo->id;
+            if ($validate) {
                 //如果新加，添加数据到subscribe表反之更新
                 if (isset($subscribeInfo)) {
                     $subscribeInfo->type = $type;
                     $subscribeInfo->responseId = $model->id;
                     $subscribeInfo->save();
                 } else {
-                    $subscribeModel = new SubscribereplayModel();
+                    $subscribeModel = new BasereplayModel();
                     $subscribeModel->responseId = $model->id;
                     $subscribeModel->type = $type;
+                    $subscribeModel->replayType = Globals::REPLAY_TYPE_SUBSCRIBE;
                     $subscribeModel->wechatId = $this->wechatInfo->id;
                     $subscribeModel->save();
                 }
-                if (isset($count)) {
-                    for ($i = 2; $i <= $count; $i++) {
-                        $formName = 'form' . $i;
-                        $$formName->parentId = $model->id;
-                        $$formName->save();
-                    }
-                    echo json_encode(array('status'=>1,'msg'=>$msg));
-                    return;
-                }else{
+                if ($type == Globals::TYPE_IMAGE_TEXT) {
+                    die(json_encode(array('status' => 1, 'msg' => $msg)));
+                } else {
                     ShowMessage::success('添加成功！');
                 }
-            }else{
-                echo json_encode(array('status'=>-1,'msg'=>$msg));
-                return;
+            } else {
+                if ($type == Globals::TYPE_IMAGE_TEXT) {
+                    $msg = '编辑失败';
+                    die(json_encode(array('status' => -1, 'msg' => $msg)));
+                }else{
+                    ShowMessage::error('编辑失败');
+                }
             }
         }
         $this->render('subscribeReplay', array('model' => $model, 'type' => $type, 'imageTextList' => $imageTextList));
+    }
+
+    public function actionDefaultReplay(){
+        $msg = '';
+        $imageTextList = $dataList = array();
+        $type = Yii::app()->request->getParam('type');
+        $subscribeInfo = BasereplayModel::model()->find('wechatId=:wechatId and replayType=:replayType',
+            array(":wechatId" => $this->wechatInfo->id, ':replayType' => Globals::REPLAY_TYPE_DEFAULT));
+        if ($type) {
+            switch ($type) {
+                case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
+                    if ($subscribeInfo && $subscribeInfo->type == Globals::TYPE_IMAGE_TEXT) {
+                        $model = ImagetextreplayModel::model()->findByPk($subscribeInfo->responseId);
+                        $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $model->id));
+                    } else {
+                        $model = new ImagetextreplayModel();
+                    }
+                    break;
+                case TextReplayModel::TEXT_REPLAY_TYPE:
+                    if ($subscribeInfo && $subscribeInfo->type == Globals::TYPE_TEXT) {
+                        $model = TextReplayModel::model()->findByPk($subscribeInfo->responseId);
+                    } else {
+                        $model = new TextReplayModel();
+                    }
+                    break;
+            }
+        } else {
+            $type = Globals::TYPE_TEXT;
+            if ($subscribeInfo) {
+                if ($subscribeInfo->type == Globals::TYPE_TEXT) {
+                    $model = TextReplayModel::model()->findByPk($subscribeInfo->responseId);
+                } else {
+                    $type = Globals::TYPE_IMAGE_TEXT;
+                    $model = ImagetextreplayModel::model()->findByPk($subscribeInfo->responseId);
+                    $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $model->id));
+                }
+            } else {
+                $model = new TextReplayModel();
+            }
+        }
+        if (isset($_POST['TextReplayModel']) || isset($_POST['count'])) {
+            if(!$model->wechatId){
+                $model->wechatId = $this->wechatInfo->id;
+                $model->type = Globals::REPLAY_TYPE_DEFAULT;
+            }
+            if ($type == TextReplayModel::TEXT_REPLAY_TYPE) {
+                $model->attributes = $_POST['TextReplayModel'];
+                $validate = $model->validate();
+                $model->save();
+            } else {
+                $model->title = $_POST['title1'];
+                $model->imgUrl = $_POST['src1'];
+                $model->description = $_POST['summary1'];
+                $model->url = $_POST['url1'];
+                $model->save();
+                $count = $_POST['count'];
+                $validate = $count > 1 ? $this->saveImageText($count, $_POST, $model->id) : $model->validate();
+            }
+            $model->type = Globals::REPLAY_TYPE_DEFAULT;
+            $model->wechatId = $this->wechatInfo->id;
+            if ($validate) {
+                //如果新加，添加数据到subscribe表反之更新
+                if (isset($subscribeInfo)) {
+                    $subscribeInfo->type = $type;
+                    $subscribeInfo->responseId = $model->id;
+                    $subscribeInfo->save();
+                } else {
+                    $subscribeModel = new BasereplayModel();
+                    $subscribeModel->responseId = $model->id;
+                    $subscribeModel->type = $type;
+                    $subscribeModel->replayType = Globals::REPLAY_TYPE_DEFAULT;
+                    $subscribeModel->wechatId = $this->wechatInfo->id;
+                    $subscribeModel->save();
+                }
+                if ($type == Globals::TYPE_IMAGE_TEXT) {
+                    die(json_encode(array('status' => 1, 'msg' => $msg)));
+                } else {
+                    ShowMessage::success('添加成功！');
+                }
+            } else {
+                if ($type == Globals::TYPE_IMAGE_TEXT) {
+                    $msg = '编辑失败';
+                    die(json_encode(array('status' => -1, 'msg' => $msg)));
+                }else{
+                    ShowMessage::error('编辑失败');
+                }
+            }
+        }
+        $this->render('defaultReplay', array('model' => $model, 'type' => $type, 'imageTextList' => $imageTextList));
     }
 
     public function actionKeyWords()
@@ -130,7 +197,7 @@ class ManagerController extends WechatManagerController
                         'order' => 't.id DESC',
                         'with' => array('textreplay_keywords'),
                         'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" .
-                            SubscribereplayModel::KEYWORDS_TYPE . "' and textreplay_keywords.type='" . TextReplayModel::TEXT_REPLAY_TYPE . "'",
+                            Globals::TYPE_KEYWORDS . "' and textreplay_keywords.type='" . TextReplayModel::TEXT_REPLAY_TYPE . "'",
                         'together' => true
                     ),
                     //'pagination' => false,
@@ -145,7 +212,7 @@ class ManagerController extends WechatManagerController
                 $dataProvider = new CActiveDataProvider('ImagetextreplayModel', array(
                     'criteria' => array(
                         'with' => array('imagetextreplay_keywords'),
-                        'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" . SubscribereplayModel::KEYWORDS_TYPE .
+                        'condition' => "t.wechatId = {$this->wechatInfo->id} and t.type='" . Globals::TYPE_KEYWORDS .
                             "' and imagetextreplay_keywords.type='" . ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE . "'",
                         'together' => true,
                         'order' => 't.id DESC',
@@ -204,7 +271,7 @@ class ManagerController extends WechatManagerController
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords');
             }
             $model->wechatId = $this->wechatInfo->id;
-            $model->type = SubscribereplayModel::KEYWORDS_TYPE;
+            $model->type = Globals::TYPE_KEYWORDS;
             $keywordsArray = explode(',', $keywords);
             if ($model->validate()) {
                 $model->save();

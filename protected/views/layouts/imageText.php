@@ -130,7 +130,11 @@
                 &nbsp; &nbsp; &nbsp;
                 <a class="btn btn-primary"
                    href="<?php echo Yii::app()->createUrl('manager/subscribeReplay', array('type' => TextReplayModel::TEXT_REPLAY_TYPE)) ?>">切换到文本模式</a>
-            <?php } ?>
+            <?php }elseif(Yii::app()->getController()->getAction()->id == 'defaultReplay'){ ?>
+                &nbsp; &nbsp; &nbsp;
+                <a class="btn btn-primary"
+                   href="<?php echo Yii::app()->createUrl('manager/defaultReplay', array('type' => TextReplayModel::TEXT_REPLAY_TYPE)) ?>">切换到文本模式</a>
+            <?php }?>
         </div>
     </div>
 

@@ -70,6 +70,7 @@
     <script type="text/javascript">
         if("ontouchend" in document) document.write("<script src='<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/global.js"></script>
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
 </head>
@@ -92,7 +93,7 @@
 
 <div class="navbar-header pull-right" role="navigation">
 <ul class="nav ace-nav">
-<li class="grey">
+<!--<li class="grey">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
         <i class="fa fa-tasks"></i>
         <span class="badge badge-grey">4</span>
@@ -299,7 +300,7 @@
             </a>
         </li>
     </ul>
-</li>
+</li>-->
 
 <li class="light-blue">
     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
@@ -411,14 +412,6 @@
                 )); ?><!-- breadcrumbs -->
                 <?php endif?><!-- .breadcrumb -->
 
-        <div class="nav-search" id="nav-search">
-            <form class="form-search">
-								<span class="input-icon">
-									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
-									<i class="fa fa-search nav-search-icon"></i>
-								</span>
-            </form>
-        </div><!-- #nav-search -->
     </div>
 
     <div class="page-content">

@@ -23,20 +23,13 @@ $this->breadcrumbs = array(
                 <div class="table-responsive">
                     <div class="tabbable">
                         <ul id="myTab" class="nav nav-tabs">
-                            <li class="<?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>active<?php } ?>">
-                                <a href="<?php echo Yii::app()->createUrl('open/replay', array('type' => GiftModel::TYPE_KEYWORDS)) ?>">
+                            <li class="active">
+                                <a href="<?php echo Yii::app()->createUrl('open/replay') ?>">
                                     关键词转接列表
                                 </a>
                             </li>
-                            <?php if($wechatInfo->isAuth){?>
-                            <li class="<?php if ($type == GiftModel::TYPE_MENU) { ?>active<?php } ?>">
-                                <a href="<?php echo Yii::app()->createUrl('open/replay', array('type' => GiftModel::TYPE_MENU)) ?>">
-                                    菜单转接列表
-                                </a>
-                            </li>
-                            <?php }?>
                             <li>
-                                <a href="<?php echo Yii::app()->createUrl('open/replayAdd', array('type' => $type)) ?>"
+                                <a href="<?php echo Yii::app()->createUrl('open/replayAdd') ?>"
                                    class="btn btn-primary">添加</a>
                             </li>
                         </ul>
@@ -55,8 +48,8 @@ $this->breadcrumbs = array(
                                             </th>
                                             <th>ID</th>
                                             <th>平台名称</th>
-                                            <th><?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>关键词<?php } else { ?>菜单名<?php } ?></th>
-                                            <?php if ($type == GiftModel::TYPE_KEYWORDS) { ?><th>是否精准匹配</th><?php } ?>
+                                            <th>关键词</th>
+                                            <th>是否精准匹配</th>
                                             <th width="25%"></th>
                                         </tr>
                                         </thead>
@@ -81,30 +74,21 @@ $this->breadcrumbs = array(
                                                     <?= $d->open_openPlatForm->name ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>
-                                                        <?php foreach ($d->open_keywords as $keywords) { ?>
-                                                            <span
-                                                                class="label label-sm label-primary arrowed arrowed-right"><?= $keywords->name ?></span>
-                                                        <?php } ?>
-                                                    <?php } else { ?>
-                                                        <?php foreach ($d->open_menuaction as $menuaction) { ?>
-                                                            <span
-                                                                class="label label-sm label-primary arrowed arrowed-right"><?= $menuaction->action_menu->name ?></span>
-                                                        <?php } ?>
+                                                    <?php foreach ($d->open_keywords as $keywords) { ?>
+                                                        <span
+                                                            class="label label-sm label-primary arrowed arrowed-right"><?= $keywords->name ?></span>
                                                     <?php } ?>
                                                 </td>
-                                                <?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>
-                                                    <td>
-                                                        <?php foreach ($d->open_keywords as $isAccurate) {
-                                                            if ($isAccurate->isAccurate) { ?>
-                                                                <span class="label label-sm label-success">是</span>
-                                                            <?php } else { ?>
-                                                                <span class="label label-sm label-warning">否</span>
-                                                            <?php }
-                                                            break;
-                                                        } ?>
-                                                    </td>
-                                                <?php } ?>
+                                                <td>
+                                                    <?php foreach ($d->open_keywords as $isAccurate) {
+                                                        if ($isAccurate->isAccurate) { ?>
+                                                            <span class="label label-sm label-success">是</span>
+                                                        <?php } else { ?>
+                                                            <span class="label label-sm label-warning">否</span>
+                                                        <?php }
+                                                        break;
+                                                    } ?>
+                                                </td>
                                                 <td style="width:23%">
                                                     <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
                                                         <a class="btn btn-xs btn-info"
@@ -151,7 +135,7 @@ $this->breadcrumbs = array(
     </div>
     <div class="col-sm-6">
         <div class="dataTables_paginate paging_bootstrap">
-
+            <?php $this->widget('CLinkPager', Page::go($pages)) ?>
         </div>
     </div>
 </div>

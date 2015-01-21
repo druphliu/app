@@ -20,6 +20,7 @@
  * @property string $created_at
  * @property integer $ispaward
  * @property integer $status
+ * @property string $desc
  */
 class ScratchModel extends CActiveRecord
 {
@@ -56,7 +57,7 @@ class ScratchModel extends CActiveRecord
 			array('type, title,startTime', 'required'),
 			array('type', 'length', 'max'=>8),
 			array('title, backgroundPic, button, awards', 'length', 'max'=>255),
-			array('endTime, created_at', 'safe'),
+			array('endTime, created_at, desc', 'safe'),
             array('backgroundPic',
                 'file',
                 'allowEmpty'=>true,
@@ -71,7 +72,7 @@ class ScratchModel extends CActiveRecord
             ),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, type, title, backgroundPic, button, awards, startTime, endTime, created_at', 'safe', 'on'=>'search'),
+			array('id, type, title, backgroundPic, button, awards, startTime, endTime, created_at,times,desc', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -109,6 +110,8 @@ class ScratchModel extends CActiveRecord
             'endTime' => '结束时间',
             'keywords' => '关键词',
             'isAccurate' => '是否精准匹配',
+            'times'=>'刮奖次数',
+            'desc' => '活动描述',
 		);
 	}
 

@@ -11,24 +11,25 @@ class Globals
 
     const TYPE_TEXT = 'text';
     const TYPE_GIFT = 'gift';
-    const TYPE_SCRATCH = 'scratch';
+    const TYPE_SCRATCH = 'scratch';//刮刮乐
+	const TYPE_WHEEL = 'wheel';//大转盘
+    const TYPE_EGG = 'egg';//彩蛋
     const TYPE_OPEN = 'open';
     const TYPE_IMAGE_TEXT = 'image-text';
     const TYPE_KEYWORDS = 'keywords';
     const TYPE_MENU = 'menu';
     const TYPE_URL = 'url';
-    const TYPE_SUBSCRIBE = 'subscribe';
+    const TYPE_BASE_REPLAY = 'basereplay';
+    const REPLAY_TYPE_SUBSCRIBE = 'subscribe';
+    const REPLAY_TYPE_DEFAULT = 'default';
     const CODE_TYPE_LEGAL = 1; //正版
     const CODE_TYPE_UNLEGAL = 2;//越狱
     const SETTING_KEY_MENU = 'menu';
     const SETTING_KEY_ACCESS_TOKEN = 'accessToken';
     const AUTH_KEY = '8ce6340c55bc25374258b0e4fc2d4de4';//加密函数key
     public static $typeList = array(
-        self::TYPE_GIFT => '礼包',
-        self::TYPE_TEXT => '文本',
-        self::TYPE_IMAGE_TEXT => '图文',
-        self::TYPE_URL => 'URL',
-        self::TYPE_OPEN => '转接');
+        self::TYPE_KEYWORDS=>'关键词',
+        self::TYPE_URL => 'URL');
 
     public static $wechatErrorCode = array(
         40001 => '获取access_token时AppSecret错误，或者access_token无效',

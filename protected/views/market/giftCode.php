@@ -136,13 +136,7 @@ $this->breadcrumbs = array(
                                     alert('请选择文件');
                                     return;
                                 }
-                                //loading
-                                $('body').addClass('modal-open');
-                                $('body').append('<div class="bootbox modal fade in" role="dialog" tabindex="-1" ' +
-                                    'style="display: block;" aria-hidden="false"><div class="modal-dialog" ' +
-                                    'style="width: 100%;text-align: center; padding-top: 80px;">' +
-                                    '<i class="fa fa-spinner fa-spin orange bigger-275"></i>' +
-                                    '</div><div class="modal-backdrop fade in"></div>');
+                                showLoading();
                                 var data = new FormData($(this).parents("form").get(0));
                                 data.append('file', file);
                                 data.append('giftId', $('input[type=hidden]').val());
@@ -161,8 +155,7 @@ $this->breadcrumbs = array(
                                     processData: false
                                 }).then(function (msg) {
                                     //remove loading
-                                    $(".bootbox").remove();
-                                    $(".modal-backdrop").remove();
+                                    removeLoading();
                                     //doneCal
                                     alert(msg);
                                     window.location.href = '';

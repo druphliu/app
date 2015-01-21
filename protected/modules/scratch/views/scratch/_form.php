@@ -69,35 +69,49 @@
         </div>
         <div class="space-4"></div>
         <div class="form-group">
+            <?php echo $form->labelEx($model, 'times', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo $form->textField($model, 'times', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php echo $form->error($model, 'times', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                <i>0:不限,-1:本活动可刮奖次数,1:每天可刮奖次数</i>
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
             <?php echo $form->labelEx($model, 'awards', array('class' => BootStrapUI::formLabelClass)); ?>
-            <div class="col-sm-9">
+            <span class="col-sm-9">
+                <button class="close red" type="button" style="float: none">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <button class="close" type="button" style="float: none">
+                    <i class="fa fa-remove"></i>
+                </button>
+                </span>
+             </span>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3">
                 <div  class="form-group">
                     一等奖:
                     <?php echo CHtml::textField('award1')?>
                     个数:
                     <?php echo CHtml::textField('count1')?>
-                    <?php echo CHtml::label('是否实物','isentity1')?><?php echo CHtml::checkBox('isentity1')?>
+                    <?php echo CHtml::label('是否实物','isentity1')?><?php echo CHtml::checkBox('isentity1',array('checked'=>'checked'))?>
                 </div>
                 <div  class="form-group">
                     二等奖:
                     <?php echo CHtml::textField('award2')?>
                     个数:
                     <?php echo CHtml::textField('count2')?>
-                    <?php echo CHtml::label('是否实物','isentity2')?><?php echo CHtml::checkBox('isentity2')?>
+                    <?php echo CHtml::label('是否实物','isentity2')?><?php echo CHtml::checkBox('isentity2',array('checked'=>'checked'))?>
+
                 </div>
                 <div class="form-group">
                     三等奖:
                     <?php echo CHtml::textField('award3')?>
                     个数:
                     <?php echo CHtml::textField('count3')?>
-                    <?php echo CHtml::label('是否实物','isentity3')?><?php echo CHtml::checkBox('isentity3')?>
-                </div>
-                <div class="form-group">
-                    四等奖:
-                    <?php echo CHtml::textField('award4')?>
-                    个数:
-                    <?php echo CHtml::textField('count4')?>
-                    <?php echo CHtml::label('是否实物','isentity4')?><?php echo CHtml::checkBox('isentity4')?>
+                    <?php echo CHtml::label('是否实物','isentity3')?><?php echo CHtml::checkBox('isentity3',array('checked'=>'checked'))?>
                 </div>
             </div>
         </div>
@@ -135,6 +149,18 @@
             <div class="col-sm-5 col-lg-4 controls">
                 <?php echo $form->fileField($model,'button',array('id'=>'id-input-file-2'))?>
                 <?php echo $form->error($model, 'button', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'desc', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <div class="col-sm-5">
+                    <?php echo $form->textarea($model,'desc',array('style'=>'width: 322px; height: 146px;')) ?>
+                </div>
+                <?php echo $form->hiddenField($model, 'unstartMsg', array('id' => 'unstartMsg')); ?>
+                <?php echo $form->error($model, 'unstartMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+
             </div>
         </div>
         <div class="space-4"></div>

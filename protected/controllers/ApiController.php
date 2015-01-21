@@ -22,6 +22,11 @@ class ApiController extends Controller
                     switch ($request) {
                         case $request instanceof WeChatTextRequest:
                             $response = $this->textResponse($wechatInfo->id, $request);
+			    if(!$response && $wechatInfo->originalId=='gh_354e9ce866ed'){
+                                                $content = "亲，刮刮卡活动已经结束了，圣诞活动即将开始，敬请关注！亲，根据您的手机型号，领取对应的礼包哦！安卓越狱请按5，正版请按6，礼包内容包>含传奇抽奖券哦！~如有需要，请联系客服哦！客服QQ号：2117994248";
+                                                $xml = new WeChatTextResponse($content);
+						$response = $xml->_to_xml($request);
+                                        } 
                             break;
                         case $request instanceof WeChatEventRequest:
                             switch ($request->event_type) {
@@ -64,7 +69,7 @@ class ApiController extends Controller
             $message = mb_substr($message, 6);
         }
         //find keywords
-        $keywords = KeywordsModel::model()->findAll("wechatId=:wechatId and name like concat('%',:name,'%')",
+        $keywords = KeywordsModel::model()->findAll("wechatId=:wechatId and name like concat('%',:name,'%') order by id desc",
             array(':wechatId' => $wechatId, ':name' => $message));
         foreach ($keywords as $k) {
             if ($k->isAccurate and trim($k->name) == $message) {
@@ -81,8 +86,9 @@ class ApiController extends Controller
             case TextReplayModel::TEXT_REPLAY_TYPE:
                 if ($keyword) {
                     $response = $this->_getTextReplay($keyword->responseId);
-                } else {
-                    $content = "亲，暂时不能理解你说的";
+                } else {return;
+                    //$content = "亲，暂时不能理解你说的";
+			$content = '';
                     $response = new WeChatTextResponse($content);
                 }
                 break;
@@ -101,6 +107,14 @@ class ApiController extends Controller
             case Globals::TYPE_SCRATCH:
                 //刮刮乐
                 $response = $this->_getScratch($keyword->responseId, $request->from_user_name, $legalType);
+                break;
+			case Globals::TYPE_WHEEL:
+                //刮刮乐
+                $response = $this->_getWheel($keyword->responseId, $request->from_user_name, $legalType);
+                break;
+            case Globals::TYPE_EGG:
+                //砸金蛋
+                $response = $this->_getEgg($keyword->responseId, $request->from_user_name, $legalType);
                 break;
         }
         $xml = $response->_to_xml($request);
@@ -151,7 +165,11 @@ class ApiController extends Controller
                     break;
                 case Globals::TYPE_SCRATCH:
                     //刮刮乐
-                    $response = $this->_getScratch($responseId, $request->from_user_name);
+                    $response = $this->_getScratch($responseId, $request->from_user_name,1);
+                    break;
+                case Globals::TYPE_EGG:
+                    //砸金蛋
+                    $response = $this->_getEgg($responseId, $request->from_user_name,1);
                     break;
             }
         }
@@ -286,6 +304,112 @@ class ApiController extends Controller
         $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
         return $responseObj;
     }
+	
+	private function _getWheel($responseId, $openId, $type)
+    {
+        $disable = 1;
+        $logTable = 'wheel_log';
+        Yii::import('application.modules.wheel.models.WheelModel');
+        Yii::import('application.modules.wheel.models.WheelLogModel');
+        $wheel = WheelModel::model()->findByPk($responseId);
+        if (!$type) {
+            $keywords = KeywordsModel::model()->find('type=:type and responseId=:responseId',
+                array(':type' => Globals::TYPE_WHEEL, ':responseId' => $responseId));
+            $content = '参与' . $wheel->title . '请回复:正版(混版)' . $keywords->name;
+            $responseObj = new WeChatTextResponse($content);
+            return $responseObj;
+        }
+        //查看刮卡次数
+        $totalCount = $wheel->times;
+        if ($totalCount == -1) {//本活动只能参与一次
+            $count = WheelLogModel::model($logTable)->count('openId=:openId and wheelId=:wheelId',
+                array(':openId' => $openId, ':wheelId' => $wheel->id));
+            if ($count > 0)
+                $disable = 0;
+        }
+
+        if ($totalCount > 0) {
+            $start = strtotime(date('Y-m-d')) - 1;
+            $end = strtotime(date('Y-m-d', strtotime('1 days'))) - 1;
+            $count = WheelLogModel::model($logTable)->count('openId=:openId and wheelId=:wheelId and datetime>:start and datetime<:end',
+                array(':openId' => $openId, ':wheelId' => $wheel->id, ':start' => $start, ':end' => $end));
+            if ($count >= $totalCount)
+                $disable = 0;
+        }
+        if ($disable == 0) {
+            $content = $totalCount == -1 ? '你本次活动的参与次数已完' : '今天的转盘次数已完，明天再来吧';
+            $responseObj = new WeChatTextResponse($content);
+            return $responseObj;
+        }
+        if ($wheel->startTime > date('Y-m-d H:i:s')) {
+            $content = $wheel->unstartMsg ? $wheel->unstartMsg : "抱歉,还未开始呢";
+        } elseif ($wheel->endTime < date('Y-m-d H:i:s')) {
+            $content = $wheel->endMsg ? $wheel->endMsg : "抱歉,你来晚了";
+        } elseif ($wheel->status == 0) {
+            $content = $wheel->pauseMsg ? $wheel->pauseMsg : "抱歉,活动暂时停止";
+        } else {
+            $string = $openId . '|' . $responseId . '|' . $type;
+            $code = Globals::authcode($string, 'ENCODE');
+            $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('wheel/handle', array('code' => $code));
+            $responseObj = new WeChatArticleResponse();
+            $responseObj->add_article($wheel->title, '', Yii::app()->params['siteUrl'] . '/wechat/' . Yii::app()->params['wheelPath'] . '/' . $wheel->wechatId . '/' . $wheel->backgroundPic, $url);
+        }
+        $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
+        return $responseObj;
+    }
+
+
+    private function _getEgg($responseId, $openId, $type)
+    {
+        $disable = 1;
+        $logTable = 'active_log';
+        $active = ActiveModel::model()->findByPk($responseId);
+        if (!$type) {
+            $keywords = KeywordsModel::model()->find('type=:type and responseId=:responseId',
+                array(':type' => Globals::TYPE_EGG, ':responseId' => $responseId));
+            $content = '参与' . $active->title . '请回复:正版(混版)' . $keywords->name;
+            $responseObj = new WeChatTextResponse($content);
+            return $responseObj;
+        }
+        //查看刮卡次数
+        $totalCount = $active->times;
+        if ($totalCount == -1) {//本活动只能参与一次
+            $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId',
+                array(':openId' => $openId, ':activeId' => $active->id));
+            if ($count > 0)
+                $disable = 0;
+        }
+
+        if ($totalCount > 0) {
+            $start = strtotime(date('Y-m-d')) - 1;
+            $end = strtotime(date('Y-m-d', strtotime('1 days'))) - 1;
+            $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId and datetime>:start and datetime<:end',
+                array(':openId' => $openId, ':activeId' => $active->id, ':start' => $start, ':end' => $end));
+            if ($count >= $totalCount)
+                $disable = 0;
+        }
+        if ($disable == 0) {
+            $content = $totalCount == -1 ? '你本次活动的参与次数已完' : '今天的转盘次数已完，明天再来吧';
+            $responseObj = new WeChatTextResponse($content);
+            return $responseObj;
+        }
+        if ($active->startTime > date('Y-m-d H:i:s')) {
+            $content = $active->unstartMsg ? $active->unstartMsg : "抱歉,还未开始呢";
+        } elseif ($active->endTime < date('Y-m-d H:i:s')) {
+            $content = $active->endMsg ? $active->endMsg : "抱歉,你来晚了";
+        } elseif ($active->status == 0) {
+            $content = $active->pauseMsg ? $active->pauseMsg : "抱歉,活动暂时停止";
+        } else {
+            $string = $openId . '|' . $responseId . '|' . $type;
+            $code = Globals::authcode($string, 'ENCODE');
+            $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('egg/handle', array('code' => $code));
+            $responseObj = new WeChatArticleResponse();
+            $responseObj->add_article($active->title, '', '', $url);
+        }
+        $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
+        return $responseObj;
+    }
+
     // Uncomment the following methods and override them if needed
     /*
     public function filters()

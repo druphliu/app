@@ -111,7 +111,7 @@ $this->breadcrumbs=array(
     </div>
     <div class="col-sm-6">
         <div class="dataTables_paginate paging_bootstrap">
-
+            <?php $this->widget('CLinkPager', Page::go($pages)) ?>
         </div>
     </div>
 </div>

@@ -4,3 +4,11 @@
 3.礼包码分表存储
 --------------------------------2014-11-16---------------------------
 1.菜单管理
+
+------------------------------2014-12-23---------------------
+1.
+ALTER TABLE `keywords`
+MODIFY COLUMN `type`  enum('text','gift','open','scratch','wheel','image-text') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'text' AFTER `responseId`;
+
+-----------------2015-01-21-----------------------------
+逻辑更改，菜单功能改为通过模拟关键词实现

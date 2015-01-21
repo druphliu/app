@@ -5,10 +5,9 @@
  *
  * The followings are the available columns in table 'openreplay':
  * @property integer $id
- * @property integer $openId
- * @property string $type
- * @property integer $wechatId
  * @property string $name
+ * @property integer $openId
+ * @property integer $wechatId
  * @property integer $status
  */
 class OpenReplayModel extends CActiveRecord
@@ -45,12 +44,12 @@ class OpenReplayModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name,openId', 'required'),
-			array('openId, wechatId', 'numerical', 'integerOnly'=>true),
-			array('type', 'length', 'max'=>8),
+			array('name, openId', 'required'),
+			array('openId, wechatId, status', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>150),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, openId, type, wechatId', 'safe', 'on'=>'search'),
+			array('id, name, openId, wechatId, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,7 +62,6 @@ class OpenReplayModel extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'open_keywords' => array(self::HAS_MANY, 'KeywordsModel', 'responseId'),
-            'open_menuaction' => array(self::HAS_MANY, 'MenuactionModel', 'responseId','with'=>'action_menu'),
             'open_openPlatForm'=>array(self::BELONGS_TO,'OpenPlatformModel','openId')
 		);
 	}
@@ -76,7 +74,6 @@ class OpenReplayModel extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'openId' => '转接平台',
-			'type' => 'Type',
 			'wechatId' => 'Wechat',
             'name'=>'名称',
             'keywords'=>'关键字',
@@ -97,9 +94,10 @@ class OpenReplayModel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('name',$this->name,true);
 		$criteria->compare('openId',$this->openId);
-		$criteria->compare('type',$this->type,true);
 		$criteria->compare('wechatId',$this->wechatId);
+		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

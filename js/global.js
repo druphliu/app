@@ -32,3 +32,16 @@ function keywordsCheck(wechatId,type,url,model,responseId) {
     });
     return result;
 }
+function showLoading(){
+	//loading
+	$('body').addClass('modal-open');
+	$('body').append('<div class="bootbox modal fade in" role="dialog" tabindex="-1" ' +
+		'style="display: block;" aria-hidden="false"><div class="modal-dialog" ' +
+		'style="width: 100%;text-align: center; padding-top: 80px;">' +
+		'<i class="fa fa-spinner fa-spin orange bigger-275"></i>' +
+		'</div><div class="modal-backdrop fade in"></div>');
+}
+function removeLoading(){
+	$(".bootbox").remove();
+	$(".modal-backdrop").remove();
+}

@@ -52,4 +52,45 @@ class WechatManagerController extends MemberController
         return $wechatInfo;
     }
 
+    protected function saveImageText($count, $data, $id)
+    {
+        $result = false;
+        $validate = true;
+        $parentId = $id;
+        /* $model = ImagetextreplayModel::model()->with('imagetextreplay_keywords')->find('t.id=:id and
+         imagetextreplay_keywords.type=:type', array(':id' => $id, ':type' => ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));*/
+        $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' =>$parentId ));
+        $listData = CHtml::listData($imageTextList, 'id', 'id');
+        if ($count >= 2 && $id) {
+            for ($i = 2; $i <= $count; $i++) {
+                $id = $data['id' . $i] ? $data['id' . $i] : 0;
+                if ($id) {
+                    ${'model' . $i} = ImagetextreplayModel::model()->findByPk($id);
+                    if (in_array($id, $listData))
+                        unset($listData[$id]);
+                }
+                ${'model' . $i} = isset(${'model' . $i}) ? ${'model' . $i} : new ImagetextreplayModel();
+                ${'model' . $i}->title = $data['title' . $i];
+                ${'model' . $i}->description = $data['summary' . $i];
+                ${'model' . $i}->type = Globals::TYPE_BASE_REPLAY;
+                ${'model' . $i}->imgUrl = $data['src' . $i];
+                ${'model' . $i}->url = $data['url' . $i];
+                ${'model' . $i}->wechatId = $this->wechatInfo->id;
+                ${'model' . $i}->parentId = $parentId;
+                $validate &= ${'model' . $i}->validate();
+            }
+            if ($validate) {
+                for ($i = 2; $i <= $count; $i++) {
+                    ${'model' . $i}->save();
+                }
+                if ($listData) {
+                    foreach ($listData as $id) {
+                        ImagetextreplayModel::model()->deleteByPk($id);
+                    }
+                }
+                $result = true;
+            }
+        }
+        return $result;
+    }
 }

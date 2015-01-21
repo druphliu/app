@@ -86,6 +86,7 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 														<span class="block input-icon input-icon-right">
                                                             <?php echo $form->textField($model,'username',array('class'=>'form-control','placeholder'=>"Username")); ?>
                                                             <i class="icon-user"></i>
+                                                            <?php echo $form->error($model,'username',array("class"=>"error")); ?>
 														</span>
                                         </label>
 
@@ -93,6 +94,7 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 														<span class="block input-icon input-icon-right">
                                                             <?php echo $form->passwordField($model,'password',array('class'=>'form-control','placeholder'=>"Password")); ?>
                                                             <i class="icon-lock"></i>
+                                                            <?php echo $form->error($model,'password',array("class"=>"error")); ?>
 														</span>
                                         </label>
 

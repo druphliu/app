@@ -23,20 +23,13 @@ $this->breadcrumbs=array(
                 <div class="table-responsive">
                     <div class="tabbable">
                         <ul id="myTab" class="nav nav-tabs">
-                            <li class="<?php if($type==GiftModel::TYPE_KEYWORDS){?>active<?php }?>">
-                                <a href="<?php echo Yii::app()->createUrl('market/gift',array('type'=>GiftModel::TYPE_KEYWORDS))?>" >
+                            <li class="active">
+                                <a href="<?php echo Yii::app()->createUrl('market/gift')?>" >
                                     关键词礼包列表
                                 </a>
                             </li>
-                            <?php if($wechatInfo->isAuth){?>
-                            <li class="<?php if($type==GiftModel::TYPE_MENU){?>active<?php }?>">
-                                <a href="<?php echo Yii::app()->createUrl('market/gift',array('type'=>GiftModel::TYPE_MENU))?>" >
-                                    菜单礼包列表
-                                </a>
-                            </li>
-                            <?php }?>
                             <li>
-                                <a href="<?php echo Yii::app()->createUrl('market/giftCreate',array('type'=>$type))?>" class="btn btn-primary">添加</a>
+                                <a href="<?php echo Yii::app()->createUrl('market/giftCreate')?>" class="btn btn-primary">添加</a>
                             </li>
                         </ul>
 
@@ -54,8 +47,8 @@ $this->breadcrumbs=array(
                                             </th>
                                             <th>ID</th>
                                             <th>活动名称</th>
-                                            <th><?php if($type==GiftModel::TYPE_KEYWORDS){?>关键词<?php }else{?>菜单名<?php }?></th>
-                                            <?php if($type==GiftModel::TYPE_KEYWORDS){?><th>是否精准匹配</th><?php }?>
+                                            <th>关键词</th>
+                                            <th>是否精准匹配</th>
                                             <th>创建时间</th>
                                             <th>开始时间</th>
                                             <th>结束时间</th>
@@ -80,25 +73,18 @@ $this->breadcrumbs=array(
                                                     <?= $d->title?>
                                                 </td>
                                                 <td>
-                                                    <?php if($type==GiftModel::TYPE_KEYWORDS){?>
                                                         <?php foreach($d->gift_keywords as $keywords){?>
                                                             <span class="label label-sm label-primary arrowed arrowed-right"><?=$keywords->name?></span>
                                                         <?php }?>
-                                                    <?php }else{?>
-                                                        <?php foreach($d->gift_menuaction as $menuaction){?>
-                                                            <span class="label label-sm label-primary arrowed arrowed-right"><?=$menuaction->action_menu->name?></span>
-                                                        <?php }?>
-                                                    <?php }?>
+
                                                 </td>
-                                                <?php if($type==GiftModel::TYPE_KEYWORDS){?>
                                                 <td>
-                                                        <?php foreach($d->gift_keywords as $isAccurate){if($isAccurate->isAccurate){?>
-                                                            <span class="label label-sm label-success">是</span>
-                                                        <?php }else{?>
-                                                            <span class="label label-sm label-warning">否</span>
-                                                        <?php }break;}?>
+                                                    <?php foreach($d->gift_keywords as $isAccurate){if($isAccurate->isAccurate){?>
+                                                        <span class="label label-sm label-success">是</span>
+                                                    <?php }else{?>
+                                                        <span class="label label-sm label-warning">否</span>
+                                                    <?php }break;}?>
                                                 </td>
-                                                <?php }?>
                                                 <td><?=$d->created_at?></td>
                                                 <td><?=$d->startTime?></td>
                                                 <td><?=$d->endTime?></td>
@@ -149,7 +135,7 @@ $this->breadcrumbs=array(
     </div>
     <div class="col-sm-6">
         <div class="dataTables_paginate paging_bootstrap">
-
+            <?php $this->widget('CLinkPager', Page::go($pages)) ?>
         </div>
     </div>
 </div>

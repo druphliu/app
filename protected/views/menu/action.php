@@ -262,7 +262,7 @@ $this->breadcrumbs = array(
                 <h4 class="modal-title" id="textImageModalLabel">编辑回复</h4>
             </div>
             <div class="modal-body">
-                <iframe id="frameDialog" height="500px" style="border: none;width:940px;overflow-x : hidden;"
+                <iframe id="textImageFrame" height="500px" style="border: none;width:940px;overflow-x : hidden;"
                         scrolling="no" src=""></iframe>
             </div>
             <div class="modal-footer">
@@ -541,11 +541,17 @@ $(document).ready(function () {
         }
     });
     $(".imageTextReplay").click(function () {
+	    showLoading();
         var Url = $(this).attr('data-url');
         var actionId = $(this).attr('data-id');
         var obj = $('#textImageModal');
         obj.find('iframe').attr('src', Url);
-        obj.modal('show');
+		var iframe = document.getElementById("textImageFrame");
+		iframe.onload=function(){
+			removeLoading();
+			obj.modal('show');
+		}
+        
     })
 });
 </script>

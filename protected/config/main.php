@@ -28,10 +28,16 @@ return array(
             'class' => 'system.gii.GiiModule',
             'password' => 'admin',
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
-            'ipFilters' => array('127.0.0.1', '::1'),
+            'ipFilters' => array('127.0.0.1', '::1','*'),
         ),
         'scratch'=>array(
             'defaultController' => 'scratch',
+        ),
+		'wheel'=>array(
+            'defaultController' => 'wheel',
+        ),
+        'egg'=>array(
+            'defaultController' => 'egg',
         )
 
     ),
@@ -120,6 +126,7 @@ return array(
         'adminEmail' => 'webmaster@example.com',
         'siteUrl' => 'http://www.app.com',
         'scratchPath' => 'upload/market/scratch',
+        'wheelPath'=>'upload/market/wheel',
     ),
 
 );

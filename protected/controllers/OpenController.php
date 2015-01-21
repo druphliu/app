@@ -73,18 +73,8 @@ class OpenController extends WechatManagerController
     public function actionReplay()
     {
         $this->layout = '/layouts/memberList';
-        $type = Yii::app()->request->getParam('type');
-        $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
-        switch ($type) {
-            case GiftModel::TYPE_KEYWORDS:
-                $with = array('open_keywords', 'open_openPlatForm');
-                $whereType = " and t.type ='" . GiftModel::TYPE_KEYWORDS . "' and open_keywords.type='" . OpenReplayModel::OPEN_TYPE . "'";
-                break;
-            case GiftModel::TYPE_MENU:
-                $with = array('open_menuaction', 'open_openPlatForm');
-                $whereType = " and t.type ='" . GiftModel::TYPE_MENU . "'";
-                break;
-        }
+        $with = array('open_keywords', 'open_openPlatForm');
+        $whereType = " and open_keywords.type='" . OpenReplayModel::OPEN_TYPE . "'";
         $dataProvider = new CActiveDataProvider('OpenReplayModel', array(
             'criteria' => array(
                 'order' => 't.id DESC',
@@ -99,173 +89,108 @@ class OpenController extends WechatManagerController
             ),
         ));
         $this->render('replay', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(),
-            'type' => $type, 'wechatInfo' => $this->wechatInfo));
+            'wechatInfo' => $this->wechatInfo));
     }
 
     public function actionReplayAdd()
     {
         $menuList = array();
-        $type = Yii::app()->request->getParam('type');
-        $type = $type ? $type : GiftModel::TYPE_KEYWORDS;
         $open = array('' => '请选择') + CHtml::listData(OpenPlatformModel::model()->findAll('wechatId=:wechatId and status=:status', array(':wechatId' => $this->wechatInfo->id, ':status' => 1)), 'id', 'name');
-        if ($type == Globals::TYPE_MENU) {
-            //取menu的下拉列表
-            $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id, Globals::TYPE_OPEN);
-        }
+
         $model = new OpenReplayModel();
         if (isset($_POST['OpenReplayModel'])) {
             $model->attributes = $_POST['OpenReplayModel'];
             $model->wechatId = $this->wechatInfo->id;
-            $model->type = $type;
             if ($model->validate()) {
                 $model->save();
-                switch ($type) {
-                    case GiftModel::TYPE_KEYWORDS:
-                        $keywords = $_POST['OpenReplayModel']['keywords'];
-                        $isAccurate = $_POST['OpenReplayModel']['isAccurate'];
-                        $keywordsArray = explode(',', $keywords);
-                        foreach ($keywordsArray as $k) {
-                            $keywordsModel = new KeywordsModel();
-                            $keywordsModel->responseId = $model->id;
-                            $keywordsModel->type = OpenReplayModel::OPEN_TYPE;
-                            $keywordsModel->isAccurate = $isAccurate;
-                            $keywordsModel->name = $k;
-                            $keywordsModel->wechatId = $this->wechatInfo->id;
-                            $keywordsModel->save();
-                        }
-                        break;
-                    case GiftModel::TYPE_MENU:
-                        $menuId = $_POST['OpenReplayModel']['action'];
-                        /*$menuAction = MenuactionModel::model()->find('wechatId=:wechatId and action=:action',
-                            array(':wechatId' => $this->wechatInfo->id, ':action' => $action));
-                        if ($menuAction) {
-                            ShowMessage::error('菜单动作已经被应用了');
-                        }*/
-                        $menuActionModel = MenuactionModel::model()->find('menuId=:menuId', array(':menuId' => $menuId));
-                        $menuActionModel->responseId = $model->id;
-                        $menuActionModel->save();
-                        break;
+                $keywords = $_POST['OpenReplayModel']['keywords'];
+                $isAccurate = $_POST['OpenReplayModel']['isAccurate'];
+                $keywordsArray = explode(',', $keywords);
+                foreach ($keywordsArray as $k) {
+                    $keywordsModel = new KeywordsModel();
+                    $keywordsModel->responseId = $model->id;
+                    $keywordsModel->type = OpenReplayModel::OPEN_TYPE;
+                    $keywordsModel->isAccurate = $isAccurate;
+                    $keywordsModel->name = $k;
+                    $keywordsModel->wechatId = $this->wechatInfo->id;
+                    $keywordsModel->save();
                 }
-                ShowMessage::success('添加成功', Yii::app()->createUrl('open/replay', array('type' => $type)));
+                ShowMessage::success('添加成功', Yii::app()->createUrl('open/replay'));
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
-        $this->render('replayCreate', array('model' => $model, 'type' => $type, 'wechatId' => $this->wechatInfo->id,
+        $this->render('replayCreate', array('model' => $model, 'wechatId' => $this->wechatInfo->id,
             'responseId' => 0, 'open' => $open, 'menuList' => $menuList));
     }
 
     public function actionReplayUpdate($id)
     {
+        $menuList = array();
         $keyword = $common = '';
         $model = OpenReplayModel::model()->findByPk($id);
         if ($model->wechatId != $this->wechatInfo->id)
             return;
         $open = array('' => '请选择') + CHtml::listData(OpenPlatformModel::model()->findAll('wechatId=:wechatId and status=:status', array(':wechatId' => $this->wechatInfo->id, ':status' => 1)), 'id', 'name');
-        switch ($model->type) {
-            //获取关联表数据
-            case GiftModel::TYPE_KEYWORDS:
-                $keywords = KeywordsModel::model()->findAll('type=:type and responseId=:responseId',
-                    array(':type' => OpenReplayModel::OPEN_TYPE, ':responseId' => $id));
-                foreach ($keywords as $k) {
-                    $oldKeywords[] = $k->name;
-                    $oldIsAccurate = $k->isAccurate;
-                    $isAccurate = $k->isAccurate;
-                    $keyword .= $common . $k->name;
-                    $common = ',';
-                }
-                $model->keywords = $keyword;
-                $model->isAccurate = $isAccurate;
-                break;
-            case GiftModel::TYPE_MENU:
-                //取menu的下拉列表
-                $menuList = MenuModel::model()->getMenuDropDownList($this->wechatInfo->id, Globals::TYPE_OPEN);
-                $action = MenuactionModel::model()->with('action_menu')->find('action_menu.wechatId=:wechatId and responseId=:responseId',
-                    array(':wechatId' => $this->wechatInfo->id, ':responseId' => $id));
-                $oldAction = $model->action = isset($action->menuId) ? $action->menuId : 0;
-                break;
+        $keywords = KeywordsModel::model()->findAll('type=:type and responseId=:responseId',
+            array(':type' => OpenReplayModel::OPEN_TYPE, ':responseId' => $id));
+        foreach ($keywords as $k) {
+            $oldKeywords[] = $k->name;
+            $oldIsAccurate = $k->isAccurate;
+            $isAccurate = $k->isAccurate;
+            $keyword .= $common . $k->name;
+            $common = ',';
         }
+        $model->keywords = $keyword;
+        $model->isAccurate = $isAccurate;
         if (isset($_POST['OpenReplayModel'])) {
             $model->attributes = $_POST['OpenReplayModel'];
             if ($model->validate()) {
-                switch ($model->type) {
-                    //根据活动类型更新不同关联表
-                    case GiftModel::TYPE_KEYWORDS:
-                        $keywordsArray = explode(',', $_POST['OpenReplayModel']['keywords']);
-                        $keywordsAdd = array_unique(array_merge($oldKeywords, $keywordsArray));
-                        $arrayDel = array_diff($keywordsAdd, $keywordsArray); //删除了的关键字
-                        $arrayAdd = array_diff($keywordsAdd, $oldKeywords); //添加的关键字
-                        $arrayAlive = array_diff($oldKeywords, $arrayAdd); //没改变的
-                        $newIsAccurate = $_POST['OpenReplayModel']['isAccurate'];
-                        if (($isAccurate != $newIsAccurate) && $arrayAlive) {
-                            //是否精准匹配改变了
-                            foreach ($arrayAlive as $name) {
-                                $keywordsModel = KeywordsModel::model()->find('name=:name', array(':name' => $name));
-                                $keywordsModel->isAccurate = $newIsAccurate;
-                                $keywordsModel->save();
-                            }
-                        }
-                        foreach ($arrayAdd as $k) {
-                            //新加关键词
-                            $keywordsModel = new KeywordsModel();
-                            $keywordsModel->responseId = $id;
-                            $keywordsModel->name = $k;
-                            $keywordsModel->isAccurate = $newIsAccurate;
-                            $keywordsModel->wechatId = $this->wechatInfo->id;
-                            $keywordsModel->type = OpenReplayModel::OPEN_TYPE;
-                            $keywordsModel->save();
-                        }
-                        foreach ($arrayDel as $k) {
-                            //删除的关键词
-                            $keywordsModel = KeywordsModel::model()->find('responseId=:responseId and name=:name', array(':name' => $k, ':responseId' => $id));
-                            $keywordsModel->delete();
-                        }
-                        if ($oldIsAccurate != $isAccurate) {
-                            KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'responseId=:responseId', array(':responseId' => $id));
-                        }
-                        //更新是否精准匹配字段
-                        break;
-                    case GiftModel::TYPE_MENU:
-                        $newAction = $_POST['OpenReplayModel']['action'];
-                        if ($oldAction != $newAction) {
-//                            //检测menu action是否被其他使用
-//                            $actionExist = MenuactionModel::model()->find('wechatId=:wechatId and action=:action', array(':wechatId' => $this->wechatInfo->id, ':action' => $newAction));
-//                            if ($actionExist) {
-//                                ShowMessage::error('此菜单动作已经被使用了');
-//                            }
-//                            $actionModel = MenuactionModel::model()->find('type=:type and action=:action', array(':type' => OpenReplayModel::OPEN_TYPE, ':action' => $oldAction));
-//                            $actionModel->action = $newAction;
-//                            $actionModel->save();
-                            if ($oldAction) {
-                                $actionModel = MenuactionModel::model()->find('menuId=:menuId', array(':menuId' => $oldAction));
-                                $actionModel->responseId = 0;
-                                $actionModel->save(); //原来菜单responseId置为0
-                            }
-                            $newActionModel = MenuactionModel::model()->find('menuId=:menuId', array(':menuId' => $newAction));
-                            $newActionModel->responseId = $model->id;
-                            $newActionModel->save();
-                        }
-                        break;
+                //根据活动类型更新不同关联表
+                $keywordsArray = explode(',', $_POST['OpenReplayModel']['keywords']);
+                $keywordsAdd = array_unique(array_merge($oldKeywords, $keywordsArray));
+                $arrayDel = array_diff($keywordsAdd, $keywordsArray); //删除了的关键字
+                $arrayAdd = array_diff($keywordsAdd, $oldKeywords); //添加的关键字
+                $arrayAlive = array_diff($oldKeywords, $arrayAdd); //没改变的
+                $newIsAccurate = $_POST['OpenReplayModel']['isAccurate'];
+                if (($isAccurate != $newIsAccurate) && $arrayAlive) {
+                    //是否精准匹配改变了
+                    foreach ($arrayAlive as $name) {
+                        $keywordsModel = KeywordsModel::model()->find('name=:name', array(':name' => $name));
+                        $keywordsModel->isAccurate = $newIsAccurate;
+                        $keywordsModel->save();
+                    }
+                }
+                foreach ($arrayAdd as $k) {
+                    //新加关键词
+                    $keywordsModel = new KeywordsModel();
+                    $keywordsModel->responseId = $id;
+                    $keywordsModel->name = $k;
+                    $keywordsModel->isAccurate = $newIsAccurate;
+                    $keywordsModel->wechatId = $this->wechatInfo->id;
+                    $keywordsModel->type = OpenReplayModel::OPEN_TYPE;
+                    $keywordsModel->save();
+                }
+                foreach ($arrayDel as $k) {
+                    //删除的关键词
+                    $keywordsModel = KeywordsModel::model()->find('responseId=:responseId and name=:name', array(':name' => $k, ':responseId' => $id));
+                    $keywordsModel->delete();
+                }
+                if ($oldIsAccurate != $isAccurate) {
+                    KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'responseId=:responseId', array(':responseId' => $id));
                 }
                 $model->save();
-                ShowMessage::success('编辑成功', Yii::app()->createUrl('open/replay', array('type' => $model->type)));
+                ShowMessage::success('编辑成功', Yii::app()->createUrl('open/replay'));
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
-        $this->render('replayUpdate', array('model' => $model, 'type' => $model->type, 'wechatId' => $this->wechatInfo->id, 'responseId' => $id, 'open' => $open, 'menuList' => $menuList));
+        $this->render('replayUpdate', array('model' => $model, 'wechatId' => $this->wechatInfo->id, 'responseId' => $id, 'open' => $open, 'menuList' => $menuList));
     }
 
     public function actionReplayDelete($id)
     {
         $model = OpenReplayModel::model()->findByPk($id);
-        //删除关键字或者menu action
-        switch ($model->type) {
-            case GiftModel::TYPE_KEYWORDS:
-                KeywordsModel::model()->deleteAll('responseId=:responseId and type=:type', array(':responseId' => $id, ':type' => OpenReplayModel::OPEN_TYPE));
-                break;
-            case GiftModel::TYPE_MENU:
-                MenuactionModel::model()->deleteAll('responseId=:responseId and type=:type', array(':responseId' => $id, ':type' => OpenReplayModel::OPEN_TYPE));
-                break;
-        }
+        //删除关键字
+        KeywordsModel::model()->deleteAll('responseId=:responseId and type=:type', array(':responseId' => $id, ':type' => OpenReplayModel::OPEN_TYPE));
         $model->delete();
         ShowMessage::success('删除成功', Yii::app()->createUrl('open/replay'));
     }

@@ -44,7 +44,6 @@ class TextReplayModel extends CActiveRecord
         return array(
             array('wechatId, type, content', 'required'),
             array('wechatId', 'numerical', 'integerOnly' => true),
-            array('type', 'length', 'max' => 9),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, wechatId, type, content', 'safe', 'on' => 'search'),
