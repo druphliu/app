@@ -1,3 +1,4 @@
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.validate.min.js"></script>
 <div class="row">
     <div class="col-xs-12">
         <?php $form = $this->beginWidget('CActiveForm', array(
@@ -71,15 +72,18 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/global.js"></script>
 
 <script>
+    var result = false;
     $().ready(function () {
     });
     $("#submit").click(function () {
-
-        var type = '<?php echo OpenReplayModel::OPEN_TYPE?>';
-        var responseId = '<?php echo $responseId?>';
-        var wechatId = '<?php echo $wechatId?>';
-        var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-        return keywordsCheck(wechatId, type, url, 'OpenReplayModel', responseId,'name');
+        if(result==false){
+            var type = '<?php echo OpenReplayModel::OPEN_TYPE?>';
+            var responseId = '<?php echo $responseId?>';
+            var wechatId = '<?php echo $wechatId?>';
+            var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
+            result = keywordsCheck(wechatId, type, url, 'OpenReplayModel', responseId,'name');
+        }
+        return result;
 
     })
 

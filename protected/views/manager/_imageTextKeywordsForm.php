@@ -8,9 +8,9 @@
     <div class="col-xs-12">
         <?php echo CHtml::beginForm('', 'POST', array('class' => 'form-horizontal', 'id' => 'validation-form')) ?>
         <div class="form-group">
-            <?php echo  CHtml::label('关键字','keyword', array('class' => BootStrapUI::formLabelClass)); ?>
+            <?php echo  CHtml::label('关键字','keywords', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-9">
-                <?php echo CHtml::textField('keyword',$model['keywords'], array('class' => 'col-xs-10 col-sm-5',
+                <?php echo CHtml::textField('keywords',$model['keywords'], array('class' => 'col-xs-10 col-sm-5',
                     'data-url'=>Yii::app()->createUrl("ajax/checkKeywords"),'data-type'=>ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE,
                     'data-responseId'=>$responseId,'data-wechatId'=>$wechatId)); ?>
             </div>

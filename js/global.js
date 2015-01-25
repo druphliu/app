@@ -7,7 +7,7 @@
  */
 function keywordsCheck(wechatId,type,url,model,responseId) {
     result = false;
-    var keyword = $("#"+model+"_keywords").val();
+    var keywords = $("#"+model+"_keywords").val();
     var wechatId = wechatId;
     var responseId = responseId;
     var type=type;
@@ -15,7 +15,7 @@ function keywordsCheck(wechatId,type,url,model,responseId) {
     $.ajax({
         type: 'POST',
         url: url,
-        data: "keyword=" + keyword + "&wechatId=" + wechatId + "&isAccurate=" + isAccurate+'&responseId='+responseId+'&type='+type,
+        data: "keywords=" + keywords + "&wechatId=" + wechatId + "&isAccurate=" + isAccurate+'&responseId='+responseId+'&type='+type,
         dataType: 'json',
         async:false,
         success: function (data) {
@@ -26,6 +26,8 @@ function keywordsCheck(wechatId,type,url,model,responseId) {
                 $("#"+model+"_keywords").parents('.form-group').addClass('has-error');
                 result = false;
             } else {
+                $("#"+model+"_keywords_em_").html('');
+                $("#"+model+"_keywords_em_").hide();
                 result = true;
             }
         }

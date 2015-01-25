@@ -98,23 +98,23 @@ $().ready(function () {
                 required: true,
                 url: true
             },
-            keyword: {
+            keywords: {
                 required: true,
                 remote: {                                          //验证用户名是否存在
                     type: "POST",
-                    url: $("#keyword").attr('data-url'),             //servlet
+                    url: $("#keywords").attr('data-url'),             //servlet
                     data: {
                         isAccurate: function () {
-                            return $("#isAccurate").val();
+                            return $("#isAccurate").is(':checked') ? 1 : 0;
                         },
                         responseId: function () {
-                            return $("#keyword").attr('data-responseId')
+                            return $("#keywords").attr('data-responseId')
                         },
                         wechatId: function () {
-                            return $("#keyword").attr('data-wechatId')
+                            return $("#keywords").attr('data-wechatId')
                         },
                         type: function () {
-                            return $("#keyword").attr('data-type')
+                            return $("#keywords").attr('data-type')
                         }
                     },
                     dataFilter: function (data) {
@@ -128,7 +128,7 @@ $().ready(function () {
             }
         },
         messages: {
-            keyword: {
+            keywords: {
                 required: '关键词不能为空',
                 remote: "冲突了"
             },
@@ -191,7 +191,7 @@ $().ready(function () {
                 var url = encodeURIComponent(locationObj[i].url);
                 var id = locationObj[i].filedId ? locationObj[i].filedId : 0;
                 if (locationObj[i].id == 1) {
-                    var keywords = $("#keyword").val();
+                    var keywords = $("#keywords").val();
                     var isAccurate = $("#isAccurate").val();
                     data = "ImagetextreplayModel[keywords]=" + keywords + "&ImagetextreplayModel[isAccurate]=" + isAccurate + "&title1=" + title + "&src1=" + src + "&&summary1=" + summary + "&url1=" + url + "&id1=" + id + "&count=" + locationObj.length;
                 } else {

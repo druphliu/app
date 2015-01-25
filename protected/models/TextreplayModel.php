@@ -98,5 +98,17 @@ class TextReplayModel extends CActiveRecord
         ));
     }
 
-
+    /**
+     * 保存前过滤掉content的html标签
+     * @return bool
+     */
+    protected function beforeSave()
+    {
+        if (parent::beforeSave()) {
+            $this->content = strip_tags($this->content);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

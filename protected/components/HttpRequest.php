@@ -59,7 +59,7 @@ class HttpRequest
                 while (!feof($sock)) $result .= fgets($sock, 4096);
                 fclose($sock);
             }
-            return $result;
+            return array('content' =>$result);
         }
     }
 } 

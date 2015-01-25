@@ -5,9 +5,9 @@ class UserController extends MemberController
 	public function actionInfo()
 	{
         $userInfo = Yii::app()->session['userInfo'];
-        $model = UserModel::model()->find(array('condition'=>'uid=:uid','params'=>array(':uid'=>$userInfo['uid'])));
-        if (isset($_POST['UserModel'])) {
-            $model->attributes = $_POST['UserModel'];
+        $model = MemberModel::model()->find(array('condition'=>'uid=:uid','params'=>array(':uid'=>$userInfo['uid'])));
+        if (isset($_POST['MemberModel'])) {
+            $model->attributes = $_POST['MemberModel'];
             if ($model->validate()) {
                 $model->save();
                 ShowMessage::success('修改成功！',Yii::app()->createUrl('user/info'));
@@ -17,12 +17,12 @@ class UserController extends MemberController
 	}
     public function actionPswd(){
         $userInfo = Yii::app()->session['userInfo'];
-        $model = UserModel::model()->find(array('condition'=>'uid=:uid','params'=>array(':uid'=>$userInfo['uid'])));
+        $model = MemberModel::model()->find(array('condition'=>'uid=:uid','params'=>array(':uid'=>$userInfo['uid'])));
         $model->scenario = 'pswd';
-        if (isset($_POST['UserModel'])) {
-            $model->attributes = $_POST['UserModel'];
+        if (isset($_POST['MemberModel'])) {
+            $model->attributes = $_POST['MemberModel'];
             if ($model->validate()) {
-                $model->pswd = md5($_POST['UserModel']['newpswd']);
+                $model->pswd = md5($_POST['MemberModel']['newpswd']);
                 $model->save();
                 ShowMessage::success('修改成功！',Yii::app()->createUrl('user/pswd'));
             }

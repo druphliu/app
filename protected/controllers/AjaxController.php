@@ -16,7 +16,7 @@ class AjaxController extends Controller
         $exitKeywords = '';
         $result = 1;
         $msg = "";
-        $keyword = Yii::app()->request->getParam('keyword');
+        $keyword = Yii::app()->request->getParam('keywords');
         $responseId = Yii::app()->request->getParam('responseId');
         $wechatId = Yii::app()->request->getParam('wechatId');
         $type = Yii::app()->request->getParam('type');
@@ -193,15 +193,15 @@ class AjaxController extends Controller
         $tokenValue = $token['tokenValue'];
         if ($tokenValue) {
             //更新菜单
-            $menu = MenuactionModel::model()->getTree($wechatId);
+            $menu = MenuModel::model()->getTree($wechatId);
             if ($menu) {
                 foreach ($menu as $m) {
                     if (isset($m['child']) && $m['child']) {
                         foreach ($m['child'] as $ch) {
                             if ($ch['type'] == Globals::TYPE_URL) {
-                                $subV = array('type' => 'view', 'url' => $ch['action']);
+                                $subV = array('type' => 'view', 'url' => $ch['url']);
                             } else {
-                                $subV = array('type' => 'click', 'key' => $ch['action']);
+                                $subV = array('type' => 'click', 'key' => urlencode($ch['name']));
                             }
                             $subV['name'] = urlencode($ch['name']);
                             $sub[] = $subV;
@@ -212,10 +212,9 @@ class AjaxController extends Controller
                         unset($sub);
                     } else {
                         if ($m['type'] == Globals::TYPE_URL) {
-                            $urlInfo = UrlModel::model()->findByPk($m['responseId']);
-                            $t = array('type' => 'view', 'url' => $urlInfo->url);
+                            $t = array('type' => 'view', 'url' => $m['url']);
                         } else {
-                            $t = array('type' => 'click', 'key' => $m['action']);
+                            $t = array('type' => 'click', 'key' => urlencode($m['name']));
                         }
                         $t['name'] = urlencode($m['name']);
                     }

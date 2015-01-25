@@ -16,6 +16,6 @@ $this->breadcrumbs = array(
         </small>
     </h1>
 </div>
-<?php $this->renderPartial('_replayForm', array('model' => $model, 'type' => $type, 'wechatId' => $wechatId,
+<?php $this->renderPartial('_replayForm', array('model' => $model, 'wechatId' => $wechatId,
     'responseId' => $responseId, 'open' => $open,'menuList'=>$menuList));
 ?>

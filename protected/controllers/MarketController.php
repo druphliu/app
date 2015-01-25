@@ -37,15 +37,7 @@ class MarketController extends WechatManagerController
                 $keywords = $_POST['GiftModel']['keywords'];
                 $isAccurate = $_POST['GiftModel']['isAccurate'];
                 $keywordsArray = explode(',', $keywords);
-                foreach ($keywordsArray as $k) {
-                    $keywordsModel = new KeywordsModel();
-                    $keywordsModel->responseId = $model->id;
-                    $keywordsModel->type = GiftModel::GIFT_TYPE;
-                    $keywordsModel->isAccurate = $isAccurate;
-                    $keywordsModel->name = $k;
-                    $keywordsModel->wechatId = $this->wechatInfo->id;
-                    $keywordsModel->save();
-                }
+                $this->saveKeywords($keywordsArray,$model->id,$isAccurate,Globals::TYPE_GIFT);
                 if ($result == GiftModel::TABLE_CREATE_FAILED) {
                     ShowMessage::error('创建异常，请重新编辑此信息', Yii::app()->createUrl('market/gift'));
                 } else {
@@ -67,47 +59,17 @@ class MarketController extends WechatManagerController
         foreach ($keywords as $k) {
             $oldKeywords[] = $k->name;
             $oldIsAccurate = $k->isAccurate;
-            $isAccurate = $k->isAccurate;
             $keyword .= $common . $k->name;
             $common = ',';
         }
         $model->keywords = $keyword;
-        $model->isAccurate = $isAccurate;
+        $model->isAccurate = $oldIsAccurate;
         if (isset($_POST['GiftModel'])) {
             $model->attributes = $_POST['GiftModel'];
             if ($model->validate()) {
+                $isAccurate = $_POST['GiftModel']['isAccurate'];
                 $keywordsArray = explode(',', $_POST['GiftModel']['keywords']);
-                $keywordsAdd = array_unique(array_merge($oldKeywords, $keywordsArray));
-                $arrayDel = array_diff($keywordsAdd, $keywordsArray); //删除了的关键字
-                $arrayAdd = array_diff($keywordsAdd, $oldKeywords); //添加的关键字
-                $arrayAlive = array_diff($oldKeywords, $arrayAdd); //没改变的
-                $newIsAccurate = $_POST['GiftModel']['isAccurate'];
-                if (($isAccurate != $newIsAccurate) && $arrayAlive) {
-                    //是否精准匹配改变了
-                    foreach ($arrayAlive as $name) {
-                        $keywordsModel = KeywordsModel::model()->find('name=:name', array(':name' => $name));
-                        $keywordsModel->isAccurate = $newIsAccurate;
-                        $keywordsModel->save();
-                    }
-                }
-                foreach ($arrayAdd as $k) {
-                    //新加关键词
-                    $keywordsModel = new KeywordsModel();
-                    $keywordsModel->responseId = $id;
-                    $keywordsModel->name = $k;
-                    $keywordsModel->isAccurate = $newIsAccurate;
-                    $keywordsModel->wechatId = $this->wechatInfo->id;
-                    $keywordsModel->type = GiftModel::GIFT_TYPE;
-                    $keywordsModel->save();
-                }
-                foreach ($arrayDel as $k) {
-                    //删除的关键词
-                    $keywordsModel = KeywordsModel::model()->find('responseId=:responseId and name=:name', array(':name' => $k, ':responseId' => $id));
-                    $keywordsModel->delete();
-                }
-                if ($oldIsAccurate != $isAccurate) {
-                    KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'responseId=:responseId', array(':responseId' => $id));
-                }
+                $this->saveKeywords($keywordsArray,$model->id,$isAccurate,Globals::TYPE_GIFT,$oldKeywords,$oldIsAccurate);
                 //更新是否精准匹配字段
                 $model->save();
                 //更新code表，防止礼包时礼包码表未创建成功问题

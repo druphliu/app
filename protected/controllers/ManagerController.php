@@ -47,7 +47,7 @@ class ManagerController extends WechatManagerController
             }
         }
         if (isset($_POST['TextReplayModel']) || isset($_POST['count'])) {
-            if(!$model->wechatId){
+            if (!$model->wechatId) {
                 $model->wechatId = $this->wechatInfo->id;
                 $model->type = Globals::TYPE_BASE_REPLAY;
             }
@@ -89,7 +89,7 @@ class ManagerController extends WechatManagerController
                 if ($type == Globals::TYPE_IMAGE_TEXT) {
                     $msg = '编辑失败';
                     die(json_encode(array('status' => -1, 'msg' => $msg)));
-                }else{
+                } else {
                     ShowMessage::error('编辑失败');
                 }
             }
@@ -97,7 +97,8 @@ class ManagerController extends WechatManagerController
         $this->render('subscribeReplay', array('model' => $model, 'type' => $type, 'imageTextList' => $imageTextList));
     }
 
-    public function actionDefaultReplay(){
+    public function actionDefaultReplay()
+    {
         $msg = '';
         $imageTextList = $dataList = array();
         $type = Yii::app()->request->getParam('type');
@@ -136,7 +137,7 @@ class ManagerController extends WechatManagerController
             }
         }
         if (isset($_POST['TextReplayModel']) || isset($_POST['count'])) {
-            if(!$model->wechatId){
+            if (!$model->wechatId) {
                 $model->wechatId = $this->wechatInfo->id;
                 $model->type = Globals::REPLAY_TYPE_DEFAULT;
             }
@@ -178,7 +179,7 @@ class ManagerController extends WechatManagerController
                 if ($type == Globals::TYPE_IMAGE_TEXT) {
                     $msg = '编辑失败';
                     die(json_encode(array('status' => -1, 'msg' => $msg)));
-                }else{
+                } else {
                     ShowMessage::error('编辑失败');
                 }
             }
@@ -231,7 +232,7 @@ class ManagerController extends WechatManagerController
 
     public function actionKeyWordsCreate()
     {
-        $validate = true;
+
         $imageTextList = array();
         $type = Yii::app()->request->getParam('type');
         switch ($type) {
@@ -249,51 +250,23 @@ class ManagerController extends WechatManagerController
                 $model->description = $_POST['summary1'];
                 $model->imgUrl = $_POST['src1'];
                 $model->url = $_POST['url1'];
+                $model->save();
                 $keywords = $_POST['ImagetextreplayModel']['keywords'];
                 $isAccurate = $_POST['ImagetextreplayModel']['isAccurate'];
-                if ($count > 1) {
-                    for ($i = 2; $i <= $count; $i++) {
-                        ${'model' . $i} = new ImagetextreplayModel();
-                        ${'model' . $i}->title = $_POST['title' . $i];
-                        ${'model' . $i}->description = $_POST['summary' . $i];
-                        ${'model' . $i}->type = Globals::TYPE_KEYWORDS;
-                        ${'model' . $i}->imgUrl = $_POST['src' . $i];
-                        ${'model' . $i}->url = $_POST['url' . $i];
-                        ${'model' . $i}->wechatId = $this->wechatInfo->id;
-                        $validate &= ${'model' . $i}->validate();
-                    }
-                }
+                $validate = $count > 1 ? $this->saveImageText($count, $_POST, $model->id) : $model->validate();
+                $jumpUrl = Yii::app()->createUrl('manager/keyWords', array('type' => Globals::TYPE_IMAGE_TEXT));
+            } else {
+                $model->content = $_POST['content'];
+                $keywords = $_POST['keywords'];
+                $isAccurate = isset($_POST['isAccurate']) ? $_POST['isAccurate'] : 0;
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords');
-            } elseif (isset($_POST['TextReplayModel'])) {
-                $model->attributes = $_POST['TextReplayModel'];
-                $keywords = $_POST['TextReplayModel']['keywords'];
-                $isAccurate = $_POST['TextReplayModel']['isAccurate'];
-                $jumpUrl = Yii::app()->createUrl('manager/keyWords');
+                $validate = $model->validate();
+                $model->save();
             }
             $model->wechatId = $this->wechatInfo->id;
             $model->type = Globals::TYPE_KEYWORDS;
             $keywordsArray = explode(',', $keywords);
-            if ($model->validate()) {
-                $model->save();
-                foreach ($keywordsArray as $k) {
-                    //新加关键词
-                    $keywordsModel = new KeywordsModel();
-                    $keywordsModel->responseId = $model->id;
-                    $keywordsModel->name = $k;
-                    $keywordsModel->isAccurate = $isAccurate;
-                    $keywordsModel->wechatId = $this->wechatInfo->id;
-                    $keywordsModel->type = $type;
-                    $keywordsModel->save();
-                }
-                //处理列表
-                if (isset($_POST['ImagetextreplayModel'])) {
-                    for ($i = 2; $i <= $count; $i++) {
-                        ${'model' . $i}->parentId = $model->id;
-                        ${'model' . $i}->save();
-                    }
-                    echo json_encode(array('status' => 1, 'url' => $jumpUrl));
-                    return;
-                }
+            if ($validate && $this->saveKeywords($keywordsArray,$model->id,$isAccurate,$type)) {
                 ShowMessage::success('添加成功', $jumpUrl);
             } else {
                 if (isset($_POST['ImagetextreplayModel'])) {
@@ -311,11 +284,10 @@ class ManagerController extends WechatManagerController
 
     public function actionKeyWordsUpdate($id)
     {
-        $focusId = $id;
+        $modelId = $id;
         $type = Yii::app()->request->getParam('type');
         $oldKeywords = $imageTextList = array();
         $oldIsAccurate = 0;
-        $validate = true;
         switch ($type) {
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
                 $model = ImagetextreplayModel::model()->with('imagetextreplay_keywords')->find('t.id=:id and
@@ -326,10 +298,8 @@ class ManagerController extends WechatManagerController
                     $oldIsAccurate = $keywords->isAccurate;
                     $model->keywords .= $comm . $keywords->name;
                     $comm = ',';
-                    $model->isAccurate = $keywords->isAccurate;
+                    $model->isAccurate &= $keywords->isAccurate;
                 }
-                $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $id));
-                $listData = CHtml::listData($imageTextList, 'id', 'id');
                 break;
             case TextReplayModel::TEXT_REPLAY_TYPE:
                 $model = TextReplayModel::model()->with('textreplay_keywords')->find('t.id=:id and
@@ -351,76 +321,22 @@ class ManagerController extends WechatManagerController
                 $model->description = $_POST['summary1'];
                 $model->imgUrl = $_POST['src1'];
                 $model->url = $_POST['url1'];
+                $model->save();
                 $keywords = $_POST['ImagetextreplayModel']['keywords'];
                 $isAccurate = $_POST['ImagetextreplayModel']['isAccurate'];
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords', array('type' => ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));
-                if ($count > 1) {
-                    for ($i = 2; $i <= $count; $i++) {
-                        $id = $_POST['id' . $i] ? $_POST['id' . $i] : 0;
-                        if ($id) {
-                            ${'model' . $i} = ImagetextreplayModel::model()->findByPk($id);
-                            if (in_array($id, $listData))
-                                unset($listData[$id]);
-                        }
-                        ${'model' . $i} = isset(${'model' . $id}) ? ${'model' . $id} : new ImagetextreplayModel();
-                        ${'model' . $i}->title = $_POST['title' . $i];
-                        ${'model' . $i}->description = $_POST['summary' . $i];
-                        ${'model' . $i}->type = Globals::TYPE_KEYWORDS;
-                        ${'model' . $i}->imgUrl = $_POST['src' . $i];
-                        ${'model' . $i}->url = $_POST['url' . $i];
-                        ${'model' . $i}->wechatId = $this->wechatInfo->id;
-                        ${'model' . $i}->parentId = $model->id;
-                        $validate &= ${'model' . $i}->validate();
-                    }
-                }
-            } elseif (isset($_POST['TextReplayModel'])) {
-                $model->attributes = $_POST['TextReplayModel'];
-                $keywords = $_POST['TextReplayModel']['keywords'];
-                $isAccurate = $_POST['TextReplayModel']['isAccurate'];
+                $validate = $count > 1 ? $this->saveImageText($count, $_POST, $model->id) : $model->validate();
+            } else {
+                $model->content = $_POST['content'];
+                $keywords = $_POST['keywords'];
+                $isAccurate = isset($_POST['isAccurate']) ? $_POST['isAccurate'] : 0;
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords');
+                $validate = $model->validate();
+                $model->save();
             }
             $keywordsArray = explode(',', $keywords);
-            $keywordsAdd = array_unique(array_merge($oldKeywords, $keywordsArray));
-            $arrayDel = array_diff($keywordsAdd, $keywordsArray); //删除了的关键字
-            $arrayAdd = array_diff($keywordsAdd, $oldKeywords); //添加的关键字
-            $arrayAlive = array_diff($oldKeywords, $arrayAdd); //没改变的
-            if ($model->validate() && $validate) {
-                if (($isAccurate != $oldIsAccurate) && $arrayAlive) {
-                    //是否精准匹配改变了
-                    foreach ($arrayAlive as $name) {
-                        $keywordsModel = KeywordsModel::model()->find('name=:name', array(':name' => $name));
-                        $keywordsModel->isAccurate = $isAccurate;
-                        $keywordsModel->save();
-                    }
-                }
-                foreach ($arrayAdd as $k) {
-                    //新加关键词
-                    $keywordsModel = new KeywordsModel();
-                    $keywordsModel->responseId = $focusId;
-                    $keywordsModel->name = $k;
-                    $keywordsModel->isAccurate = $isAccurate;
-                    $keywordsModel->wechatId = $this->wechatInfo->id;
-                    $keywordsModel->type = $type;
-                    $keywordsModel->save();
-                }
-                foreach ($arrayDel as $k) {
-                    //删除的关键词
-                    $keywordsModel = KeywordsModel::model()->find('responseId=:responseId and name=:name', array(':name' => $k, ':responseId' => $id));
-                    $keywordsModel->delete();
-                }
-                if ($oldIsAccurate != $isAccurate) {
-                    KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'responseId=:responseId', array(':responseId' => $id));
-                }
-                $model->save();
+            if ($validate&&$this->saveKeywords($keywordsArray,$modelId,$isAccurate,$type,$oldKeywords,$oldIsAccurate)) {
                 if (isset($_POST['ImagetextreplayModel'])) {
-                    for ($i = 2; $i <= $count; $i++) {
-                        ${'model' . $i}->save();
-                    }
-                    if ($listData) {
-                        foreach ($listData as $id) {
-                            ImagetextreplayModel::model()->deleteByPk($id);
-                        }
-                    }
                     echo json_encode(array('status' => 1, 'url' => $jumpUrl));
                     return;
                 } else {

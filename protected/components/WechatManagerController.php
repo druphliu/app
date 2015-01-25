@@ -52,6 +52,13 @@ class WechatManagerController extends MemberController
         return $wechatInfo;
     }
 
+    /**
+     * 图文编辑，子文章编辑
+     * @param $count
+     * @param $data
+     * @param $id
+     * @return bool
+     */
     protected function saveImageText($count, $data, $id)
     {
         $result = false;
@@ -59,7 +66,7 @@ class WechatManagerController extends MemberController
         $parentId = $id;
         /* $model = ImagetextreplayModel::model()->with('imagetextreplay_keywords')->find('t.id=:id and
          imagetextreplay_keywords.type=:type', array(':id' => $id, ':type' => ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE));*/
-        $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' =>$parentId ));
+        $imageTextList = ImagetextreplayModel::model()->findAll('parentId=:parentId', array(':parentId' => $parentId));
         $listData = CHtml::listData($imageTextList, 'id', 'id');
         if ($count >= 2 && $id) {
             for ($i = 2; $i <= $count; $i++) {
@@ -92,5 +99,61 @@ class WechatManagerController extends MemberController
             }
         }
         return $result;
+    }
+
+    protected function saveKeywords($keywords, $responseId, $isAccurate, $type, $oldKeywords = array(), $oldIsAccurate = 0)
+    {
+        $validate = true;
+        if ($oldKeywords) {
+            $keywordsAdd = array_unique(array_merge($oldKeywords, $keywords));
+            $arrayDel = array_diff($keywordsAdd, $keywords); //删除了的关键字
+            $arrayAdd = array_diff($keywordsAdd, $oldKeywords); //添加的关键字
+            $arrayAlive = array_diff($oldKeywords, $arrayAdd); //没改变的
+            if ($arrayAlive) {
+                //是否精准匹配改变了
+                foreach ($arrayAlive as $name) {
+                    $keywordsModel = KeywordsModel::model()->find('name=:name', array(':name' => $name));
+                    $keywordsModel->isAccurate = $isAccurate;
+                    $validate &=$keywordsModel->validate();
+                    $keywordsModel->save();
+                }
+            }
+            if ($arrayAdd) {
+                foreach ($arrayAdd as $k) {
+                    //新加关键词
+                    $keywordsModel = new KeywordsModel();
+                    $keywordsModel->responseId = $responseId;
+                    $keywordsModel->name = $k;
+                    $keywordsModel->isAccurate = $isAccurate;
+                    $keywordsModel->wechatId = $this->wechatInfo->id;
+                    $keywordsModel->type = $type;
+                    $validate &=$keywordsModel->validate();
+                    $keywordsModel->save();
+                }
+            }
+            if ($arrayDel) {
+                foreach ($arrayDel as $k) {
+                    //删除的关键词
+                    $keywordsModel = KeywordsModel::model()->find('responseId=:responseId and name=:name', array(':name' => $k, ':responseId' => $responseId));
+                    $keywordsModel->delete();
+                }
+            }
+            if ($oldIsAccurate != $isAccurate) {
+                KeywordsModel::model()->updateAll(array('isAccurate' => $isAccurate), 'responseId=:responseId', array(':responseId' => $responseId));
+            }
+        } else {
+            foreach ($keywords as $k) {
+                //新加关键词
+                $keywordsModel = new KeywordsModel();
+                $keywordsModel->responseId = $responseId;
+                $keywordsModel->name = $k;
+                $keywordsModel->isAccurate = $isAccurate;
+                $keywordsModel->wechatId = $this->wechatInfo->id;
+                $keywordsModel->type = $type;
+                $validate &= $keywordsModel->validate();
+                $keywordsModel->save();
+            }
+        }
+        return $validate;
     }
 }
