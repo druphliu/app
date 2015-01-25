@@ -22,11 +22,6 @@ class ApiController extends Controller
                     switch ($request) {
                         case $request instanceof WeChatTextRequest:
                             $response = $this->textResponse($wechatInfo->id, $request);
-			    if(!$response && $wechatInfo->originalId=='gh_354e9ce866ed'){
-                                                $content = "亲，刮刮卡活动已经结束了，圣诞活动即将开始，敬请关注！亲，根据您的手机型号，领取对应的礼包哦！安卓越狱请按5，正版请按6，礼包内容包>含传奇抽奖券哦！~如有需要，请联系客服哦！客服QQ号：2117994248";
-                                                $xml = new WeChatTextResponse($content);
-						$response = $xml->_to_xml($request);
-                                        } 
                             break;
                         case $request instanceof WeChatEventRequest:
                             switch ($request->event_type) {
@@ -81,56 +76,82 @@ class ApiController extends Controller
                 $keyword = $k;
             }
         }
-        $type = $keyword ? $keyword->type : TextReplayModel::TEXT_REPLAY_TYPE;
-        switch ($type) {
-            case TextReplayModel::TEXT_REPLAY_TYPE:
-                if ($keyword) {
-                    $response = $this->_getTextReplay($keyword->responseId);
-                } else {return;
-                    //$content = "亲，暂时不能理解你说的";
-			$content = '';
-                    $response = new WeChatTextResponse($content);
-                }
-                break;
-            case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $response = $this->_getImageTextReplay($keyword->responseId, Globals::TYPE_KEYWORDS);
-                break;
-            case GiftModel::GIFT_TYPE:
-                //礼包领取
-                $response = $this->_getGiftReplay($keyword->responseId, $request->from_user_name);
-                break;
-            case OpenReplayModel::OPEN_TYPE:
-                //转接
-                $response = $this->_getOpenReplay($keyword->responseId);
-                return $response;
-                break;
-            case Globals::TYPE_SCRATCH:
-                //刮刮乐
-                $response = $this->_getScratch($keyword->responseId, $request->from_user_name, $legalType);
-                break;
-			case Globals::TYPE_WHEEL:
-                //刮刮乐
-                $response = $this->_getWheel($keyword->responseId, $request->from_user_name, $legalType);
-                break;
-            case Globals::TYPE_EGG:
-                //砸金蛋
-                $response = $this->_getEgg($keyword->responseId, $request->from_user_name, $legalType);
-                break;
-        }
+        $type = $keyword ? $keyword->type : '';
+        $responseId = $keywords->responseId;
+        $response = $this->protocol($type, $wechatId, $responseId, $request->from_user_name);
         $xml = $response->_to_xml($request);
         return $xml;
     }
 
     private function subscribeResponse($wechatInfo, $request)
     {
-        $subscribeInfo = SubscribereplayModel::model()->find('wechatId=:wechatId', array(':wechatId' => $wechatInfo->id));
+        $response = $this->_baseResponse($wechatInfo, $request, Globals::REPLAY_TYPE_SUBSCRIBE);
+        $xml = $response->_to_xml($request);
+        return $xml;
+    }
+
+    private function menuResponse($key, $request)
+    {
+        $menuInfo = MenuModel::model()->find('name=:name', array(':name' => $key));
+        if ($menuInfo) {
+            $keywordsId = $menuInfo->keywordsId;
+            switch ($menuInfo->type) {
+                case Globals::TYPE_KEYWORDS:
+                    $keywordsInfo = KeywordsModel::model()->findByPk($keywordsId);
+                    $response = $this->protocol($keywordsInfo->type, $keywordsInfo->wechatId, $keywordsInfo->responseId, $request->from_user_name);
+                    break;
+            }
+        }
+        return $response;
+    }
+
+    private function protocol($type, $wechatId, $responseId, $openId)
+    {
+        switch ($type) {
+            case TextReplayModel::TEXT_REPLAY_TYPE:
+                $response = $this->_getTextReplay($responseId);
+                break;
+            case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
+                $response = $this->_getImageTextReplay($responseId, Globals::TYPE_KEYWORDS);
+                break;
+            case GiftModel::GIFT_TYPE:
+                //礼包领取
+                $response = $this->_getGiftReplay($responseId, $openId);
+                break;
+            case OpenReplayModel::OPEN_TYPE:
+                //转接
+                $response = $this->_getOpenReplay($responseId);
+                return $response;
+                break;
+            case Globals::TYPE_SCRATCH:
+                //刮刮乐
+                $response = $this->_getScratch($responseId, $openId, $legalType);
+                break;
+            case Globals::TYPE_WHEEL:
+                //刮刮乐
+                $response = $this->_getWheel($responseId, $openId, $legalType);
+                break;
+            case Globals::TYPE_EGG:
+                //砸金蛋
+                $response = $this->_getEgg($responseId, $openId, $legalType);
+                break;
+            default:
+                $response = $this->_baseResponse($wechatId, $openId, Globals::REPLAY_TYPE_DEFAULT);
+                break;
+        }
+        return $response;
+    }
+
+    private function _baseResponse($wechatInfo, $openId, $replayType)
+    {
+        $subscribeInfo = BasereplayModel::model()->find('wechatId=:wechatId and replayType=:replayType', array(':wechatId' => $wechatInfo->id, ':replayType' => $replayType));
         $type = $subscribeInfo ? $subscribeInfo->type : TextReplayModel::TEXT_REPLAY_TYPE;
         switch ($type) {
             case TextReplayModel::TEXT_REPLAY_TYPE:
                 if ($subscribeInfo) {
-                    $response = $this->_getTextReplay($subscribeInfo->responseId, $request->from_user_name);
+                    $response = $this->_getTextReplay($subscribeInfo->responseId, $openId);
                 } else {
-                    $content = '感谢您关注' . $wechatInfo->name;
+                    $content = $replayType == Globals::REPLAY_TYPE_SUBSCRIBE ? '感谢您关注' . $wechatInfo->name : '暂时不理解你说的';
                     $response = new WeChatTextResponse($content);
                 }
                 break;
@@ -138,44 +159,9 @@ class ApiController extends Controller
                 $response = $this->_getImageTextReplay($subscribeInfo->responseId, Globals::TYPE_SUBSCRIBE);
                 break;
         }
-        $xml = $response->_to_xml($request);
-        return $xml;
+        return $response;
     }
 
-    private function menuResponse($key, $request)
-    {
-        $menuInfo = MenuactionModel::model()->with('action_menu')->find('action=:action', array(':action' => $key));
-        if ($menuInfo) {
-            $responseId = $menuInfo->responseId;
-            switch ($menuInfo->action_menu->type) {
-                case Globals::TYPE_TEXT:
-                    $response = $this->_getTextReplay($responseId);
-                    break;
-                case Globals::TYPE_IMAGE_TEXT:
-                    $response = $this->_getImageTextReplay($responseId, Globals::TYPE_MENU);
-                    break;
-                case Globals::TYPE_GIFT:
-                    //礼包领取
-                    $response = $this->_getGiftReplay($responseId, $request->from_user_name);
-                    break;
-                case Globals::TYPE_OPEN:
-                    //转接
-                    $response = $this->_getOpenReplay($responseId);
-                    return $response;
-                    break;
-                case Globals::TYPE_SCRATCH:
-                    //刮刮乐
-                    $response = $this->_getScratch($responseId, $request->from_user_name,1);
-                    break;
-                case Globals::TYPE_EGG:
-                    //砸金蛋
-                    $response = $this->_getEgg($responseId, $request->from_user_name,1);
-                    break;
-            }
-        }
-        $xml = $response->_to_xml($request);
-        return $xml;
-    }
 
     /**
      * 文本回复
@@ -304,8 +290,8 @@ class ApiController extends Controller
         $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
         return $responseObj;
     }
-	
-	private function _getWheel($responseId, $openId, $type)
+
+    private function _getWheel($responseId, $openId, $type)
     {
         $disable = 1;
         $logTable = 'wheel_log';
