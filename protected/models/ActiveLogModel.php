@@ -1,24 +1,39 @@
 <?php
 
 /**
- * This is the model class for table "url".
+ * This is the model class for table "active_log".
  *
- * The followings are the available columns in table 'url':
+ * The followings are the available columns in table 'active_log':
  * @property integer $id
- * @property integer $wechatId
- * @property string $url
- * @property string $type
+ * @property string $openId
+ * @property integer $activeId
+ * @property integer $datetime
  */
-class UrlModel extends CActiveRecord
+class ActiveLogModel extends CActiveRecord
 {
+	private static $tableName ;
+
+	public function __construct($table_name = '') {
+
+		if($table_name === null) {
+			parent::__construct(null);
+		} else {
+			self::$tableName = $table_name ;
+			parent::__construct();
+		}
+
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return UrlModel the static model class
+	 * @return GiftCodeModel the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($table_name)
 	{
-		return parent::model($className);
+		self::$tableName = $table_name ;
+
+		return parent::model(__CLASS__);
 	}
 
 	/**
@@ -26,7 +41,7 @@ class UrlModel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'url';
+		return self::$tableName;
 	}
 
 	/**
@@ -37,13 +52,12 @@ class UrlModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('wechatId, url', 'required'),
-			array('wechatId', 'numerical', 'integerOnly'=>true),
-			array('url', 'length', 'max'=>255),
-			array('type', 'length', 'max'=>3),
+			array('openId, activeId, datetime', 'required'),
+			array('activeId, datetime', 'numerical', 'integerOnly'=>true),
+			array('openId', 'length', 'max'=>28),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, wechatId, url, type', 'safe', 'on'=>'search'),
+			array('id, openId, activeId, datetime', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,9 +79,9 @@ class UrlModel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'wechatId' => 'Wechat',
-			'url' => 'Url',
-			'type' => 'Type',
+			'openId' => 'Open',
+			'activeId' => 'Active',
+			'datetime' => 'Datetime',
 		);
 	}
 
@@ -83,9 +97,9 @@ class UrlModel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('wechatId',$this->wechatId);
-		$criteria->compare('url',$this->url,true);
-		$criteria->compare('type',$this->type,true);
+		$criteria->compare('openId',$this->openId,true);
+		$criteria->compare('activeId',$this->activeId);
+		$criteria->compare('datetime',$this->datetime);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
