@@ -25,6 +25,8 @@
  */
 class ActiveModel extends CActiveRecord
 {
+	public $keywords;
+	public $isAccurate;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -41,7 +43,7 @@ class ActiveModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('wechatId, title, awards, predictCount, created_at', 'required'),
+			array('wechatId, title, awards, predictCount', 'required'),
 			array('wechatId, ispaward, predictCount, isCode, isSensitive, status, times', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>12),
 			array('title, unstartMsg, endMsg, pauseMsg', 'length', 'max'=>255),
@@ -61,6 +63,7 @@ class ActiveModel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'active_keywords'=>array(self::HAS_MANY, 'KeywordsModel', 'responseId')
 		);
 	}
 
@@ -76,17 +79,17 @@ class ActiveModel extends CActiveRecord
 			'title' => 'Title',
 			'awards' => '奖项',
 			'ispaward' => '是否参与奖',
-			'predictCount' => '活动预测参加人数(用此值来做中奖率算法)',
+			'predictCount' => '活动预测参加人数',
 			'isCode' => '奖项中是否有虚拟奖品',
 			'startTime' => '开始时间',
 			'endTime' => '结束时间',
 			'created_at' => '创建时间',
-			'unstartMsg' => 'Unstart Msg',
-			'endMsg' => 'End Msg',
-			'pauseMsg' => 'Pause Msg',
+			'unstartMsg' => '未开始提示',
+			'endMsg' => '结束提示',
+			'pauseMsg' => '暂停提示',
 			'isSensitive' => '是否区分正混版',
 			'status' => '是否开启',
-			'times' => '每天可参见次数:0不限，-1本次活动只能参见一次，1-N每天可参加次数',
+			'times' => '每天可参加次数',
 			'desc' => '活动简介',
 		);
 	}

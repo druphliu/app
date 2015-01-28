@@ -38,12 +38,19 @@ return array(
         ),
         'egg'=>array(
             'defaultController' => 'egg',
+        ),
+        'registration'=>array(
+            'defaultController' => 'registration',
         )
 
     ),
 
     // application components
     'components' => array(
+        'cache'=>array(
+            'class'=>'system.caching.CFileCache',
+            'directoryLevel'=>2//缓存目录深度
+        ),
         'request' => array(
             'enableCsrfValidation' => false,
             'enableCookieValidation' => true,
@@ -85,7 +92,7 @@ return array(
         ),
         'log' => array(
             'class' => 'CLogRouter',
-            'routes' => array(
+            /*'routes' => array(
                 array(
                     'class' => 'CFileLogRoute',
                     'levels' => 'error, warning',
@@ -95,12 +102,12 @@ return array(
 
                 array(
                     'class' => 'CWebLogRoute',
-                ),
-                /*'routes' => array(
+                ),*/
+                'routes' => array(
                     array(
                         'class' => 'CFileLogRoute',
                         'levels' => 'error, warning',
-                    ),*/
+                    ),
                 //debug
                 /*array(
                     'class'=>'CWebLogRoute',  'levels'=>'trace, info, error, warning',
@@ -124,7 +131,7 @@ return array(
     'params' => array(
         // this is used in contact page
         'adminEmail' => 'webmaster@example.com',
-        'siteUrl' => 'http://www.app.com',
+        'siteUrl' => 'http://192.168.102.221:82',
         'scratchPath' => 'upload/market/scratch',
         'wheelPath'=>'upload/market/wheel',
     ),

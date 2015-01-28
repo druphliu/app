@@ -252,7 +252,7 @@ class AjaxController extends Controller
     public function actionDeleteMenu($wechatId)
     {
         $status = -1;
-        $token = $this->_getToken($wechatId);
+        $token = Globals::getToken($wechatId);
         $tokenValue = $token['tokenValue'];
         if ($tokenValue) {
             $url = sprintf(Globals::MENU_DELETE_URL, $tokenValue);
@@ -266,38 +266,5 @@ class AjaxController extends Controller
         echo json_encode(array('status' => $status, 'msg' => $msg));
     }
 
-    private function _getToken($wechatId)
-    {
-        $msg = '参数有误';
-        $tokenValue = '';
-        $tokenModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
-            array(':wechatId' => $wechatId, ':key' => Globals::SETTING_KEY_ACCESS_TOKEN));
-        if ($tokenModel) {
-            if ((time() - $tokenModel->created_at) < WechatToken::EXPIRES_IN) {
-                $tokenValue = $tokenModel->value;
-            }
-        }
-        if (!$tokenValue) {
-            $wechat = WechatModel::model()->findByPk($wechatId);
-            $appid = $wechat->appid;
-            $secret = $wechat->secret;
-            $tokenObj = new WechatToken($appid, $secret);
-            $token = $tokenObj->getToken();
-            if ($token['status'] == WechatToken::OK) {
-                $tokenValue = $token['result'];
-                //update token
-                if (!$tokenModel) {
-                    $tokenModel = new SettingModel();
-                    $tokenModel->wechatId = $wechatId;
-                    $tokenModel->key = Globals::SETTING_KEY_ACCESS_TOKEN;
-                }
-                $tokenModel->value = $tokenValue;
-                $tokenModel->created_at = time();
-                $tokenModel->save();
-            } else {
-                $msg = $token['result'];
-            }
-        }
-        return array('tokenValue' => $tokenValue, 'msg' => $msg);
-    }
+
 }

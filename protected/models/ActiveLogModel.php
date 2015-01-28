@@ -29,9 +29,9 @@ class ActiveLogModel extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return GiftCodeModel the static model class
 	 */
-	public static function model($table_name)
+	public static function model($tableName = false, $className = __CLASS__)
 	{
-		self::$tableName = $table_name ;
+		self::$tableName = $tableName ;
 
 		return parent::model(__CLASS__);
 	}

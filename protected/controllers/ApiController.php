@@ -77,8 +77,8 @@ class ApiController extends Controller
             }
         }
         $type = $keyword ? $keyword->type : '';
-        $responseId = $keywords->responseId;
-        $response = $this->protocol($type, $wechatId, $responseId, $request->from_user_name);
+        $responseId = $keyword->responseId;
+        $response = $this->protocol($type, $wechatId, $responseId, $request->from_user_name,$legalType);
         $xml = $response->_to_xml($request);
         return $xml;
     }
@@ -105,7 +105,7 @@ class ApiController extends Controller
         return $response;
     }
 
-    private function protocol($type, $wechatId, $responseId, $openId)
+    private function protocol($type, $wechatId, $responseId, $openId,$legalType=0)
     {
         switch ($type) {
             case TextReplayModel::TEXT_REPLAY_TYPE:
@@ -122,6 +122,9 @@ class ApiController extends Controller
                 //转接
                 $response = $this->_getOpenReplay($responseId);
                 return $response;
+                break;
+            case Globals::TYPE_ACTIVE:
+                $response = $this->_getActiveReplay($responseId,$openId,$legalType);
                 break;
             case Globals::TYPE_SCRATCH:
                 //刮刮乐
@@ -236,6 +239,42 @@ class ApiController extends Controller
         $url = $wechatApi->buildSignUrl($apiUrl);
         $result = HttpRequest::sendHttpRequest($url, $post_string, 'POST', array("Content-type: text/xml"));
         return $result['content'] ? $result['content'] : '';
+    }
+
+    private function _getActiveReplay($responseId, $openId, $type){
+        $active = ActiveModel::model()->findByPk($responseId);
+        switch($active->type){
+            case Globals::TYPE_REGISTRATION:
+                    $responseObj = $this->_getRegistration($responseId, $openId, $type);
+                break;
+        }
+        return $responseObj;
+    }
+
+    private function _getRegistration($responseId, $openId, $type){
+        $active = ActiveModel::model()->findByPk($responseId);
+        if (!$type) {
+            $keywords = KeywordsModel::model()->find('type=:type and responseId=:responseId',
+                array(':type' => Globals::TYPE_WHEEL, ':responseId' => $responseId));
+            $content = '参与' . $active->title . '请回复:正版(混版)' . $keywords->name;
+            $responseObj = new WeChatTextResponse($content);
+            return $responseObj;
+        }
+        if ($active->startTime > date('Y-m-d H:i:s')) {
+            $content = $active->unstartMsg ? $active->unstartMsg : "抱歉,还未开始呢";
+        } elseif ($active->endTime < date('Y-m-d H:i:s')) {
+            $content = $active->endMsg ? $active->endMsg : "抱歉,你来晚了";
+        } elseif ($active->status == 0) {
+            $content = $active->pauseMsg ? $active->pauseMsg : "抱歉,活动暂时停止";
+        } else {
+            $string = $openId . '|' . $responseId . '|' . $type;
+            $code = Globals::authcode($string, 'ENCODE');
+            $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('registration/handle', array('code' => $code));
+            $responseObj = new WeChatArticleResponse();
+            $responseObj->add_article($active->title, '', Yii::app()->params['siteUrl'] . '/wechat//upload/market/registration/active.jpg', $url);
+        }
+        $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
+        return $responseObj;
     }
 
     private function _getScratch($responseId, $openId, $type)

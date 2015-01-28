@@ -14,6 +14,8 @@ class Globals
     const TYPE_SCRATCH = 'scratch';//刮刮乐
 	const TYPE_WHEEL = 'wheel';//大转盘
     const TYPE_EGG = 'egg';//彩蛋
+    const TYPE_ACTIVE = 'active';//
+    const TYPE_REGISTRATION = 'registration';//
     const TYPE_OPEN = 'open';
     const TYPE_IMAGE_TEXT = 'image-text';
     const TYPE_KEYWORDS = 'keywords';
@@ -26,6 +28,7 @@ class Globals
     const CODE_TYPE_UNLEGAL = 2;//越狱
     const SETTING_KEY_MENU = 'menu';
     const SETTING_KEY_ACCESS_TOKEN = 'accessToken';
+    const SETTING_KEY_JS_TOKEN = 'jsToken';
     const AUTH_KEY = '8ce6340c55bc25374258b0e4fc2d4de4';//加密函数key
     public static $typeList = array(
         self::TYPE_KEYWORDS=>'关键词',
@@ -193,4 +196,70 @@ class Globals
             return strtr( $keyc . str_replace('=', '', base64_encode($result)), '+/', '-_');
         }
     }
+
+    public static function getToken($wechatId)
+    {
+        $msg = '参数有误';
+        $tokenValue = '';
+        $tokenModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
+            array(':wechatId' => $wechatId, ':key' => Globals::SETTING_KEY_ACCESS_TOKEN));
+        if ($tokenModel) {
+            if ((time() - $tokenModel->created_at) < WechatToken::EXPIRES_IN) {
+                $tokenValue = $tokenModel->value;
+            }
+        }
+        if (!$tokenValue) {
+            $wechat = WechatModel::model()->findByPk($wechatId);
+            $appid = $wechat->appid;
+            $secret = $wechat->secret;
+            $token = WechatToken::getToken($appid, $secret);
+            if ($token['status'] == WechatToken::OK) {
+                $tokenValue = $token['result'];
+                //update token
+                if (!$tokenModel) {
+                    $tokenModel = new SettingModel();
+                    $tokenModel->wechatId = $wechatId;
+                    $tokenModel->key = Globals::SETTING_KEY_ACCESS_TOKEN;
+                }
+                $tokenModel->value = $tokenValue;
+                $tokenModel->created_at = time();
+                $tokenModel->save();
+            } else {
+                $msg = $token['result'];
+            }
+        }
+        return array('tokenValue' => $tokenValue, 'msg' => $msg);
+    }
+
+    public static function getJsToken($wechatId)
+    {
+        $msg = '参数有误';
+        $tokenValue = '';
+        $tokenModel = SettingModel::model()->find("wechatId = :wechatId and `key`=:key",
+            array(':wechatId' => $wechatId, ':key' => Globals::SETTING_KEY_JS_TOKEN));
+        if ($tokenModel) {
+            if ((time() - $tokenModel->created_at) < WechatToken::EXPIRES_IN) {
+                $tokenValue = $tokenModel->value;
+            }
+        }
+        if (!$tokenValue) {
+            $jsToken = WechatToken::getJsToken($tokenValue);
+            if ($jsToken['status'] == WechatToken::OK) {
+                $tokenValue = $jsToken['result'];
+                //update token
+                if (!$tokenModel) {
+                    $tokenModel = new SettingModel();
+                    $tokenModel->wechatId = $wechatId;
+                    $tokenModel->key = Globals::SETTING_KEY_JS_TOKEN;
+                }
+                $tokenModel->value = $tokenValue;
+                $tokenModel->created_at = time();
+                $tokenModel->save();
+            } else {
+                $msg = $jsToken['result'];
+            }
+        }
+        return array('tokenValue' => $tokenValue, 'msg' => $msg);
+    }
+
 } 
