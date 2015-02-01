@@ -1,6 +1,21 @@
 /**
  * Created by druphliu on 14-10-16.
  */
+$().ready(function(){
+    //fix modal force focus
+    $.fn.modal.Constructor.prototype.enforceFocus = function () {
+        var that = this;
+        $(document).on('focusin.modal', function (e) {
+            if ($(e.target).hasClass('select2-input')) {
+                return true;
+            }
+
+            if (that.$element[0] !== e.target && !that.$element.has(e.target).length) {
+                that.$element.focus();
+            }
+        });
+    };
+})
 /**
  * 检查关键词是否重复
  * @returns {boolean|*}

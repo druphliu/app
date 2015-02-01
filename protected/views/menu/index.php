@@ -155,7 +155,10 @@ $this->breadcrumbs = array(
                         <?php echo CHtml::label('模拟关键词', 'action', array('class' => 'col-sm-3 col-lg-2 control-label required')) ?>
                         <div class="col-sm-5 col-lg-4 controls">
                             <input type="hidden" class="bigdrop" id="e7" style="width:210px"/>
-                            <?php echo CHtml::hiddenField('keywordsId', '', array('class' => 'form-control input-sm')) ?>
+                            <div class="hide">
+                                <?php echo CHtml::textField('keywordsId', '', array('class' => 'form-control input-sm')) ?>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -408,6 +411,8 @@ $this->breadcrumbs = array(
         $("#keywordsId").val(keywords.id);
         return keywords.name;
     }
+
+
 </script>
 <style>
     .tree:before {
