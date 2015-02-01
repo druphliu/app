@@ -3,7 +3,7 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.validate.min.js"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.form.js"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/jquery.storage.js"></script>
-<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/imageTextEdit.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/ImageTextEdit.js"></script>
 <div class="row">
     <div class="col-xs-12">
         <?php echo CHtml::beginForm('', 'POST', array('class' => 'form-horizontal', 'id' => 'validation-form')) ?>

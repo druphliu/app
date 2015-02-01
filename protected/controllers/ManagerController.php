@@ -244,6 +244,8 @@ class ManagerController extends WechatManagerController
                 break;
         }
         if (isset($_POST['ImagetextreplayModel']) || isset($_POST['TextReplayModel'])) {
+            $model->wechatId = $this->wechatInfo->id;
+            $model->type = Globals::TYPE_KEYWORDS;
             if (isset($_POST['ImagetextreplayModel'])) {
                 $count = $_POST['count'];
                 $model->title = $_POST['title1'];
@@ -260,13 +262,16 @@ class ManagerController extends WechatManagerController
                 $keywords = $_POST['keywords'];
                 $isAccurate = isset($_POST['isAccurate']) ? $_POST['isAccurate'] : 0;
                 $jumpUrl = Yii::app()->createUrl('manager/keyWords');
+
                 $validate = $model->validate();
                 $model->save();
             }
-            $model->wechatId = $this->wechatInfo->id;
-            $model->type = Globals::TYPE_KEYWORDS;
             $keywordsArray = explode(',', $keywords);
             if ($validate && $this->saveKeywords($keywordsArray,$model->id,$isAccurate,$type)) {
+                if (isset($_POST['ImagetextreplayModel'])) {
+                    echo json_encode(array('status' => 1, 'msg' => '添加成功','url'=>$jumpUrl));
+                    return;
+                }
                 ShowMessage::success('添加成功', $jumpUrl);
             } else {
                 if (isset($_POST['ImagetextreplayModel'])) {
