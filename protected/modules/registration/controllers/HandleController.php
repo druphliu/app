@@ -48,15 +48,8 @@ class HandleController extends CController
             }
         }
         $wechatInfo = WechatModel::model()->findByPk($active->wechatId);
-        $jsToken = Globals::getJsToken($active->wechatId);
-        $jsTokenValue = $jsToken['tokenValue'];
-        $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
-        $timestamp = time();
-        $nonceStr = $code;
-        $string = 'jsapi_ticket='.$jsTokenValue.'&noncestr='.$nonceStr.'&timestamp='.$timestamp.'&url='.$url;
-        $signature = sha1($string);
-        $this->renderPartial('active', array('active' => $active, 'prize' => $prize, 'encryption' => $code,'jsToken'=>$jsToken,
-            'appId'=>$wechatInfo->appid,'signature'=>$signature,'timestamp'=>$timestamp,'nonceStr'=>$nonceStr,'date'=>$date));
+        $this->renderPartial('active', array('active' => $active, 'prize' => $prize, 'encryption' => $code,
+            'appId'=>$wechatInfo->appid,'date'=>$date));
     }
 
     public function actionActive()
@@ -91,6 +84,7 @@ class HandleController extends CController
             } else {
                 $count = ActiveLogModel::model($logTable)->count('activeId=:activeId and openId=:openId',
                     array(':activeId' => $activeId, ':openId' => $openId));
+                $count = $count+1;
                 $awardsArray = unserialize($active->awards);
                 if(isset($awardsArray[$count])){
                     //获取礼包码
