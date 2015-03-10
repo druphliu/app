@@ -29,7 +29,7 @@ $this->breadcrumbs = array(
 								</a>
 							</li>
 							<li>
-								<a href="<?php echo Yii::app()->createUrl('/registration/registration/create') ?>"
+								<a href="<?php echo $this->createUrl('manager/create') ?>"
 								   class="btn btn-primary">添加</a>
 							</li>
 						</ul>
@@ -112,38 +112,38 @@ $this->breadcrumbs = array(
 													<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 														<?php if ($d->ispaward) { ?>
 															<a class="btn btn-xs btn-primary"
-															   href="<?php echo Yii::app()->createUrl('scratch/scratch/codes/id/' . $d->id) ?>">
+															   href="<?php echo $this->createUrl('manager/codes/id/' . $d->id) ?>">
 																<i class="fa fa-list-ol bigger-120">礼包码</i>
 															</a>
 														<?php } ?>
 														<?php if (!$d->status) { ?>
-															<a class="btn btn-xs btn-info" href="<?php echo Yii::app()->createUrl('registration/registration/update/id/' . $d->id) ?>">
+															<a class="btn btn-xs btn-info" href="<?php echo $this->createUrl('manager/update/id/' . $d->id) ?>">
                                                                 <i class="fa fa-edit bigger-120">编辑</i>
                                                             </a>
-															<a class="btn btn-xs btn-info js_status" rel="<?php echo Yii::app()->createUrl('registration/registration/status/id/' . $d->id) ?>" data="1" href="javascript:void(0)">
+															<a class="btn btn-xs btn-info js_status" rel="<?php echo $this->createUrl('manager/status/id/' . $d->id) ?>" data="1" href="javascript:void(0)">
                                                                 <i class="fa fa-play bigger-120">启用</i>
                                                             </a>
-															<a class="btn btn-xs btn-danger  bootbox-confirm" rel="<?= Yii::app()->createUrl('registration/registration/delete/id/' . $d->id) ?>">
+															<a class="btn btn-xs btn-danger  bootbox-confirm" rel="<?= $this->createUrl('manager/delete/id/' . $d->id) ?>">
 																<i class="fa fa-remove bigger-120">删除</i>
 															</a>
 														<?php } else { ?>
-															<a class="btn btn-xs btn-info js_status" rel="<?php echo Yii::app()->createUrl('registration/registration/status/id/' . $d->id) ?>"  data="0" href="javascript:void(0)">
+															<a class="btn btn-xs btn-info js_status" rel="<?php echo $this->createUrl('manager/status/id/' . $d->id) ?>"  data="0" href="javascript:void(0)">
                                                                 <i class="fa fa-stop bigger-120">停止</i>
                                                             </a>
 														<?php } ?>
 														<?php if($d->codeType==Globals::ACTIVE_AWARD_TYPE_MIX){?>
-															<a href="<?php echo Yii::app()->createUrl('registration/registration/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
+															<a href="<?php echo $this->createUrl('manager/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
 																<i class="fa fa-list-ol bigger-120">礼包码</i>
 															</a>
 														<a class="btn btn-xs btn-danger" id="winner"
-														   rel="<?php echo Yii::app()->createUrl('registration/registration/winnerList/id/'.$d->id) ?>">中奖查询</a>
+														   rel="<?php echo $this->createUrl('manager/winnerList/id/'.$d->id) ?>">中奖查询</a>
 														<?php }elseif($d->codeType==Globals::ACTIVE_AWARD_TYPE_VIRTUAL){?>
-															<a href="<?php echo Yii::app()->createUrl('registration/registration/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
+															<a href="<?php echo $this->createUrl('manager/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
 																<i class="fa fa-list-ol bigger-120">礼包码</i>
 															</a>
 														<?php }else{?>
 															<a class="btn btn-xs btn-danger" id="winner"
-															   rel="<?php echo Yii::app()->createUrl('registration/registration/winnerList/id/'.$d->id) ?>">中奖查询</a>
+															   rel="<?php echo $this->createUrl('manager/winnerList/id/'.$d->id) ?>">中奖查询</a>
 														<?php }?>
 													</div>
 												</td>
