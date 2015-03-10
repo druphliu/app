@@ -62,6 +62,9 @@ class ApiController extends Controller
         } elseif (mb_strpos($message, '混版') !== false) {
             $legalType = Globals::CODE_TYPE_UNLEGAL;
             $message = mb_substr($message, 6);
+        }elseif(mb_strpos($message,'中奖查询')){
+            $legalType = -1;
+            $message = mb_substr($message, 0, -12);
         }
         //find keywords
         $keywords = KeywordsModel::model()->findAll("wechatId=:wechatId and name like concat('%',:name,'%') order by id desc",
@@ -256,22 +259,26 @@ class ApiController extends Controller
         if (!$type) {
             $keywords = KeywordsModel::model()->find('type=:type and responseId=:responseId',
                 array(':type' => Globals::TYPE_WHEEL, ':responseId' => $responseId));
-            $content = '参与' . $active->title . '请回复:正版(混版)' . $keywords->name;
+            $content = '参与' . $active->title . '请回复:正版(混版)' . $keywords->name.'参与活动。回复:'.$keywords->name.'中奖查询,查询中奖信息';
             $responseObj = new WeChatTextResponse($content);
             return $responseObj;
         }
-        if ($active->startTime > date('Y-m-d H:i:s')) {
-            $content = $active->unstartMsg ? $active->unstartMsg : "抱歉,还未开始呢";
-        } elseif ($active->endTime < date('Y-m-d H:i:s')) {
-            $content = $active->endMsg ? $active->endMsg : "抱歉,你来晚了";
-        } elseif ($active->status == 0) {
-            $content = $active->pauseMsg ? $active->pauseMsg : "抱歉,活动暂时停止";
-        } else {
-            $string = $openId . '|' . $responseId . '|' . $type;
-            $code = Globals::authcode($string, 'ENCODE');
-            $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('registration/handle', array('code' => $code));
-            $responseObj = new WeChatArticleResponse();
-            $responseObj->add_article($active->title, '', Yii::app()->params['siteUrl'] . '/wechat//upload/market/registration/active.jpg', $url);
+        if($type==-1){
+            $content = $this->_getActiveAwards($openId,$responseId,Globals::TYPE_REGISTRATION);
+        }else{
+            if ($active->startTime > date('Y-m-d H:i:s')) {
+                $content = $active->unstartMsg ? $active->unstartMsg : "抱歉,还未开始呢";
+            } elseif ($active->endTime < date('Y-m-d H:i:s')) {
+                $content = $active->endMsg ? $active->endMsg : "抱歉,你来晚了";
+            } elseif ($active->status == 0) {
+                $content = $active->pauseMsg ? $active->pauseMsg : "抱歉,活动暂时停止";
+            } else {
+                $string = $openId . '|' . $responseId . '|' . $type;
+                $code = Globals::authcode($string, 'ENCODE');
+                $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('registration/handle', array('code' => $code));
+                $responseObj = new WeChatArticleResponse();
+                $responseObj->add_article($active->title, '', Yii::app()->params['siteUrl'] . '/wechat/upload/market/registration/active.jpg', $url);
+            }
         }
         $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
         return $responseObj;
@@ -435,6 +442,30 @@ class ApiController extends Controller
         return $responseObj;
     }
 
+    /**
+     * 活动中奖查询
+     * @param $openId
+     * @param $wechatId
+     * @param $type
+     * @return string
+     */
+    private function _getActiveAwards($openId,$activeId,$type){
+        $table = 'active_awards';
+        $content = '';
+        $awardsList = ActiveAwardsModel::model($table)->findAll('activeId=:activeId and openId=:openId',
+            array(':activeId'=>$activeId,':openId'=>$openId));
+        foreach($awardsList as $a){
+            switch($type){
+                case Globals::TYPE_REGISTRATION:
+                    $content .= '签到'.$a->grade.'礼包:'.$a->code."\n";
+                    break;
+                default:
+                    $content .=$a->grade.'等奖礼包:'.$a->code."\n";
+                        break;
+            }
+        }
+        return $content ? $content : '暂无中奖信息';
+    }
     // Uncomment the following methods and override them if needed
     /*
     public function filters()

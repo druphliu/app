@@ -11,7 +11,7 @@
  * @property string $awards
  * @property integer $ispaward
  * @property integer $predictCount
- * @property integer $isCode
+ * @property integer $codeType
  * @property string $startTime
  * @property string $endTime
  * @property string $created_at
@@ -44,14 +44,14 @@ class ActiveModel extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('wechatId, title, awards, predictCount', 'required'),
-			array('wechatId, ispaward, predictCount, isCode, isSensitive, status, times', 'numerical', 'integerOnly'=>true),
+			array('wechatId, ispaward, predictCount, codeType, isSensitive, status, times', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>12),
 			array('title, unstartMsg, endMsg, pauseMsg', 'length', 'max'=>255),
 			array('awards', 'length', 'max'=>1000),
 			array('startTime, endTime, desc', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, wechatId, type, title, awards, ispaward, predictCount, isCode, startTime, endTime, created_at, unstartMsg, endMsg, pauseMsg, isSensitive, status, times, desc', 'safe', 'on'=>'search'),
+			array('id, wechatId, type, title, awards, ispaward, predictCount, codeType, startTime, endTime, created_at, unstartMsg, endMsg, pauseMsg, isSensitive, status, times, desc', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,7 +80,7 @@ class ActiveModel extends CActiveRecord
 			'awards' => '奖项',
 			'ispaward' => '是否参与奖',
 			'predictCount' => '活动预测参加人数',
-			'isCode' => '奖项中是否有虚拟奖品',
+			'codeType' => '奖品类型',
 			'startTime' => '开始时间',
 			'endTime' => '结束时间',
 			'created_at' => '创建时间',
@@ -119,7 +119,7 @@ class ActiveModel extends CActiveRecord
 		$criteria->compare('awards',$this->awards,true);
 		$criteria->compare('ispaward',$this->ispaward);
 		$criteria->compare('predictCount',$this->predictCount);
-		$criteria->compare('isCode',$this->isCode);
+		$criteria->compare('codeType',$this->codeType);
 		$criteria->compare('startTime',$this->startTime,true);
 		$criteria->compare('endTime',$this->endTime,true);
 		$criteria->compare('created_at',$this->created_at,true);

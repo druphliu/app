@@ -30,6 +30,18 @@ class Globals
     const SETTING_KEY_ACCESS_TOKEN = 'accessToken';
     const SETTING_KEY_JS_TOKEN = 'jsToken';
     const AUTH_KEY = '8ce6340c55bc25374258b0e4fc2d4de4';//加密函数key
+    const ACTIVE_AWARD_TYPE_MIX = 1;//混合奖项
+    const ACTIVE_AWARD_TYPE_ENTITY = 3;//全实物
+    const ACTIVE_AWARD_TYPE_VIRTUAL = 2;//全虚拟
+    public static $activeAwardTypeList = array(
+        self::ACTIVE_AWARD_TYPE_MIX=>'混合奖项',
+        self::ACTIVE_AWARD_TYPE_ENTITY=>'实物奖项',
+        self::ACTIVE_AWARD_TYPE_VIRTUAL=>'虚拟奖项'
+    );
+    public static $codeTypeList = array(
+       self::CODE_TYPE_LEGAL=>'正版',
+        self::CODE_TYPE_UNLEGAL=>'混版'
+    );
     public static $typeList = array(
         self::TYPE_KEYWORDS=>'关键词',
         self::TYPE_URL => 'URL');
@@ -262,4 +274,4 @@ class Globals
         return array('tokenValue' => $tokenValue, 'msg' => $msg);
     }
 
-} 
+}

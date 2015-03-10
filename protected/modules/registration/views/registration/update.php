@@ -12,7 +12,7 @@ $this->breadcrumbs = array(
         签到有奖
         <small>
             <i class="fa fa-angle-double-right"></i>
-            添加活动
+            编辑活动
         </small>
     </h1>
 </div>

@@ -22,10 +22,10 @@ class MemberMenu extends CWidget
                 array('name' => '回复转接管理', 'act' => 'open_replay', 'list_acl' => array(), 'url' => 'open/replay')
             )),
         '营销管理' => array('controller' => 'market', 'act' => 'market', 'class' => 'fa fa-bullhorn', 'action' => array(
-            array('name' => '礼包领取', 'url' => 'market/gift', 'act' => 'market_gift', 'list_acl' => array()),
-            array('name' => '刮刮乐', 'url' => 'scratch', 'act' => 'scratch_index', 'list_acl' => array()),
-			array('name' => '大转盘', 'url' => 'wheel', 'act' => 'wheel_index', 'list_acl' => array()),
-            array('name' => '砸金蛋', 'url' => 'egg', 'act' => 'egg_index', 'list_acl' => array()),
+            array('name' => '礼包领取', 'url' => 'gift', 'act' => 'market_gift', 'list_acl' => array()),
+            array('name' => '刮刮乐', 'url' => 'scratch', 'act' => 'market_scratch', 'list_acl' => array()),
+			array('name' => '大转盘', 'url' => 'wheel', 'act' => 'market_wheel', 'list_acl' => array()),
+            array('name' => '砸金蛋', 'url' => 'egg', 'act' => 'market_egg', 'list_acl' => array()),
             array('name' => '签到有奖', 'url' => 'registration', 'act' => 'egg_index', 'list_acl' => array()),
         )),
         '菜单管理' => array('controller' => 'menu', 'act' => 'menu', 'class' => 'fa fa-windows','url' => 'menu/action', 'action' => array(
@@ -51,7 +51,7 @@ class MemberMenu extends CWidget
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
         $userAllowAction = array('wechat', 'user', 'vip');
-        $mangerAllowAction = array('manager', 'market', 'open','menu','scratch','wheel','egg','registration');
+        $mangerAllowAction = array('manager', 'market', 'open','menu','scratch','wheel','egg','registration','gift');
         if (in_array($controllerId, $userAllowAction)) {
             $menuList = self::$userMenu;
         } else if (in_array($controllerId, $mangerAllowAction)) {

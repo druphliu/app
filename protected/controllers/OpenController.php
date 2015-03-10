@@ -21,7 +21,7 @@ class OpenController extends WechatManagerController
                 'pageSize' => Page::SIZE,
                 'pageVar' => 'page'
             ),
-        ));;
+        ));
         $this->render('index', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination()));
     }
 

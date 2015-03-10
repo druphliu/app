@@ -226,7 +226,7 @@ $this->breadcrumbs = array(
                     $("#type").find("option[value='" + data.type + "']").attr("selected", true);
                     $("#name").val(data.name);
                     $("#keywordsId").val(data.keywordsId);
-                    $(".select2-chosen").html(data.keywordsName);
+                    data.keywordsName ? $(".select2-chosen").html(data.keywordsName) : '';
                     $("#url").val(data.url);
                     $("#id").val(data.id);
                     $("#myModal").modal('show');

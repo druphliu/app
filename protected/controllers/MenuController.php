@@ -143,10 +143,16 @@ class MenuController extends WechatManagerController
             $msg = '更新成功';
             $model->name = $_POST['name'];
             $model->type = $_POST['type'];
-            if ($model->parentId>0 && $_POST['parentId']) {
-                $status = -1;
-                $msg = '此菜单含有子菜单，不能做此修改';
-            } else {
+            if ($model->parentId <= 0 && $_POST['parentId']) {
+                //移动父菜单
+                //看底下是否还有子菜单
+                $childrenMenu = MenuModel::model()->find('parentId=:parentId',array(':parentId'=>$model->id));
+                if($childrenMenu){
+                    $status = -1;
+                    $msg = '此菜单含有子菜单，不能做此修改';
+                }
+            }
+            if($status==1){
                 $model->parentId = isset($_POST['parentId']) ? $_POST['parentId'] : 0;
                 $model->keywordsId =isset($_POST['keywordsId']) ? $_POST['keywordsId'] : 0;
                 $model->url =isset($_POST['url']) ? $_POST['url'] : 0;
