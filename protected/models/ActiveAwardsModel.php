@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'active_awards':
  * @property integer $id
  * @property integer $activeId
- * @property string $area
  * @property integer $grade
  * @property string $code
  * @property integer $isentity
@@ -61,13 +60,12 @@ class ActiveAwardsModel extends CActiveRecord
 		return array(
 			array('activeId, code', 'required'),
 			array('activeId, grade, isentity, type, datetime, status', 'numerical', 'integerOnly'=>true),
-			array('area', 'length', 'max'=>11),
 			array('code', 'length', 'max'=>150),
 			array('openId', 'length', 'max'=>28),
 			array('awardsInfo', 'length', 'max'=>255),
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, activeId, area, grade, code, isentity, openId, type, datetime, status, awardsInfo', 'safe', 'on'=>'search'),
+			// @todo Please remove those attributes that should not be searched.
+			array('id, activeId, grade, code, isentity, openId, type, datetime, status, awardsInfo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,33 +87,38 @@ class ActiveAwardsModel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'activeId' => 'activeId',
-			'area' => 'Area',
-			'grade' => 'Grade',
-			'code' => 'Code',
-			'isentity' => 'Isentity',
+			'activeId' => 'Active',
+			'grade' => '中奖等级',
+			'code' => '中奖码或者中奖详情(实物中奖即为奖品详情，礼包码类即为码值)',
+			'isentity' => '是否实物',
 			'openId' => 'Open',
-			'type' => 'Type',
-			'datetime' => 'Datetime',
-			'status' => 'Status',
-			'awardsInfo' => 'Awards Info',
+			'type' => '类型(用于礼包码区分正版和越狱),1:正版,2:越狱',
+			'datetime' => '中奖时间',
+			'status' => '状态：0未中奖，1中奖未确认，2成功领取',
+			'awardsInfo' => '中奖信息',
 		);
 	}
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('activeId',$this->activeId);
-		$criteria->compare('area',$this->area,true);
 		$criteria->compare('grade',$this->grade);
 		$criteria->compare('code',$this->code,true);
 		$criteria->compare('isentity',$this->isentity);

@@ -1,6 +1,6 @@
 <?php
 
-class RegistrationController extends WechatManagerController
+class ManagerController extends WechatManagerController
 {
     public function actionIndex()
     {
@@ -145,7 +145,7 @@ class RegistrationController extends WechatManagerController
             )
         ));
         $this->render('code', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(),
-            'scratchId' => $id, 'grades' => $grades,'currentGrade'=>$grade));
+            'activeId' => $id, 'grades' => $grades,'currentGrade'=>$grade));
     }
 
     public function actionCodeImport()
@@ -185,5 +185,26 @@ class RegistrationController extends WechatManagerController
             $msg = '提交错误';
         }
         echo $msg;
+    }
+
+    public function actionCodeDelete($id)
+    {
+        $tableName = 'active_awards';
+        $model = ActiveAwardsModel::model($tableName)->findByPk($id);
+        /* $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
+         GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));*/
+        $model->delete();
+        ShowMessage::success('删除成功');
+    }
+
+    public function actionCodeTruncate($id){
+        $grade = Yii::app()->request->getParam('grade');
+        if($grade){
+            $activeId=$id;
+            $tableName = 'active_awards';
+            ActiveAwardsModel::model($tableName)->deleteAll('activeId=:activeId and grade=:grade',
+                array(':activeId'=>$activeId,':grade'=>$grade));
+        }
+        ShowMessage::success('删除成功');
     }
 }
