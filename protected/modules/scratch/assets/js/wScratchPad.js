@@ -289,6 +289,6 @@
 		scratchUp: function(e, $this)
 		{
 			$this.ctx.closePath();
-		},
+		}
 	}
 })(jQuery);

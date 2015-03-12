@@ -35,7 +35,8 @@ class ManagerController extends WechatManagerController
             for ($i = 1; $i <= $count; $i++) {
                 ${'award' . $i} = $_POST['award' . $i];
                 ${'isentity' . $i} = isset($_POST['isentity' . $i]) ? $_POST['isentity' . $i] : 0;
-                $awards[$i] = array('name' => ${'award' . $i}, 'isentity' => ${'isentity' . $i});
+                ${'count' . $i} = isset($_POST['count' . $i]) ? $_POST['count' . $i] : 0;
+                $awards[$i] = array('name' => ${'award' . $i}, 'isentity' => ${'isentity' . $i},'count'=> ${'count' . $i});
             }
             $model->awards = serialize($awards);
             if ($model->validate()) {
@@ -69,7 +70,8 @@ class ManagerController extends WechatManagerController
             for ($i = 1; $i <= $count; $i++) {
                 ${'award' . $i} = $_POST['award' . $i];
                 ${'isentity' . $i} = isset($_POST['isentity' . $i]) ? $_POST['isentity' . $i] : 0;
-                $awards[$i] = array('name' => ${'award' . $i}, 'isentity' => ${'isentity' . $i});
+                ${'count' . $i} = isset($_POST['count' . $i]) ? $_POST['count' . $i] : 0;
+                $awards[$i] = array('name' => ${'award' . $i}, 'isentity' => ${'isentity' . $i},'count'=> ${'count' . $i});
             }
             $model->awards = serialize($awards);
             if ($model->validate()) {
