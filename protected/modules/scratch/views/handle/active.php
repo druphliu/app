@@ -78,7 +78,7 @@
 <div class="main">
     <div class="cover">
         <img
-            src="<?php echo Yii::app()->Params['scratchPath'] . '/' . $scratch->wechatId . '/' . $scratch->backgroundPic ?>">
+            src="<?php echo $this->module->assetsUrl; ?>/images/back.jpg">
 
         <div id="prize">
             <?php if(!$disable){?><img src="<?php echo $button?>"><?php }?>
@@ -135,18 +135,7 @@
 							</span>
                 </div>
                 <div class="Detail">
-                    <?php $award = unserialize($scratch->awards) ?>
-                    <p>
-                        一等奖： <?php echo $award[1]['name'] ?>
-                    </p>
 
-                    <p>
-                        二等奖： <?php echo $award[2]['name'] ?>
-                    </p>
-
-                    <p>
-                        三等奖： <?php echo $award[3]['name'] ?>
-                    </p>
                 </div>
             </div>
         </div>
@@ -188,7 +177,7 @@
                 width: 150,
                 height: 40,
                 color: "#a9a9a7",
-                image2: "<?php echo $button; ?>",
+                image2: "<?php echo $this->module->assetsUrl; ?>/images/1.jpg",
                 scratchMove: function () {
 
                     var grade = <?php echo $prize['grade']?>;

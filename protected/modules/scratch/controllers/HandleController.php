@@ -10,32 +10,32 @@ class HandleController extends CController
 {
     public function actionIndex()
     {
-        $logTable = 'scratch_log';
-        $table = 'scratch_awards';
+        $logTable = 'active_log';
+        $table = 'active_awards';
         $disable = 1;
         $probability = $remainCount = 0;
         $return = $encryption = '';
         $rand = rand(1, 100000);
         $code = Yii::app()->request->getParam('code');
-        list($openId, $scratchId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
-        $scratch = ScratchModel::model()->findByPk($scratchId);
+        list($openId, $activeId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
+        $active = ActiveModel::model()->findByPk($activeId);
         //活动是否开始
-        if ($scratch->startTime > date('Y-m-d H:i:s')) {
+        if ($active->startTime > date('Y-m-d H:i:s')) {
             $disable = false;
-        } elseif ($scratch->endTime < date('Y-m-d H:i:s')) {
+        } elseif ($active->endTime < date('Y-m-d H:i:s')) {
             $disable = false;
-        } elseif ($scratch->status == 0) {
+        } elseif ($active->status == 0) {
             $disable = false;
         }
-        $totalCount = $scratch->times;
-        $button = Yii::app()->params['siteUrl'] . '/wechat/' . Yii::app()->params['scratchPath'] . '/' . $scratch->wechatId . '/' . $scratch->button;
-        $awards = unserialize($scratch->awards);
+        $totalCount = $active->times;
+        $button = '';
+        $awards = unserialize($active->awards);
         $return['grade'] = -1;
         $return['name'] = '谢谢参与';
         //次数限制
         if ($totalCount == -1) {//本活动只能参与一次
-            $count = ScratchLogModel::model($logTable)->count('openId=:openId and scratchId=:scratchId',
-                array(':openId' => $openId, ':scratchId' => $scratchId));
+            $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId',
+                array(':openId' => $openId, ':activeId' => $activeId));
             if ($count > 0)
                 $disable = 0;
         }
@@ -43,8 +43,8 @@ class HandleController extends CController
         if ($totalCount > 0) {
             $start = strtotime(date('Y-m-d')) - 1;
             $end = strtotime(date('Y-m-d',strtotime('1 days')))-1;
-            $count = ScratchLogModel::model($logTable)->count('openId=:openId and scratchId=:scratchId and datetime>:start and datetime<:end',
-                array(':openId' => $openId, ':scratchId' => $scratchId, ':start' => $start, ':end' => $end));
+            $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId and datetime>:start and datetime<:end',
+                array(':openId' => $openId, ':activeId' => $activeId, ':start' => $start, ':end' => $end));
             if ($count >= $totalCount)
                 $disable = 0;
             else
@@ -52,11 +52,11 @@ class HandleController extends CController
         }
 
         //查看当前用户是否已中奖
-        $awardInfo = ScratchAwardsModel::model($table)->find('scratchId=:scratchId and openId=:openId and status<>0',
-            array(':scratchId' => $scratchId, ':openId' => $openId));
+        $awardInfo = ActiveAwardsModel::model($table)->find('activeId=:activeId and openId=:openId and status<>0',
+            array(':activeId' => $activeId, ':openId' => $openId));
         if (!$awardInfo && $disable) {
             foreach ($awards as $k => $v) {
-                $probability += $v['probability'] * 1000;
+                $probability += 1 * 1000;
                 $award[$k] = array('name' => $v['name'], 'num' => $probability);
             }
             //奖品不足时，发送激活码，
@@ -81,12 +81,12 @@ class HandleController extends CController
                 }
             }
             if ($return['grade'] > 0) {
-                $awardCount = ScratchAwardsModel::model($table)->count('grade=:grade and scratchId=:scratchId and status<>0',
-                    array(':grade' => $return['grade'], ':scratchId' => $scratchId)); //已中奖个数
+                $awardCount = ActiveAwardsModel::model($table)->count('grade=:grade and activeId=:activeId and status<>0',
+                    array(':grade' => $return['grade'], ':activeId' => $activeId)); //已中奖个数
                 if ($awardCount <= 0 || $awardCount < $awards[$return['grade']]['count']) {//未超过系统设置中奖个数
-                    $awardModel = new ScratchAwardsModel($table);
+                    $awardModel = new ActiveAwardsModel($table);
                     $awardModel->openId = $openId;
-                    $awardModel->scratchId = $scratchId;
+                    $awardModel->activeId = $activeId;
                     $awardModel->grade = $return['grade'];
                     $awardModel->code = $return['name'];
                     $awardModel->isentity = isset($awards[$return['grade']]['isentity']) ? $awards[$return['grade']]['isentity'] : 0;
@@ -98,12 +98,12 @@ class HandleController extends CController
                     //奖品达到系统设置个数
 
                     //查看是否已经赠送了礼包
-                    $code = ScratchAwardsModel::model($table)->find('grade=:grade and scratchId=:scratchId and openId=:openId and status<>0',
-                        array(':grade' => 0, ':scratchId' => $scratchId, ':openId' => $openId));
+                    $code = ActiveAwardsModel::model($table)->find('grade=:grade and activeId=:activeId and openId=:openId and status<>0',
+                        array(':grade' => 0, ':activeId' => $activeId, ':openId' => $openId));
                     if (!$code) {
                         //取一条礼包码
-                        $code = ScratchAwardsModel::model($table)->find('grade=:grade and scratchId=:scratchId and type=:type and status=:status',
-                            array(':grade' => 0, ':scratchId' => $scratchId, ':type' => $type, ':status' => 0));
+                        $code = ActiveAwardsModel::model($table)->find('grade=:grade and activeId=:activeId and type=:type and status=:status',
+                            array(':grade' => 0, ':activeId' => $activeId, ':type' => $type, ':status' => 0));
                         if ($code) {
                             $code->openId = $openId;
                             $code->time = time();
@@ -116,12 +116,12 @@ class HandleController extends CController
                 }
             } else {
                 //礼包奖品，查询是否已经获得过礼包
-                $code = ScratchAwardsModel::model($table)->find('grade=:grade and scratchId=:scratchId and openId=:openId and status<>:status',
-                    array(':grade' => 0, ':scratchId' => $scratchId, ':openId' => $openId, ':status' => 0));
+                $code = ActiveAwardsModel::model($table)->find('grade=:grade and activeId=:activeId and openId=:openId and status<>:status',
+                    array(':grade' => 0, ':activeId' => $activeId, ':openId' => $openId, ':status' => 0));
                 if (!$code) {
                     //取一条礼包码
-                    $code = ScratchAwardsModel::model($table)->find('grade=:grade and scratchId=:scratchId and type=:type and status=:status',
-                        array(':grade' => 0, ':scratchId' => $scratchId, ':type' => $type, ':status' => 0));
+                    $code = ActiveAwardsModel::model($table)->find('grade=:grade and activeId=:activeId and type=:type and status=:status',
+                        array(':grade' => 0, ':activeId' => $activeId, ':type' => $type, ':status' => 0));
                     if ($code) {
                         $code->openId = $openId;
                         $code->datetime = time();
@@ -135,8 +135,8 @@ class HandleController extends CController
                 }
             }
         }
-        $encryption = Globals::authcode($openId . '|' . $return['grade'] . '|' . $scratchId, 'ENCODE');
-        $this->renderPartial('active', array('scratch' => $scratch, 'prize' => $return, 'encryption' => $encryption,
+        $encryption = Globals::authcode($openId . '|' . $return['grade'] . '|' . $activeId, 'ENCODE');
+        $this->renderPartial('active', array('active' => $active, 'prize' => $return, 'encryption' => $encryption,
             'button' => $button, 'disable' => $disable, 'remainCount' => $remainCount, 'totalCount' => $totalCount));
     }
 
@@ -146,9 +146,9 @@ class HandleController extends CController
         $status = false;
         $encryption = $_POST['encryption'];
         $table = 'scratch_awards';
-        list($openid, $grade, $scratchId) = explode('|', Globals::authcode($encryption, 'DECODE'));
-        $code = ScratchAwardsModel::model($table)->find('grade=:grade and scratchId=:scratchId and openId=:openId',
-            array(':grade' => $grade, ':scratchId' => $scratchId, ':openId' => $openid));
+        list($openid, $grade, $activeId) = explode('|', Globals::authcode($encryption, 'DECODE'));
+        $code = ScratchAwardsModel::model($table)->find('grade=:grade and activeId=:activeId and openId=:openId',
+            array(':grade' => $grade, ':activeId' => $activeId, ':openId' => $openid));
         if ($code) {
             $code->status = $grade == 0 ? 2 : 1;
             $code->save();
@@ -157,7 +157,7 @@ class HandleController extends CController
         $log = new ScratchLogModel($logTable);
         $log->datetime = time();
         $log->openId = $openid;
-        $log->scratchId = $scratchId;
+        $log->activeId = $activeId;
         $log->save();
         echo json_encode(array('status' => $status));
     }
@@ -170,16 +170,16 @@ class HandleController extends CController
         $msg = '中奖信息失效或系统异常';
         $encryption = $_POST['encryption'];
         $name = $_POST['code'];
-        list($openid, $grade, $scratchId) = explode('|', Globals::authcode($encryption, 'DECODE'));
-        $scratchInfo = ScratchModel::model()->findByPk($scratchId);
+        list($openid, $grade, $activeId) = explode('|', Globals::authcode($encryption, 'DECODE'));
+        $scratchInfo = ScratchModel::model()->findByPk($activeId);
         if ($scratchInfo && $tel) {
             $awards = unserialize($scratchInfo->awards);
             if ($awards[$grade] && $awards[$grade]['name'] == $name) {
                 $success = true;
                 $msg = '你的信息已收录，我们会及时联系你';
                 //存储用户信息
-                $codeInfo = ScratchAwardsModel::model($table)->find('openId=:openId and scratchId=:scratchId and grade=:grade',
-                    array(':openId' => $openid, ':scratchId' => $scratchId, ':grade' => $grade));
+                $codeInfo = ScratchAwardsModel::model($table)->find('openId=:openId and activeId=:activeId and grade=:grade',
+                    array(':openId' => $openid, ':activeId' => $activeId, ':grade' => $grade));
                 $codeInfo->status = 2;
                 $codeInfo->telphone = $tel;
                 $codeInfo->save();

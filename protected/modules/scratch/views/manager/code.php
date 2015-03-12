@@ -4,7 +4,7 @@
 $this->breadcrumbs = array(
     array('name' => '首页', 'url' => array('wechat/index')),
     array('name' => '营销管理'),
-    array('name' => '刮刮乐管理'),
+    array('name' => '刮刮乐管理','url'=>array('scratch')),
 );
 ?>
 <div class="page-header">
@@ -12,7 +12,11 @@ $this->breadcrumbs = array(
         营销管理
         <small>
             <i class="fa fa-angle-double-right"></i>
-            刮刮乐管理
+            <a href="<?php echo Yii::app()->createUrl('scratch')?>">刮刮乐</a>
+        </small>
+        <small>
+            <i class="fa fa-angle-double-right"></i>
+            刮刮乐奖品管理
         </small>
     </h1>
 </div>
@@ -23,19 +27,28 @@ $this->breadcrumbs = array(
                 <div class="table-responsive">
                     <div class="tabbable">
                         <ul id="myTab" class="nav nav-tabs">
-                            <li class="<?php if($type==Globals::CODE_TYPE_LEGAL){?>active<?php }?>">
-                                <a href="<?php echo Yii::app()->createUrl('scratch/scratch/codes/id/'.$scratchId,array('type'=>Globals::CODE_TYPE_LEGAL))?>">
-                                    参与奖正版礼包
+                            <?php if($active->ispaward){?>
+                            <li class="<?php if(0==$currentGrade){?>active<?php }?>">
+                                <a href="<?php echo $this->createUrl('manager/codes/id/'.$activeId,array('grade'=>0))?>">
+                                    参与奖等奖礼包码
                                 </a>
                             </li>
-                            <li class="<?php if($type==Globals::CODE_TYPE_UNLEGAL){?>active<?php }?>">
-                                <a href="<?php echo Yii::app()->createUrl('scratch/scratch/codes/id/'.$scratchId,array('type'=>Globals::CODE_TYPE_UNLEGAL))?>">
-                                    参与奖越狱版礼包
-                                </a>
-                            </li>
+                            <?php }?>
+                            <?php foreach($grades as $grade){?>
+                                <li class="<?php if($grade==$currentGrade){?>active<?php }?>">
+                                    <a href="<?php echo $this->createUrl('manager/codes/id/'.$activeId,array('grade'=>$grade))?>">
+                                        <?php echo $grade;?>等奖礼包码
+                                    </a>
+                                </li>
+                            <?php }?>
                             <li>
                                 <a href="javascript:void(0)" class="btn btn-primary" id="import">导入</a>
                             </li>
+                            <?php if($data){?>
+                            <li>
+                                <a href="javascript:void(0)" class="btn btn-waring" id="truncate">清空</a>
+                            </li>
+                            <?php }?>
                         </ul>
 
                         <div class="tab-content">
@@ -51,6 +64,7 @@ $this->breadcrumbs = array(
                                                 </label>
                                             </th>
                                             <th>ID</th>
+                                            <th>版本</th>
                                             <th>CODE</th>
                                             <th>是否领取</th>
                                             <th></th>
@@ -74,6 +88,9 @@ $this->breadcrumbs = array(
                                                     <?= $i ?>
                                                 </td>
                                                 <td>
+                                                    <?= Globals::$codeTypeList[$d['type']] ?>
+                                                </td>
+                                                <td>
                                                     <?php echo $d['code']; //substr_replace($d->code, '*****', 4, 5) ?>
                                                 </td>
                                                 <td><?php if ($d['openId']) { ?>
@@ -85,7 +102,7 @@ $this->breadcrumbs = array(
                                                 <td style="width:23%">
                                                     <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
                                                         <a class="btn btn-xs btn-danger  bootbox-confirm"
-                                                           rel="<?= Yii::app()->createUrl('market/giftCodeDelete/id/' . $d['id']) ?>">
+                                                           rel="<?= $this->createUrl('manager/CodeDelete/id/' . $d['id']) ?>">
                                                             <i class="fa fa-remove bigger-120">删除</i>
                                                         </a>
                                                     </div>
@@ -123,13 +140,19 @@ $this->breadcrumbs = array(
                     message: '<div class="row"> ' +
                         '<div class="col-md-12"> ' +
                         '<form class="form-horizontal" id="myform"  method="post" ' +
-                        'action="<?php echo Yii::app()->createUrl('scratch/scratch/codeImport')?>" ' +
+                        'action="<?php echo $this->createUrl('manager/codeImport')?>" ' +
                         'enctype="multipart/form-data"> ' +
                         '<div class="form-group"> ' +
                         '<div class="col-md-8"> ' +
                         '<input type="file" id="id-input-file-2" name="code"/>' +
-                        '<input type="hidden" name="scratchId" value="<?=$scratchId?>" />' +
+                        '<input type="hidden" name="activeId" id="activeId" value="<?=$activeId?>" />' +
                         '<i>仅支持txt格式文件,参考格式<a target="_blank" href="upload/eg.txt">查看</a></i></div> ' +
+                        '<div class="col-md-8"> ' +
+                        '<select name="type" id="type">' +
+                        '<option value="<?php echo Globals::CODE_TYPE_LEGAL?>" selected="selected">正版</option>' +
+                        '<option value="<?php echo Globals::CODE_TYPE_UNLEGAL?>">混版</option>' +
+                        '</select>' +
+                        '</div>'+
                         '</form> </div> </div>',
                     buttons: {
                         success: {
@@ -150,11 +173,12 @@ $this->breadcrumbs = array(
                                     '</div><div class="modal-backdrop fade in"></div>');
                                 var data = new FormData($(this).parents("form").get(0));
                                 data.append('file', file);
-                                data.append('scratchId', $('input[type=hidden]').val());
-                                data.append('type',<?php echo $type?>);
+                                data.append('activeId', $('#activeId').val());
+                                data.append('grade',<?php echo $currentGrade?>);
+                                data.append('type', $('#type').val())
                                 $.ajax({
                                     type: 'POST',
-                                    url: '<?php echo Yii::app()->createUrl('scratch/scratch/codeImport')?>',
+                                    url: '<?php echo $this->createUrl('manager/codeImport')?>',
                                     data: data,
                                     /**
                                      *必须false才会自动加上正确的Content-Type
@@ -200,6 +224,12 @@ $this->breadcrumbs = array(
                 }
             });
         });
-
+    $("#truncate").click(function(){
+        bootbox.confirm('确认要清空？',function(result){
+            if(result){
+                window.location = '<?php echo $this->createUrl("manager/codeTruncate/id/".$activeId,array('grade'=>$currentGrade))?>';
+            }
+        })
+    });
     })
 </script>
