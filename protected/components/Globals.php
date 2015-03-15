@@ -33,6 +33,7 @@ class Globals
     const ACTIVE_AWARD_TYPE_MIX = 1;//混合奖项
     const ACTIVE_AWARD_TYPE_ENTITY = 3;//全实物
     const ACTIVE_AWARD_TYPE_VIRTUAL = 2;//全虚拟
+    const XXXX=9999;//无穷大
     public static $activeAwardTypeList = array(
         self::ACTIVE_AWARD_TYPE_MIX=>'混合奖项',
         self::ACTIVE_AWARD_TYPE_ENTITY=>'实物奖项',

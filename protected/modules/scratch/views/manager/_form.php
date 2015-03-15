@@ -112,7 +112,7 @@
                             奖励:
                             <?php echo CHtml::textField('award'.$grade,$award['name'])?>
                             <?php echo CHtml::label('是否实物','isentity'.$grade)?><?php echo CHtml::checkBox('isentity1',$award['isentity'],array('class'=>'isentity'))?>
-                            <span class="<?php if(!$award['isentity']){?>hide<?php }?>">
+                            <span>
                                 <?php echo CHtml::label('个数','isentity'.$grade)?>
                                 <?php echo CHtml::textField('count'.$grade,$award['count'])?>
                                 <span>
@@ -125,7 +125,7 @@
                     奖励:
                     <?php echo CHtml::textField('award1')?>
                     <?php echo CHtml::label('是否实物','isentity1')?><?php echo CHtml::checkBox('isentity1',array('checked'=>'checked'),array('class'=>'isentity'))?>
-                    <span class="hide">
+                    <span >
                         <?php echo CHtml::label('个数','isentity1')?>
                         <?php echo CHtml::textField('count1')?>
                         <span>
@@ -311,7 +311,7 @@
                 var responseId = '<?php echo $responseId?>';
                 var wechatId = '<?php echo $wechatId?>';
                 var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-                result = keywordsCheck(wechatId, type, url, 'ActiveModel', responseId);
+                result = keywordsCheck(wechatId, type, url, 'ActiveModel', responseId) && checkAwards();
             }
             return result
         });
@@ -322,7 +322,7 @@
                 '奖励: <input type="text" id="award'+count+'" name="award'+count+'" value="">  ' +
                 '<label for="isentity'+count+'">是否实物</label>' +
                 '<input type="checkbox" id="isentity'+count+'" name="isentity'+count+'" value="1" checked="checked" class="isentity">'+
-                '<span class="hide"><label for="count'+count+'">个数</label>' +
+                '<span><label for="count'+count+'">个数</label>' +
                 '<input type="text" id="count'+count+'" name="count'+count+'" value="1" class="js_count"></span>'+
                 '</div>';
             $("#awards").append(html);
@@ -330,15 +330,23 @@
         $(".js_cancel").click(function(){
             $("#awards div:last-child").remove();
         });
-        $(document).on('click','.isentity',function(){
-            if($(this).is(':checked')){
-                $(this).next().removeClass();
-            }else{
-                $(this).next().removeClass().addClass('hide');
-            }
-        })
     });
 
-
+function checkAwards(){
+    result = true;
+    var sum = 0;
+    var predictCount = $("#ActiveModel_predictCount").val();
+    $("#awards").children().each(function(i){
+        var num = i+1;
+        sum +=parseInt($("#count"+num).val());
+    });
+    if(predictCount<=sum){
+        result= false;
+    }
+    if(result==false){
+        alert('奖品数量有误');
+    }
+    return result;
+}
 </script>
 

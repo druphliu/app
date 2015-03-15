@@ -13,7 +13,6 @@
  * @property integer $type
  * @property integer $datetime
  * @property integer $status
- * @property string $awardsInfo
  */
 class ActiveAwardsModel extends CActiveRecord
 {
@@ -62,10 +61,9 @@ class ActiveAwardsModel extends CActiveRecord
 			array('activeId, grade, isentity, type, datetime, status', 'numerical', 'integerOnly'=>true),
 			array('code', 'length', 'max'=>150),
 			array('openId', 'length', 'max'=>28),
-			array('awardsInfo', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, activeId, grade, code, isentity, openId, type, datetime, status, awardsInfo', 'safe', 'on'=>'search'),
+			array('id, activeId, grade, code, isentity, openId, type, datetime, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,7 +93,6 @@ class ActiveAwardsModel extends CActiveRecord
 			'type' => '类型(用于礼包码区分正版和越狱),1:正版,2:越狱',
 			'datetime' => '中奖时间',
 			'status' => '状态：0未中奖，1中奖未确认，2成功领取',
-			'awardsInfo' => '中奖信息',
 		);
 	}
 
@@ -126,7 +123,6 @@ class ActiveAwardsModel extends CActiveRecord
 		$criteria->compare('type',$this->type);
 		$criteria->compare('datetime',$this->datetime);
 		$criteria->compare('status',$this->status);
-		$criteria->compare('awardsInfo',$this->awardsInfo,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
