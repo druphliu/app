@@ -111,13 +111,26 @@ class ManagerController extends WechatManagerController
     }
 
     public function actionWinnerList($id){
+        $this->layout = '//layouts/iframe';
         $table = 'active_awards_info';
-        $winnerList = array();
-        $winner = ActiveAwardsInfoModel::model($table)->with('awards')->findAll('activeId=:activeId', array(':activeId' => $id));
-       foreach ($winner as $w) {
-            $winnerList[] = array('telphone' => $w->tel, 'grade' => $w->grade, 'code' => $w->code, 'datetime' => date('Y-m-d H:i:s', $w->datetime));
-        }
-        echo json_encode($winnerList);
+        $tabActiveAwards = 'active_awards';
+        $countSql = 'SELECT COUNT(*) FROM '.$table.' t left join '.$tabActiveAwards.' t2 on t.awardId=t2.id where t2.activeId='.$id;
+        $count=Yii::app()->db->createCommand($countSql)->queryScalar();
+        $sql='SELECT * FROM '.$table.' t left join '.$tabActiveAwards.' t2 on t.awardId=t2.id where t2.activeId='.$id;
+        $dataProvider=new CSqlDataProvider($sql, array(
+            'totalItemCount'=>$count,
+            'sort'=>array(
+                'attributes'=>array(
+                    'id',
+                ),
+            ),
+            'pagination'=>array(
+                'pageSize'=>Page::SIZE,
+            ),
+        ));
+        $grades = array(1=>'一',2=>'二',3=>'三',4=>'四',5=>'五',6=>'六',7=>'七',8=>'八',9=>'九','10'=>'十');
+        $this->render('winnerList', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(),
+            'grades'=>$grades));
     }
 
     public function actionCodes($id){

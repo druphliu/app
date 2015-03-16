@@ -174,36 +174,19 @@ $this->breadcrumbs = array(
 </div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
-						class="sr-only">Close</span></button>
-				<h4 class="modal-title" id="myModalLabel">中奖者信息</h4>
-			</div>
-			<div class="modal-body">
-				<div class="table-responsive">
-					<table class="table table-striped table-bordered table-hover" id="sample-table-1">
-						<thead>
-						<tr>
-							<th>中奖等级</th>
-							<th>中奖内容</th>
-							<th class="hidden-480">中奖者电话</th>
-							<th>
-								中奖时间
-							</th>
-						</tr>
-						</thead>
-						<tbody id="winner_content">
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">中奖者信息</h4>
+            </div>
+            <iframe id="winnerContent" width="100%" height="400px" frameborder="0"></iframe>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
 	$().ready(function () {
@@ -227,23 +210,15 @@ $this->breadcrumbs = array(
 				}
 			});
 		});
-		$(".js_winner").click(function () {
-			var url = $(this).attr('rel');
-			var html = '';
-			$.getJSON(url, function (data) {
-				for (i = 0; i < data.length; i++) {
-					html += ' <tr>' +
-					'<td>' + data[i].grade + '</td>' +
-					'<td>' + data[i].code + '</td>' +
-					'<td>' + data[i].telphone + '</td>' +
-					'<td>' + data[i].datetime + '</td>' +
-					'</tr>';
-				}
-				$("#winner_content").html(html);
-				$('#myModal').modal('show');
-			});
+        $(".js_winner").click(function () {
+            showDialogLoading('myModal');
+            var url = $(this).attr('rel');
+            $("#winnerContent").attr('src',url);
+            $("#winnerContent").load(function(){
+                closeDialogLoading('myModal');
+            });
 
-		});
+        });
 		$(".js_status").click(function(){
 			var url = $(this).attr('rel');
 			var status = $(this).attr('data');
