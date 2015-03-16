@@ -35,7 +35,7 @@ class OpenController extends WechatManagerController
             $model->created_at = $dateTime;
             if ($model->validate()) {
                 $model->save();
-                ShowMessage::success('添加成功！', Yii::app()->createUrl('open/index'));
+                $this->showSuccess('添加成功！', Yii::app()->createUrl('open/index'));
             }
         }
         $this->render('create', array('model' => $model));
@@ -51,7 +51,7 @@ class OpenController extends WechatManagerController
             $model->status = 0;
             if ($model->validate()) {
                 $model->save();
-                ShowMessage::success('编辑成功！', Yii::app()->createUrl('open/index'));
+                $this->showSuccess('编辑成功！', Yii::app()->createUrl('open/index'));
             }
         }
         $this->render('update', array('model' => $model));
@@ -65,9 +65,9 @@ class OpenController extends WechatManagerController
         //检查是否已接入关键字
         $openReplayInfo = OpenReplayModel::model()->find('openId=:openId', array(':openId' => $model->id));
         if ($openReplayInfo)
-            ShowMessage::error('请先删除转接回复');
+            $this->showError('请先删除转接回复');
         $model->delete();
-        ShowMessage::success('删除成功', Yii::app()->createUlr('open/idex'));
+        $this->showSuccess('删除成功', Yii::app()->createUlr('open/idex'));
     }
 
     public function actionReplay()
@@ -107,7 +107,7 @@ class OpenController extends WechatManagerController
             if ($model->validate()) {
                 $model->save();
                 $this->saveKeywords($keywordsArray,$model->id,$isAccurate,Globals::TYPE_OPEN);
-                ShowMessage::success('添加成功', Yii::app()->createUrl('open/replay'));
+                $this->showSuccess('添加成功', Yii::app()->createUrl('open/replay'));
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
@@ -139,7 +139,7 @@ class OpenController extends WechatManagerController
             $model->attributes = $_POST['OpenReplayModel'];
             if ($model->validate() && $this->saveKeywords($keywordsArray,$model->id,$isAccurate,Globals::TYPE_OPEN,$oldKeywords,$oldIsAccurate)) {
                 $model->save();
-                ShowMessage::success('编辑成功', Yii::app()->createUrl('open/replay'));
+                $this->showSuccess('编辑成功', Yii::app()->createUrl('open/replay'));
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
@@ -152,6 +152,6 @@ class OpenController extends WechatManagerController
         //删除关键字
         KeywordsModel::model()->deleteAll('responseId=:responseId and type=:type', array(':responseId' => $id, ':type' => OpenReplayModel::OPEN_TYPE));
         $model->delete();
-        ShowMessage::success('删除成功', Yii::app()->createUrl('open/replay'));
+        $this->showSuccess('删除成功', Yii::app()->createUrl('open/replay'));
     }
 }

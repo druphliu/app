@@ -27,14 +27,14 @@ $this->breadcrumbs=array(
                     </a>
                 </li>
 
-                <li class="">
+                <li class="js_loading">
                     <a href="<?php echo Yii::app()->createUrl('manager/keyWords',array('type'=>ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE))?>" >
                         图文关键词
                     </a>
                 </li>
 
                 <li>
-                    <a href="<?php echo Yii::app()->createUrl('manager/keyWordsCreate',array('type'=>TextReplayModel::TEXT_REPLAY_TYPE))?>" class="btn btn-primary">添加</a>
+                    <a href="<?php echo Yii::app()->createUrl('manager/keyWordsCreate',array('type'=>TextReplayModel::TEXT_REPLAY_TYPE))?>" class="btn btn-primary js_loading">添加</a>
                 </li>
 
             </ul>
@@ -83,7 +83,7 @@ $this->breadcrumbs=array(
                         <td class="hidden-480"><?=$d->content?></td>
                         <td style="width:12%">
                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-                                <a class="btn btn-xs btn-info" href="<?php echo Yii::app()->createUrl('manager/KeyWordsUpdate/id/'.$d->id,array('type'=>TextReplayModel::TEXT_REPLAY_TYPE))?>">
+                                <a class="btn btn-xs btn-info js_loading" href="<?php echo Yii::app()->createUrl('manager/KeyWordsUpdate/id/'.$d->id,array('type'=>TextReplayModel::TEXT_REPLAY_TYPE))?>">
                                     <i class="fa fa-edit bigger-120">编辑</i>
                                 </a>
 

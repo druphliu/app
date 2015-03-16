@@ -20,7 +20,7 @@ $this->breadcrumbs=array(
     <div class="col-sm-12">
         <div class="tabbable">
             <ul id="myTab" class="nav nav-tabs">
-                <li class="">
+                <li class="js_loading">
                     <a href="<?php echo Yii::app()->createUrl('manager/keyWords')?>" >
                         <i class="green icon-home bigger-110"></i>
                         文本关键词
@@ -33,7 +33,7 @@ $this->breadcrumbs=array(
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo Yii::app()->createUrl('manager/keyWordsCreate',array('type'=>ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE))?>" class="btn btn-primary">添加</a>
+                    <a href="<?php echo Yii::app()->createUrl('manager/keyWordsCreate',array('type'=>ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE))?>" class="btn btn-primary js_loading">添加</a>
                 </li>
             </ul>
 
@@ -86,7 +86,7 @@ $this->breadcrumbs=array(
                         <td><?=$d->description?></td>
                         <td style="width:12%">
                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-                                <a class="btn btn-xs btn-info" href="<?php echo Yii::app()->createUrl('manager/KeyWordsUpdate/id/'.$d->id,array('type'=>ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE))?>">
+                                <a class="btn btn-xs btn-info js_loading" href="<?php echo Yii::app()->createUrl('manager/KeyWordsUpdate/id/'.$d->id,array('type'=>ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE))?>">
                                     <i class="fa fa-edit bigger-120">编辑</i>
                                 </a>
 

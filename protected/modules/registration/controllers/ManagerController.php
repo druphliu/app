@@ -45,7 +45,7 @@ class ManagerController extends WechatManagerController
                 $isAccurate = $_POST['ActiveModel']['isAccurate'];
                 $keywordsArray = explode(',', $keywords);
                 $this->saveKeywords($keywordsArray, $model->id, $isAccurate, Globals::TYPE_ACTIVE);
-                ShowMessage::success('添加成功', Yii::app()->createUrl('registration'));
+                $this->showSuccess('添加成功', Yii::app()->createUrl('registration'));
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
@@ -80,7 +80,7 @@ class ManagerController extends WechatManagerController
                 $isAccurate = $_POST['ActiveModel']['isAccurate'];
                 $keywordsArray = explode(',', $keywords);
                 $this->saveKeywords($keywordsArray, $model->id, $isAccurate, Globals::TYPE_ACTIVE, $oldKeywords, $oldIsAccurate);
-                ShowMessage::success('添加成功', Yii::app()->createUrl('registration'));
+                $this->showSuccess('添加成功', Yii::app()->createUrl('registration'));
             }
         }
         $awards = unserialize($model->awards);
@@ -107,15 +107,15 @@ class ManagerController extends WechatManagerController
         ActiveModel::model()->deleteByPk($id,'wechatId=:wechatId',array(':wechatId'=>$this->wechatInfo->id));
         //删除关键词
         KeywordsModel::model()->deleteAll('responseId=:responseId and type=:type',array(':responseId'=>$id,':type'=>Globals::TYPE_ACTIVE));
-        ShowMessage::success('删除成功',Yii::app()->createUrl('registration'));
+        $this->showSuccess('删除成功',Yii::app()->createUrl('registration'));
     }
 
     public function actionWinnerList($id){
-        $table = 'active_awards';
+        $table = 'active_awards_info';
         $winnerList = array();
-        $winner = ActiveAwardsModel::model($table)->findAll('activeId=:activeId and grade>0 and status>0', array(':activeId' => $id));
-        foreach ($winner as $w) {
-            $winnerList[] = array('telphone' => $w->telphone, 'grade' => $w->grade, 'code' => $w->code, 'datetime' => date('Y-m-d H:i:s', $w->datetime));
+        $winner = ActiveAwardsInfoModel::model($table)->with('awards')->findAll('activeId=:activeId', array(':activeId' => $id));
+       foreach ($winner as $w) {
+            $winnerList[] = array('telphone' => $w->tel, 'grade' => $w->grade, 'code' => $w->code, 'datetime' => date('Y-m-d H:i:s', $w->datetime));
         }
         echo json_encode($winnerList);
     }
@@ -196,7 +196,7 @@ class ManagerController extends WechatManagerController
         /* $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
          GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));*/
         $model->delete();
-        ShowMessage::success('删除成功');
+        $this->showSuccess('删除成功');
     }
 
     public function actionCodeTruncate($id){
@@ -207,6 +207,6 @@ class ManagerController extends WechatManagerController
             ActiveAwardsModel::model($tableName)->deleteAll('activeId=:activeId and grade=:grade',
                 array(':activeId'=>$activeId,':grade'=>$grade));
         }
-        ShowMessage::success('删除成功');
+        $this->showSuccess('删除成功');
     }
 }

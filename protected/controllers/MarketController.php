@@ -39,9 +39,9 @@ class MarketController extends WechatManagerController
                 $keywordsArray = explode(',', $keywords);
                 $this->saveKeywords($keywordsArray,$model->id,$isAccurate,Globals::TYPE_GIFT);
                 if ($result == GiftModel::TABLE_CREATE_FAILED) {
-                    ShowMessage::error('创建异常，请重新编辑此信息', Yii::app()->createUrl('market/gift'));
+                    $this->showError('创建异常，请重新编辑此信息', Yii::app()->createUrl('market/gift'));
                 } else {
-                    ShowMessage::success('添加成功', Yii::app()->createUrl('market/gift'));
+                    $this->showSuccess('添加成功', Yii::app()->createUrl('market/gift'));
                 }
 
             }
@@ -75,9 +75,9 @@ class MarketController extends WechatManagerController
                 //更新code表，防止礼包时礼包码表未创建成功问题
                 $result = GiftModel::model()->createCodeTable($this->wechatInfo->id);
                 if ($result == GiftModel::TABLE_CREATE_FAILED) {
-                    ShowMessage::error('数据异常，请再次编辑一下');
+                    $this->showError('数据异常，请再次编辑一下');
                 } else {
-                    ShowMessage::success('编辑成功', Yii::app()->createUrl('market/gift'));
+                    $this->showSuccess('编辑成功', Yii::app()->createUrl('market/gift'));
                 }
 
             }
@@ -91,7 +91,7 @@ class MarketController extends WechatManagerController
         $model = GiftModel::model()->findByPk($id);
         $model->status = 1;
         $model->save();
-        ShowMessage::success('已开启');
+        $this->showSuccess('已开启');
     }
 
     public function actionGiftStop($id)
@@ -99,7 +99,7 @@ class MarketController extends WechatManagerController
         $model = GiftModel::model()->findByPk($id);
         $model->status = 0;
         $model->save();
-        ShowMessage::success('已停止');
+        $this->showSuccess('已停止');
     }
 
     public function actionGiftDelete($id)
@@ -108,7 +108,7 @@ class MarketController extends WechatManagerController
         /* $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
          GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));*/
         $model->delete();
-        ShowMessage::success('删除成功', Yii::app()->createUrl('market/gift'));
+        $this->showSuccess('删除成功', Yii::app()->createUrl('market/gift'));
     }
 
     public function actionGiftCodes($id)
@@ -172,7 +172,7 @@ class MarketController extends WechatManagerController
         /* $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
          GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));*/
         $model->delete();
-        ShowMessage::success('删除成功');
+        $this->showSuccess('删除成功');
     }
 	
     // Uncomment the following methods and override them if needed

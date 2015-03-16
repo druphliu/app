@@ -188,6 +188,7 @@ $this->breadcrumbs = array(
             expanderCollapsedClass: 'fa fa-plus'
         });
         $("#add").click(function () {
+			showDialogLoading('myModal');
             postUrl = '<?php echo Yii::app()->createUrl('menu/create')?>';
             $.get(
                 '<?php echo Yii::app()->createUrl('menu/getDropDownList')?>',
@@ -198,11 +199,12 @@ $this->breadcrumbs = array(
                     $("#name").val();
                     $("#action").val();
                     $("#url").val();
-                    $("#myModal").modal('show');
+                    closeDialogLoading('myModal');
                 }
             );
         });
         $(".js_edit").click(function () {
+			showDialogLoading('myModal');
             postUrl = $(this).attr('rel');
             var selectUrl = $(this).attr('data-url');
             $.get(
@@ -229,7 +231,7 @@ $this->breadcrumbs = array(
                     data.keywordsName ? $(".select2-chosen").html(data.keywordsName) : '';
                     $("#url").val(data.url);
                     $("#id").val(data.id);
-                    $("#myModal").modal('show');
+                    closeDialogLoading('myModal');
                 }
             )
         });

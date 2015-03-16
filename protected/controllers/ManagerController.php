@@ -83,14 +83,14 @@ class ManagerController extends WechatManagerController
                 if ($type == Globals::TYPE_IMAGE_TEXT) {
                     die(json_encode(array('status' => 1, 'msg' => $msg)));
                 } else {
-                    ShowMessage::success('添加成功！');
+                    $this->showSuccess('添加成功！');
                 }
             } else {
                 if ($type == Globals::TYPE_IMAGE_TEXT) {
                     $msg = '编辑失败';
                     die(json_encode(array('status' => -1, 'msg' => $msg)));
                 } else {
-                    ShowMessage::error('编辑失败');
+                    S$this->showError('编辑失败');
                 }
             }
         }
@@ -173,14 +173,14 @@ class ManagerController extends WechatManagerController
                 if ($type == Globals::TYPE_IMAGE_TEXT) {
                     die(json_encode(array('status' => 1, 'msg' => $msg)));
                 } else {
-                    ShowMessage::success('添加成功！');
+                    $this->showSuccess('添加成功！');
                 }
             } else {
                 if ($type == Globals::TYPE_IMAGE_TEXT) {
                     $msg = '编辑失败';
                     die(json_encode(array('status' => -1, 'msg' => $msg)));
                 } else {
-                    ShowMessage::error('编辑失败');
+                    $this->showError('编辑失败');
                 }
             }
         }
@@ -272,7 +272,7 @@ class ManagerController extends WechatManagerController
                     echo json_encode(array('status' => 1, 'msg' => '添加成功','url'=>$jumpUrl));
                     return;
                 }
-                ShowMessage::success('添加成功', $jumpUrl);
+                $this->showSuccess('添加成功', $jumpUrl);
             } else {
                 if (isset($_POST['ImagetextreplayModel'])) {
                     echo json_encode(array('status' => -1, 'msg' => '编辑出错'));
@@ -345,7 +345,7 @@ class ManagerController extends WechatManagerController
                     echo json_encode(array('status' => 1, 'url' => $jumpUrl));
                     return;
                 } else {
-                    ShowMessage::success('编辑成功', $jumpUrl);
+                    $this->showSuccess('编辑成功', $jumpUrl);
                 }
             } else {
                 if (isset($_POST['ImagetextreplayModel'])) {
@@ -376,7 +376,7 @@ class ManagerController extends WechatManagerController
         $model->delete();
         //删除相关关键词
         KeywordsModel::model()->deleteAll('responseId=:responseId', array(':responseId' => $id));
-        ShowMessage::success('删除成功', $jumpUrl);
+        $this->showSuccess('删除成功', $jumpUrl);
     }
     // Uncomment the following methods and override them if needed
     /*

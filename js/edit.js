@@ -140,6 +140,7 @@ $().ready(function () {
         },
 
         submitHandler: function (form) {
+			showLoading();
             var j = 1;
             var data;
             var title = $("#title").val();
@@ -170,6 +171,7 @@ $().ready(function () {
                 data: data,
                 dataType: 'json',
                 success: function (result) {
+				closeLoading();
                     if (result.status == 1) {
                         alert('编辑成功');
                     } else {

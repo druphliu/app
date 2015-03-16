@@ -37,4 +37,37 @@ class MemberController extends CController{
         }
         return true;
     }
+	
+	protected function showSuccess($msg = "", $jumpurl = "", $wait = 3)
+    {
+        self::_jump($msg, $jumpurl, $wait, 1);
+    }
+
+    protected function showError($msg = "", $jumpurl = "", $wait = 3)
+    {
+
+        self::_jump($msg, $jumpurl, $wait, 0);
+    }
+
+    private function _jump($msg = "", $jumpurl = "", $wait = 3, $type = 0)
+    {
+        $modal = Yii::app()->request->getParam('modal');
+        $data = array(
+            'msg' => $msg,
+            'jumpurl' => $jumpurl,
+            'wait' => $wait,
+            'type' => $type,
+            'modal' => $modal
+        );
+        $data['title'] = ($type == 1) ? "提示信息" : "错误信息";
+        if (empty($jumpurl)) {
+            if ($type == 1) {
+                $data['jumpurl'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "javascript:window.close();";
+            } else {
+                $data['jumpurl'] = "javascript:history.back(-1);";
+            }
+        }
+        $this->render("//layouts/showMessage", $data);
+        exit;
+    }
 }

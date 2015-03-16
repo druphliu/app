@@ -15,6 +15,8 @@ $().ready(function(){
             }
         });
     };
+	$("#sidebar").find('a').click(function(){var href=$(this).attr('href');if(href&& href!='#'){showLoading()}});
+	$(".js_loading").click(function(){showLoading();});
 })
 /**
  * 检查关键词是否重复
@@ -52,13 +54,27 @@ function keywordsCheck(wechatId,type,url,model,responseId) {
 function showLoading(){
 	//loading
 	$('body').addClass('modal-open');
-	$('body').append('<div class="bootbox modal fade in" role="dialog" tabindex="-1" ' +
+	$('body').append('<div id="loading" class="bootbox modal fade in" role="dialog" tabindex="-1" ' +
 		'style="display: block;" aria-hidden="false"><div class="modal-dialog" ' +
 		'style="width: 100%;text-align: center; padding-top: 80px;">' +
 		'<i class="fa fa-spinner fa-spin orange bigger-275"></i>' +
 		'</div><div class="modal-backdrop fade in"></div>');
 }
-function removeLoading(){
-	$(".bootbox").remove();
-	$(".modal-backdrop").remove();
+function closeLoading(){
+	$('body').removeClass('modal-open');
+	$('#loading').remove();
+}
+function showDialogLoading(id){
+    var obj = $("#"+id);
+	obj.attr('data-backdrop','static');
+    obj.children().addClass('js_modal_content hide');
+    content = '<div class="modal-dialog"><div class="loading" style="width: 100%;text-align: center; padding-top: 80px;">' +
+    '<i class="fa fa-spinner fa-spin orange bigger-275"></i></div></div>'
+    obj.append(content);
+	$("#"+id).modal('show')
+}
+function closeDialogLoading(id){
+	var obj = $("#"+id).find('.js_modal_content');
+	obj.siblings().remove();
+	obj.removeClass('hide');
 }

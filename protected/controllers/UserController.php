@@ -10,7 +10,7 @@ class UserController extends MemberController
             $model->attributes = $_POST['MemberModel'];
             if ($model->validate()) {
                 $model->save();
-                ShowMessage::success('修改成功！',Yii::app()->createUrl('user/info'));
+                $this->showSuccess('修改成功！',Yii::app()->createUrl('user/info'));
             }
         }
 		$this->render('info',array('model'=>$model));
@@ -24,7 +24,7 @@ class UserController extends MemberController
             if ($model->validate()) {
                 $model->pswd = md5($_POST['MemberModel']['newpswd']);
                 $model->save();
-                ShowMessage::success('修改成功！',Yii::app()->createUrl('user/pswd'));
+                $this->showSuccess('修改成功！',Yii::app()->createUrl('user/pswd'));
             }
         }
         $this->render('pswd', array('model' => $model));

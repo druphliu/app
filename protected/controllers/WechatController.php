@@ -31,7 +31,7 @@ class WechatController extends MemberController
             $model->apiUrl = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('/api/index/id/' . $model->originalId);
             if ($model->validate()) {
                 $model->save();
-                ShowMessage::success('添加成功！', Yii::app()->createUrl('wechat/index'));
+                $this->showSuccess('添加成功！', Yii::app()->createUrl('wechat/index'));
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
@@ -51,7 +51,7 @@ class WechatController extends MemberController
             $model->attributes = $_POST['WechatModel'];
             if ($model->validate()) {
                 $model->save();
-                ShowMessage::success('修改成功！', Yii::app()->createUrl('wechat/index'));
+                $this->showSuccess('修改成功！', Yii::app()->createUrl('wechat/index'));
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
@@ -63,7 +63,7 @@ class WechatController extends MemberController
         $model = WechatModel::model()->find('id=:id and uid=:uid',array(':id'=>$id,':uid'=>Yii::app()->session['userInfo']['uid']));
         $model->delete();
 
-        ShowMessage::success('删除成功！', Yii::app()->createUrl('wechat/index'));
+        $this->showSuccess('删除成功！', Yii::app()->createUrl('wechat/index'));
     }
 
     public function actionApi($id)

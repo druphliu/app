@@ -57,7 +57,7 @@ class MenuController extends WechatManagerController
                 $newModel->wechatId = $this->wechatInfo->id;
                 $newModel->save();
             }
-            ShowMessage::success('报错成功');
+            $this->showSuccess('报错成功');
         }
 
         $this->render('index', array('menu' => $menu));
@@ -131,7 +131,7 @@ class MenuController extends WechatManagerController
     public function actionDelete($id)
     {
         if(MenuModel::model()->deleteByPk($id)){
-            ShowMessage::success('删除成功');
+            $this->showSuccess('删除成功');
         }
     }
 

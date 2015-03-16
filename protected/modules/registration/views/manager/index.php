@@ -135,14 +135,14 @@ $this->breadcrumbs = array(
 															<a href="<?php echo $this->createUrl('manager/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
 																<i class="fa fa-list-ol bigger-120">礼包码</i>
 															</a>
-														<a class="btn btn-xs btn-danger" id="winner"
+														<a class="btn btn-xs btn-danger js_winner" id="winner"
 														   rel="<?php echo $this->createUrl('manager/winnerList/id/'.$d->id) ?>">中奖查询</a>
 														<?php }elseif($d->codeType==Globals::ACTIVE_AWARD_TYPE_VIRTUAL){?>
 															<a href="<?php echo $this->createUrl('manager/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
 																<i class="fa fa-list-ol bigger-120">礼包码</i>
 															</a>
 														<?php }else{?>
-															<a class="btn btn-xs btn-danger" id="winner"
+															<a class="btn btn-xs btn-danger js_winner" id="winner"
 															   rel="<?php echo $this->createUrl('manager/winnerList/id/'.$d->id) ?>">中奖查询</a>
 														<?php }?>
 													</div>
@@ -227,7 +227,7 @@ $this->breadcrumbs = array(
 				}
 			});
 		});
-		$("#winner").click(function () {
+		$(".js_winner").click(function () {
 			var url = $(this).attr('rel');
 			var html = '';
 			$.getJSON(url, function (data) {
