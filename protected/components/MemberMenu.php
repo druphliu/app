@@ -18,15 +18,15 @@ class MemberMenu extends CWidget
 
         )),
         '外接平台管理' => array('controller' => 'open', 'act' => 'open', 'class' => 'fa fa-openid', 'action' => array(
-                array('name' => '平台列表', 'act' => 'open_index', 'list_acl' => array(), 'url' => 'open/index'),
-                array('name' => '回复转接管理', 'act' => 'open_replay', 'list_acl' => array(), 'url' => 'open/replay')
+                array('name' => '平台列表', 'act' => 'open_index_add_update', 'list_acl' => array(), 'url' => 'open/index'),
+                array('name' => '回复转接管理', 'act' => 'open_replay_replayAdd_replayUpdate', 'list_acl' => array(), 'url' => 'open/replay')
             )),
         '营销管理' => array('controller' => 'market', 'act' => 'market', 'class' => 'fa fa-bullhorn', 'action' => array(
             array('name' => '礼包领取', 'url' => 'gift', 'act' => 'market_gift', 'list_acl' => array()),
             array('name' => '刮刮乐', 'url' => 'scratch', 'act' => 'market_scratch', 'list_acl' => array()),
 			array('name' => '大转盘', 'url' => 'wheel', 'act' => 'market_wheel', 'list_acl' => array()),
             array('name' => '砸金蛋', 'url' => 'egg', 'act' => 'market_egg', 'list_acl' => array()),
-            array('name' => '签到有奖', 'url' => 'registration', 'act' => 'egg_index', 'list_acl' => array()),
+            array('name' => '签到有奖', 'url' => 'registration', 'act' => 'market_registration', 'list_acl' => array()),
         )),
         '菜单管理' => array('controller' => 'menu', 'act' => 'menu', 'class' => 'fa fa-windows','url' => 'menu/action', 'action' => array(
 
@@ -50,6 +50,8 @@ class MemberMenu extends CWidget
     {
         $menuList = array();
         $controllerId = Yii::app()->controller->getid();
+		$actionId = Yii::app()->controller->action->id;
+		$moduleId = isset(Yii::app()->controller->module)?Yii::app()->controller->module->id:'';
         $userAllowAction = array('wechat', 'user', 'vip');
         $mangerAllowAction = array('manager', 'market', 'open','menu','scratch','wheel','egg','registration','gift');
         if (in_array($controllerId, $userAllowAction)) {
@@ -66,6 +68,27 @@ class MemberMenu extends CWidget
                 if (!in_array($m['act'], $actionArray)) {
                     unset($menuList[$k]);
                 }
+				if($m['action']){
+				foreach($m['action'] as $mkey=>$action){
+					if($moduleId){
+						if(strpos($action['act'],$moduleId)!==false){
+							$menuList[$k]['isActive'] = true;
+							$menuList[$k]['action'][$mkey]['isActive'] = true;
+						};
+					}else{
+						if(strpos($m['act'],$controllerId)!==false){
+							$menuList[$k]['isActive'] = true;
+							if(strpos($action['act'],$actionId)!==false){
+								$menuList[$k]['action'][$mkey]['isActive'] = true;
+							}
+						}
+					}
+				}
+				}else{
+					if(strpos($m['act'],$controllerId)!==false){
+							$menuList[$k]['isActive'] = true;
+							}
+				}
             }
         }
         return $menuList;
