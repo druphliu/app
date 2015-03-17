@@ -90,7 +90,7 @@ class ManagerController extends WechatManagerController
                     $msg = '编辑失败';
                     die(json_encode(array('status' => -1, 'msg' => $msg)));
                 } else {
-                    S$this->showError('编辑失败');
+                    $this->showError('编辑失败');
                 }
             }
         }

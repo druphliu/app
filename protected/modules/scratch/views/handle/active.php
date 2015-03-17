@@ -113,7 +113,7 @@
             src="<?php echo $this->module->assetsUrl; ?>/images/back.jpg">
 
         <div id="prize">
-            <?php if(!$remainCount==0){?><img src="<?php echo $this->module->assetsUrl; ?>/images/1.jpg"><?php }?>
+            <?php if($remainCount==0){?><img src="<?php echo $this->module->assetsUrl; ?>/images/1.jpg"><?php }?>
         </div>
         <div id="scratchpad">
         </div>
@@ -137,8 +137,9 @@
             <div class="boxcontent boxwhite">
                 <div class="box">
                     <div class="Detail">
-                        <?php if($totalCount==-1){?>
-                            本次活动你只可参与<span class="red" >1</span>次，请把握机会哦!
+                        <?php if($dayLimit==1){?>
+                            本次活动你只可参与<span class="red" ><?php echo $totalCount?></span>次，目前还剩
+                            <span class="red"><?php echo $remainCount?></span>次
                         <?php }else{?>
                             今天可以参与<span class="red"><?php echo $totalCount?></span>次,目前还剩
                             <span class="red"><?php echo $remainCount?></span>次
@@ -209,13 +210,10 @@
     var goon = true;
     $(function () {
         var remainCount = <?php echo $remainCount?>;
-        var msg = '<?php if($totalCount>0){?>今天刮卡次数已用完，明天再来吧<?php }else{?>本次活动你已参与了<?php }?>'
-        if (remainCount==0) {
-            $("#scratchpad").mousedown(function () {
-                alerts(msg);
-                return;
-            })
-        } else {
+        var isStop = <?php echo $isStop?>;
+        if (isStop == 0 && remainCount ==0) {
+            alerts('今天的刮奖次数已用完');
+        }else{
             $("#scratchpad").wScratchPad({
                 width: 150,
                 height: 40,
@@ -236,7 +234,7 @@
                     document.getElementById('prize').innerHTML = award;
                     sncode ? document.getElementById('sncode').innerHTML = sncode : '';
                     $("#theAward").html(award);
-                    if (zjl && goon) {
+                    if (zjl && goon && isStop ==0) {
                         //$("#zjl").fadeIn();
                         goon = false;
                         var url = '<?php echo $this->createUrl("handle/confirm")?>';
@@ -256,7 +254,7 @@
             });
         }
         //绑定按钮事件
-        $(".guanbi, #btnlotteryno1, #btnlotteryno2, #btnCancelfloat").on('click', function(){
+        $(".guanbi, #btnlotteryno1, #btnlotteryno2, #btnCancelfloat").on('click', function () {
             closeDialog();
         });
     });

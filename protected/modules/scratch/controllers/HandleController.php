@@ -14,102 +14,100 @@ class HandleController extends CController
         $return['name'] = '谢谢参与';
         $logTable = 'active_log';
         $table = 'active_awards';
-        $probability = $remainCount = 0;
+        $probability = $remainCount = $totalCount = $dayLimit = 0;
+        $isStop = 1;
         $rand = rand(1, 100000);
         $code = Yii::app()->request->getParam('code');
         list($openId, $activeId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
         $active = ActiveModel::model()->findByPk($activeId);
         //活动是否开始
-        if ($active->startTime > date('Y-m-d H:i:s')) {
-            $return['name'] = $active->unstartMsg ? $active->unstartMsg : "抱歉,还未开始呢";;
-        } elseif ($active->endTime < date('Y-m-d H:i:s')) {
-            $return['name'] = $active->endMsg ? $active->endMsg : "抱歉,你来晚了";
-        } elseif ($active->status == 0) {
-            $return['name'] = $active->pauseMsg ? $active->pauseMsg : "抱歉,活动暂时停止";
-        }
-        $totalCount = $active->times;
-        $awards = unserialize($active->awards);
-        //次数限制
-        if($totalCount > 0) {
-            $start = strtotime(date('Y-m-d')) - 1;
-            $end = strtotime(date('Y-m-d',strtotime('1 days')))-1;
-            $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId and datetime>:start and datetime<:end',
-                array(':openId' => $openId, ':activeId' => $activeId, ':start' => $start, ':end' => $end));
-            if ($count >= $totalCount)
-                $remainCount = 0;
-            else
-                $remainCount = $totalCount - $count;
-        }elseif($totalCount<0){
-            $totalCount = abs($totalCount);
-            $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId',
-                array(':openId' => $openId, ':activeId' => $activeId));
-            if ($count >= $totalCount){
-                $remainCount = 0;
+        if($active->startTime<=date('Y-m-d H:i:s') && $active->endTime >= date('Y-m-d H:i:s')&&$active->status != 0){
+            $isStop = 0;
+            $totalCount = $active->times;
+            $awards = unserialize($active->awards);
+            //次数限制
+            if($totalCount > 0) {
+                $start = strtotime(date('Y-m-d')) - 1;
+                $end = strtotime(date('Y-m-d',strtotime('1 days')))-1;
+                $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId and datetime>:start and datetime<:end',
+                    array(':openId' => $openId, ':activeId' => $activeId, ':start' => $start, ':end' => $end));
+                if ($count >= $totalCount)
+                    $remainCount = 0;
+                else
+                    $remainCount = $totalCount - $count;
+            }elseif($totalCount<0){
+                $dayLimit = 1;
+                $totalCount = abs($totalCount);
+                $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId',
+                    array(':openId' => $openId, ':activeId' => $activeId));
+                if ($count >= $totalCount){
+                    $remainCount = 0;
+                }else{
+                    $remainCount = $totalCount - $count;
+                }
             }else{
-                $remainCount = $totalCount - $count;
+                $remainCount = Globals::XXXX;
             }
-        }else{
-            $remainCount = Globals::XXXX;
-        }
 
-        //查看当前用户是否已中奖
-        $awardInfo = ActiveAwardsModel::model($table)->find('activeId=:activeId and openId=:openId and status<>0',
-            array(':activeId' => $activeId, ':openId' => $openId));
-        if (!$awardInfo && $remainCount) {
-            foreach ($awards as $k => $v) {
-                $prob = round($v['count']/$active->predictCount,2);
-                $probability +=  $prob* 100000;
-                $award[$k] = array('name' => $v['name'], 'num' => $probability);
-            }
-            //返回给客户端的奖品名称
-            foreach ($award as $key => $val) {
-                if (isset($award[$key - 1])) {
-                    if ($rand > $award[$key - 1]['num'] && $rand <= $val['num']) {
-                        //if ($rand > $award[$key - 1]['num']) {
-                        $return = $val;
-                        $return['grade'] = $key;
-                        break;
-                    }
-                } else {
-                    if ($rand > 0 && $rand <= $val['num']) {
-                        $return = $val;
-                        $return['grade'] = $key;
-                        break;
+            //查看当前用户是否已中奖
+            $awardInfo = ActiveAwardsModel::model($table)->find('activeId=:activeId and openId=:openId and status<>0',
+                array(':activeId' => $activeId, ':openId' => $openId));
+            if (!$awardInfo && $remainCount) {
+                foreach ($awards as $k => $v) {
+                    $prob = round($v['count']/$active->predictCount,2);
+                    $probability +=  $prob* 100000;
+                    $award[$k] = array('name' => $v['name'], 'num' => $probability);
+                }
+                //返回给客户端的奖品名称
+                foreach ($award as $key => $val) {
+                    if (isset($award[$key - 1])) {
+                        if ($rand > $award[$key - 1]['num'] && $rand <= $val['num']) {
+                            //if ($rand > $award[$key - 1]['num']) {
+                            $return = $val;
+                            $return['grade'] = $key;
+                            break;
+                        }
+                    } else {
+                        if ($rand > 0 && $rand <= $val['num']) {
+                            $return = $val;
+                            $return['grade'] = $key;
+                            break;
+                        }
                     }
                 }
-            }
-            if ($return['grade'] > 0) {
-                $awardCount = ActiveAwardsModel::model($table)->count('grade=:grade and activeId=:activeId and status<>0',
-                    array(':grade' => $return['grade'], ':activeId' => $activeId)); //已中奖个数
-                if ($awardCount < $awards[$return['grade']]['count']) {//未超过系统设置中奖个数
-                    $awardModel = new ActiveAwardsModel($table);
-                    $awardModel->openId = $openId;
-                    $awardModel->activeId = $activeId;
-                    $awardModel->grade = $return['grade'];
-                    $awardModel->code = $return['name'];
-                    $awardModel->isentity = isset($awards[$return['grade']]['isentity']) ? $awards[$return['grade']]['isentity'] : 0;
-                    $awardModel->status = 0;
-                    $awardModel->type = $type;
-                    $awardModel->datetime = time();
-                    $awardModel->save();
+                if ($return['grade'] > 0) {
+                    $awardCount = ActiveAwardsModel::model($table)->count('grade=:grade and activeId=:activeId and status<>0',
+                        array(':grade' => $return['grade'], ':activeId' => $activeId)); //已中奖个数
+                    if ($awardCount < $awards[$return['grade']]['count']) {//未超过系统设置中奖个数
+                        $awardModel = new ActiveAwardsModel($table);
+                        $awardModel->openId = $openId;
+                        $awardModel->activeId = $activeId;
+                        $awardModel->grade = $return['grade'];
+                        $awardModel->code = $return['name'];
+                        $awardModel->isentity = isset($awards[$return['grade']]['isentity']) ? $awards[$return['grade']]['isentity'] : 0;
+                        $awardModel->status = 0;
+                        $awardModel->type = $type;
+                        $awardModel->datetime = time();
+                        $awardModel->save();
+                    } else {
+                        //奖品达到系统设置个数,获取参与奖
+                        $participationAward = $this->_getParticipationAward($active,$openId,$type);
+                        if($participationAward)
+                            $return = $participationAward;
+                    }
                 } else {
-                    //奖品达到系统设置个数,获取参与奖
+                    //获取参与奖
                     $participationAward = $this->_getParticipationAward($active,$openId,$type);
                     if($participationAward)
                         $return = $participationAward;
                 }
-            } else {
-                //获取参与奖
-                $participationAward = $this->_getParticipationAward($active,$openId,$type);
-                if($participationAward)
-                    $return = $participationAward;
             }
         }
         $grades = array(1=>'一',2=>'二',3=>'三',4=>'四',5=>'五',6=>'六',7=>'七',8=>'八',9=>'九','10'=>'十');
         $encryption = Globals::authcode($openId . '|' . $return['grade'] . '|' . $activeId, 'ENCODE');
         $this->renderPartial('active', array('active' => $active, 'prize' => $return, 'encryption' => $encryption,
               'remainCount' => $remainCount, 'totalCount' => $totalCount,'awards'=>unserialize($active->awards),
-        'grades'=>$grades));
+        'grades'=>$grades,'isStop'=>$isStop,'dayLimit'=>$dayLimit));
     }
 
     public function actionConfirm()
