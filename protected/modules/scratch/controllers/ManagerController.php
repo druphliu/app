@@ -47,6 +47,18 @@ class ManagerController extends WechatManagerController
                 $awards[$i] = array('name' => ${'award' . $i}, 'isentity' => ${'isentity' . $i},'count'=> ${'count' . $i});
             }
             $model->awards = serialize($awards);
+            //处理海报图片
+            if($_FILES['focusImg']['error']==0){
+                $path = Yii::app()->params['imagePath'].'/'.date('Y').'/'.date('m').'/'.date('d').'/';
+                $uploader = new FileUpload($path,$_FILES['focusImg']);
+                $uploader->move();
+                $return = $uploader->getMessages();
+                if(isset($return['name'])){
+                    $filename = $return['name'];
+                    $filePath = $path.$filename;
+                    $model->focusImg = $filePath;
+                }
+            }
             if ($model->validate()) {
                 $model->save();
                 $keywords = $_POST['ActiveModel']['keywords'];
@@ -82,6 +94,18 @@ class ManagerController extends WechatManagerController
                 $awards[$i] = array('name' => ${'award' . $i}, 'isentity' => ${'isentity' . $i},'count'=> ${'count' . $i});
             }
             $model->awards = serialize($awards);
+            //处理海报图片
+            if($_FILES['focusImg']['error']==0){
+                $path = Yii::app()->params['imagePath'].'/'.date('Y').'/'.date('m').'/'.date('d').'/';
+                $uploader = new FileUpload($path,$_FILES['focusImg']);
+                $uploader->move();
+                $return = $uploader->getMessages();
+                if(isset($return['name'])){
+                    $filename = $return['name'];
+                    $filePath = $path.$filename;
+                    $model->focusImg = $filePath;
+                }
+            }
             if ($model->validate()) {
                 $model->save();
                 $keywords = $_POST['ActiveModel']['keywords'];

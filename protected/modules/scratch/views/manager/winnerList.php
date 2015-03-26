@@ -12,7 +12,7 @@
         <table class="table table-striped table-bordered table-hover" id="sample-table-1">
             <thead>
             <tr>
-                <th>签到天数</th>
+                <th>中奖等级</th>
                 <th>中奖内容</th>
                 <th class="hidden-480">中奖者电话</th>
                 <th>
@@ -23,7 +23,7 @@
             <tbody>
             <?php foreach($data as $list){?>
                 <tr>
-                    <td><?php echo $grades[$list['grade']]?>天</td>
+                    <td><?php echo $grades[$list['grade']]?>等奖</td>
                     <td><?php echo $list['code']?></td>
                     <td><?php echo $list['tel']?></td>
                     <td><?php echo date('Y-m-d',$list['datetime'])?></td>

@@ -153,6 +153,13 @@
         </div>
         <div class="space-4"></div>
         <div class="form-group">
+            <?php echo CHtml::label('海报图片', 'focusImg', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo CHtml::fileField('focusImg', '',array('id'=>'id-input-file-1')); ?>
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
             <?php echo $form->labelEx($model, 'desc', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-9">
                 <div class="col-sm-5">
@@ -227,6 +234,7 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootbox.min.js"></script>
 <script>
     var result = false;
+    var fileName = '<?php echo $model->focusImg?>';
     $().ready(function () {
         $("#startTime").datetimepicker({
             format: 'yyyy-MM-dd hh:mm:ss',
@@ -284,17 +292,39 @@
                 {name: 'unlink', className: 'btn-pink'}
             ]
         }).prev().addClass('wysiwyg-style2');
-        $('#id-input-file-1,#id-input-file-2').ace_file_input({
-            no_file:'未选择图片....',
+        $('#id-input-file-1').ace_file_input({
+            style:'well',
+            no_icon:'fa fa-picture-o',
             btn_choose:'选择',
             btn_change:'更改',
             droppable:false,
             onchange:null,
-            thumbnail:false //| true | large
-            //whitelist:'gif|png|jpg|jpeg'
+            thumbnail:'large', //| true | large
+            whitelist:'gif|png|jpg|jpeg',
             //blacklist:'exe|php'
             //onchange:''
             //
+            'before_change': function(files, dropped) {
+                var allowed_files = [];
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (typeof file === "string") {
+                        //IE8 and browsers that don't support File Object
+                        if (!(/\.(jpe?g|png|gif|bmp)$/i).test(file)) return false;
+                    }
+                    else {
+                        var type = $.trim(file.type);
+                        if (( type.length > 0 && !(/^image\/(jpe?g|png|gif|bmp)$/i).test(type) )
+                            || ( type.length == 0 && !(/\.(jpe?g|png|gif|bmp)$/i).test(file.name) )//for android's default browser which gives an empty string for file.type
+                        ) continue;//not an image so don't keep this file
+                    }
+                    allowed_files.push(file);
+                }
+
+                if(allowed_files.length == 0) return false;
+
+                return allowed_files;
+            }
         });
         $("#submit").click(function () {
             if(result==false){
@@ -330,6 +360,9 @@
         $(".js_cancel").click(function(){
             $("#awards div:last-child").remove();
         });
+        if(fileName){
+            $(".file-name").html('<img src="'+fileName+'">');
+        }
     });
 
 function checkAwards(){
