@@ -92,7 +92,6 @@ class HandleController extends CController
                         type=:type and openId is null', array(':activeId' => $activeId, ':grade' => $count,':type'=>$type));
                     if ($code) {
                         $code->status=2;
-                        $code->awardsInfo = $awardsArray[$count]['name'];
                         $code->openId = $openId;
                         $code->datetime = time();
                         $code->save();

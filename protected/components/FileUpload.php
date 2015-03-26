@@ -29,7 +29,7 @@ class FileUpload
     public function __construct($path,$file)
     {
         if(!file_exists($path)){
-            mkdir($path);
+            mkdir($path,777,true);
             $handel = fopen($path.'index.php','w');
             fwrite($handel,'');
             fclose($handel);

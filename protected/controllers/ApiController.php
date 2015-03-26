@@ -283,7 +283,7 @@ class ApiController extends Controller
             $code = Globals::authcode($string, 'ENCODE');
             $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl($activeType.'/handle', array('code' => $code));
             $responseObj = new WeChatArticleResponse();
-            $responseObj->add_article($active->title, '', Yii::app()->params['siteUrl'] . '/wechat/' . Yii::app()->params['scratchPath'] . '/' . $active->wechatId, $url);
+            $responseObj->add_article($active->title, $active->desc, Yii::app()->params['siteUrl'] . '/' . $active->focusImg, $url);
         }
         $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
         return $responseObj;

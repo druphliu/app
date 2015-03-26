@@ -22,6 +22,7 @@
  * @property integer $status
  * @property integer $times
  * @property string $desc
+ * @property string $focusImg
  */
 class ActiveModel extends CActiveRecord
 {
@@ -43,10 +44,10 @@ class ActiveModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('wechatId, title, awards, predictCount', 'required'),
+			array('wechatId, title, awards', 'required'),
 			array('wechatId, ispaward, predictCount, codeType, isSensitive, status, times', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>12),
-			array('title, unstartMsg, endMsg, pauseMsg', 'length', 'max'=>255),
+			array('title, unstartMsg, endMsg, pauseMsg,focusImg', 'length', 'max'=>255),
 			array('awards', 'length', 'max'=>1000),
 			array('startTime, endTime, desc', 'safe'),
 			// The following rule is used by search().
@@ -76,7 +77,7 @@ class ActiveModel extends CActiveRecord
 			'id' => 'ID',
 			'wechatId' => 'Wechat',
 			'type' => '活动类型',
-			'title' => 'Title',
+			'title' => '活动标题',
 			'awards' => '奖项',
 			'ispaward' => '是否参与奖',
 			'predictCount' => '活动预测参加人数',
@@ -91,6 +92,9 @@ class ActiveModel extends CActiveRecord
 			'status' => '是否开启',
 			'times' => '每天可参加次数',
 			'desc' => '活动简介',
+            'focusImg' => '活动海报图片',
+            'isAccurate'=>'是否精准匹配',
+            'keywords'=>'关键词'
 		);
 	}
 
@@ -130,6 +134,7 @@ class ActiveModel extends CActiveRecord
 		$criteria->compare('status',$this->status);
 		$criteria->compare('times',$this->times);
 		$criteria->compare('desc',$this->desc,true);
+        $criteria->compare('focusImg',$this->focusImg,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

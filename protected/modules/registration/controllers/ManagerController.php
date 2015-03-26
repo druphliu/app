@@ -30,6 +30,7 @@ class ManagerController extends WechatManagerController
             $model->type = Globals::TYPE_REGISTRATION;
             $model->attributes = $_POST['ActiveModel'];
             $model->wechatId = $this->wechatInfo->id;
+            $model->codeType = Globals::ACTIVE_AWARD_TYPE_VIRTUAL;
             $count = $_POST['awardsCount'];
             //奖项处理
             for ($i = 1; $i <= $count; $i++) {
@@ -63,6 +64,7 @@ class ManagerController extends WechatManagerController
             $comm = ',';
         }
         $model->isAccurate = $oldIsAccurate;
+        $model->codeType = Globals::ACTIVE_AWARD_TYPE_VIRTUAL;
         if (isset($_POST['ActiveModel'])) {
             $model->attributes = $_POST['ActiveModel'];
             $count = $_POST['awardsCount'];
@@ -74,6 +76,19 @@ class ManagerController extends WechatManagerController
                 $awards[$i] = array('name' => ${'award' . $i}, 'isentity' => ${'isentity' . $i},'count'=> ${'count' . $i});
             }
             $model->awards = serialize($awards);
+            //处理海报图片
+            if($_FILES){
+                $path = Yii::app()->params['imagePath'].'/'.date('Y').'/'.date('m').'/'.date('d').'/';
+                $uploader = new FileUpload($path,$_FILES['focusImg']);
+                $uploader->move();
+                $return = $uploader->getMessages();
+                if(isset($return['name'])){
+                    $filename = $return['name'];
+                    $filePath = $path.$filename;
+                    $model->focusImg = $filePath;
+                }
+            }
+
             if ($model->validate()) {
                 $model->save();
                 $keywords = $_POST['ActiveModel']['keywords'];
