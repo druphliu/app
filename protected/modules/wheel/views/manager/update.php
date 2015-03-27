@@ -4,17 +4,17 @@
 $this->breadcrumbs = array(
     array('name' => '首页', 'url' => array('wechat/index')),
     array('name' => '营销管理'),
-    array('name' => '彩蛋'),
+    array('name' => '大转盘','url'=>array('/scratch/manager')),
 );
 ?>
 <div class="page-header">
     <h1>
-        刮刮乐
+        大转盘
         <small>
             <i class="fa fa-angle-double-right"></i>
-            添加彩蛋
+            编辑大转盘活动
         </small>
     </h1>
 </div>
-<?php $this->renderPartial('_form', array('model' => $model,'type'=>$type,'wechatId'=>$wechatId,'responseId'=>$responseId,'menuList'=>$menuList));
+<?php $this->renderPartial('_form', array('model' => $model,'wechatId'=>$wechatId,'responseId'=>$responseId,'awards'=>$awards));
 ?>

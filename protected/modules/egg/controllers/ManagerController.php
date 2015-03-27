@@ -1,18 +1,12 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: druphliu
- * Date: 2014/12/9
- * Time: 11:04
- */
 class ManagerController extends WechatManagerController
 {
-    public function actionIndex()
-    {
+	public function actionIndex()
+	{
         $type = Yii::app()->request->getParam('type');
         $with = array('active_keywords');
-        $whereType = "and t.type='" . Globals::TYPE_SCRATCH . "' and active_keywords.type='" . Globals::TYPE_ACTIVE . "'";
+        $whereType = "and t.type='" . Globals::TYPE_EGG . "' and active_keywords.type='" . Globals::TYPE_ACTIVE . "'";
         $this->layout = '//layouts/memberList';
         $dataProvider = new CActiveDataProvider('ActiveModel', array(
             'criteria' => array(
@@ -29,13 +23,13 @@ class ManagerController extends WechatManagerController
         ));
         $this->render('index', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(),
             'type' => $type, 'wechatInfo' => $this->wechatInfo));
-    }
+	}
 
-    public function actionCreate()
-    {
+	public function actionCreate()
+	{
         $model = new ActiveModel();
         if (isset($_POST['ActiveModel'])) {
-            $model->type = Globals::TYPE_SCRATCH;
+            $model->type = Globals::TYPE_EGG;
             $model->attributes = $_POST['ActiveModel'];
             $model->wechatId = $this->wechatInfo->id;
             $count = $_POST['awardsCount'];
@@ -65,12 +59,12 @@ class ManagerController extends WechatManagerController
                 $isAccurate = $_POST['ActiveModel']['isAccurate'];
                 $keywordsArray = explode(',', $keywords);
                 $this->saveKeywords($keywordsArray, $model->id, $isAccurate, Globals::TYPE_ACTIVE);
-                $this->showSuccess('添加成功', Yii::app()->createUrl('scratch'));
+                $this->showSuccess('添加成功', Yii::app()->createUrl('egg'));
             }
         }
         Yii::app()->clientScript->scriptMap['jquery.js'] = false;
         $this->render('create', array('model' => $model, 'wechatId' => $this->wechatInfo->id, 'responseId' => 0,'awards'=>''));
-    }
+	}
 
     public function actionUpdate($id){
         $comm = '';
@@ -112,7 +106,7 @@ class ManagerController extends WechatManagerController
                 $isAccurate = $_POST['ActiveModel']['isAccurate'];
                 $keywordsArray = explode(',', $keywords);
                 $this->saveKeywords($keywordsArray, $model->id, $isAccurate, Globals::TYPE_ACTIVE, $oldKeywords, $oldIsAccurate);
-                $this->showSuccess('添加成功', Yii::app()->createUrl('scratch'));
+                $this->showSuccess('添加成功', Yii::app()->createUrl('egg'));
             }
         }
         $awards = unserialize($model->awards);
@@ -124,13 +118,14 @@ class ManagerController extends WechatManagerController
         ActiveModel::model()->deleteByPk($id,'wechatId=:wechatId',array(':wechatId'=>$this->wechatInfo->id));
         //删除关键词
         KeywordsModel::model()->deleteAll('responseId=:responseId and type=:type',array(':responseId'=>$id,':type'=>Globals::TYPE_ACTIVE));
-        $this->showSuccess('删除成功', Yii::app()->createUrl('scratch'));
+        $this->showSuccess('删除成功', Yii::app()->createUrl('egg'));
     }
 
     public function actionCodes($id)
     {
         $active = ActiveModel::model()->findByPk($id);
         $awards = unserialize($active->awards);
+        $awardsList = array();
         foreach($awards as $g=>$a){
             if(!$a['isentity']){
                 $awardsList[$g] = $a;
@@ -251,4 +246,4 @@ class ManagerController extends WechatManagerController
         }
         $this->showSuccess('删除成功');
     }
-} 
+}

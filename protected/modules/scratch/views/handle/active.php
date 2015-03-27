@@ -211,7 +211,7 @@
     $(function () {
         var remainCount = <?php echo $remainCount?>;
         var isStop = <?php echo $isStop?>;
-        if (isStop == 0 && remainCount ==0) {
+        if (isStop == 0 || remainCount ==0) {
             alerts('今天的刮奖次数已用完');
         }else{
             $("#scratchpad").wScratchPad({

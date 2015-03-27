@@ -10,53 +10,58 @@ class HandleController extends CController
 {
     public function actionIndex()
     {
-        $logTable = 'wheel_log';
-        $table = 'wheel_awards';
-        $remainCount = $prize = 0;
+        $logTable = 'active_log';
+        $table = 'active_awards';
+        $remainCount = $hasCount = 0;
+        $isStop = 1;
         $code = Yii::app()->request->getParam('code');
-        list($openId, $wheelId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
-        $wheel = WheelModel::model()->findByPk($wheelId);
+        list($openId, $activeId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
+        $active = ActiveModel::model()->findByPk($activeId);
         //活动是否开始
-        if ($wheel->startTime > date('Y-m-d H:i:s')) {
-            $prize = 1;
-        } elseif ($wheel->endTime < date('Y-m-d H:i:s')) {
-            $prize = 1;
-        } elseif ($wheel->status == 0) {
-            $prize = 1;
+        if ($active->startTime <= date('Y-m-d H:i:s') && $active->endTime >= date('Y-m-d H:i:s') && $active->status != 0) {
+            $isStop = 0;
+            $totalCount = $active->times;
+            $awards = unserialize($active->awards);
+            //次数限制
+            if ($totalCount > 0) {
+                $start = strtotime(date('Y-m-d')) - 1;
+                $end = strtotime(date('Y-m-d', strtotime('1 days'))) - 1;
+                $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId and datetime>:start and datetime<:end',
+                    array(':openId' => $openId, ':activeId' => $activeId, ':start' => $start, ':end' => $end));
+                if ($count >= $totalCount)
+                    $remainCount = 0;
+                else
+                    $remainCount = $totalCount - $count;
+            } elseif ($totalCount < 0) {
+                $dayLimit = 1;
+                $totalCount = abs($totalCount);
+                $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId',
+                    array(':openId' => $openId, ':activeId' => $activeId));
+                if ($count >= $totalCount) {
+                    $remainCount = 0;
+                } else {
+                    $remainCount = $totalCount - $count;
+                }
+            } else {
+                $remainCount = Globals::XXXX;
+            }
         }
-        $totalCount = $wheel->times;
-        //次数限制
-        if ($totalCount == -1) {//本活动只能参与一次
-            $count = WheelLogModel::model($logTable)->count('openId=:openId and wheelId=:wheelId',
-                array(':openId' => $openId, ':wheelId' => $wheelId));
-            $totalCount = 1;
-            if ($count > 0)
-                $hasCount = $count;
-        }
-        if ($totalCount > 0) {
-            $start = strtotime(date('Y-m-d')) - 1;
-            $end = strtotime(date('Y-m-d', strtotime('1 days'))) - 1;
-            $count = WheelLogModel::model($logTable)->count('openId=:openId and wheelId=:wheelId and datetime>:start and datetime<:end',
-                array(':openId' => $openId, ':wheelId' => $wheelId, ':start' => $start, ':end' => $end));
-            $hasCount = $count;
-        }
-        $this->renderPartial('active', array('wheel' => $wheel, 'prize' => $prize, 'hasCount' => $hasCount,
-            'encryption' => $code, 'totalCount' => $totalCount));
+        $this->renderPartial('active', array('active' => $active, 'remainCount' => $remainCount, 'encryption' => $code,'isStop'=>$isStop,));
     }
 
     public function actionActive()
     {
         $probability = 0;
-        $sn='';
+        $sn = '';
         $rand = rand(1, 100000);
-        $table = 'wheel_awards';
-        $logTable = 'wheel_log';
+        $table = 'actve_awards';
+        $logTable = 'active_log';
         $encryption = Yii::app()->request->getParam('encryption');
         list($openId, $wheelId, $type) = explode('|', Globals::authcode($encryption, 'DECODE'));
-        $wheel = WheelModel::model()->findByPk($wheelId);
+        $wheel = ActiveModel::model()->findByPk($wheelId);
         $awards = unserialize($wheel->awards);
         //查看当前用户是否已中奖
-        $wheelInfo = WheelAwardsModel::model($table)->find('wheelId=:wheelId and openId=:openId and status<>0',
+        $wheelInfo = ActiveAwardsModel::model($table)->find('wheelId=:wheelId and openId=:openId and status<>0',
             array(':wheelId' => $wheelId, ':openId' => $openId));
         if (!$wheelInfo) {
             foreach ($awards as $k => $v) {
@@ -85,15 +90,15 @@ class HandleController extends CController
                 }
             }
             if ($return['grade'] > 0) {
-                $awardCount = WheelAwardsModel::model($table)->count('grade=:grade and wheelId=:wheelId and status<>0',
+                $awardCount = ActiveAwardsModel::model($table)->count('grade=:grade and wheelId=:wheelId and status<>0',
                     array(':grade' => $return['grade'], ':wheelId' => $wheelId)); //已中奖个数
                 if (($awardCount <= 0 || $awardCount < $awards[$return['grade']]['count'])) {//未超过系统设置中奖个数
                     if ($awards[$return['grade']]['isentity'] == 1) {
                         //人工干预抽奖，实现每天送出15个一等奖和二等奖
-                        $shiwuCount = WheelAwardsModel::model($table)->count('grade=:grade and datetime>:start and datetime<:end',
-                            array(':grade'=>$return['grade'],':start'=>strtotime(date('Y-m-d'))-1,':end'=>strtotime(date('Y-m-d')." 23:59:59")));
-                        if($shiwuCount<15){
-                            $awardModel = new WheelAwardsModel($table);
+                        $shiwuCount = ActiveAwardsModel::model($table)->count('grade=:grade and datetime>:start and datetime<:end',
+                            array(':grade' => $return['grade'], ':start' => strtotime(date('Y-m-d')) - 1, ':end' => strtotime(date('Y-m-d') . " 23:59:59")));
+                        if ($shiwuCount < 15) {
+                            $awardModel = new ActiveAwardsModel($table);
                             $awardModel->openId = $openId;
                             $awardModel->wheelId = $wheelId;
                             $awardModel->grade = $return['grade'];
@@ -103,21 +108,21 @@ class HandleController extends CController
                             $awardModel->type = $type;
                             $awardModel->datetime = time();
                             $awardModel->save();
-                        }else{
+                        } else {
                             $return = array('grade' => 0, 'name' => '谢谢参与', 'num' => 100000);
                         }
 
                     } else {
                         //码类
-                        $awardData = WheelAwardsModel::model($table)->find('wheelId=:wheelId and grade=:grade and type=:type and status=0',
+                        $awardData = ActiveAwardsModel::model($table)->find('wheelId=:wheelId and grade=:grade and type=:type and status=0',
                             array(':wheelId' => $wheelId, ':grade' => $return['grade'], ':type' => $type));
-                        if($awardData) {//是否还有码
+                        if ($awardData) {//是否还有码
                             $sn = $awardData->code;
                             $awardData->status = 1;
                             $awardData->openId = $openId;
                             $awardData->datetime = time();
                             $awardData->save();
-                        }else{
+                        } else {
 
                             $return = array('grade' => 0, 'name' => '谢谢参与', 'num' => 100000);
                         }
@@ -129,7 +134,7 @@ class HandleController extends CController
             $return = array('grade' => 0, 'name' => '谢谢参与', 'num' => 100000);
         }
         //log
-        $log = new WheelLogModel($logTable);
+        $log = new ActiveLogModel($logTable);
         $log->datetime = time();
         $log->openId = $openId;
         $log->wheelId = $wheelId;

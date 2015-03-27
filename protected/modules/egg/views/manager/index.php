@@ -4,7 +4,7 @@
 $this->breadcrumbs = array(
     array('name' => '首页', 'url' => array('wechat/index')),
     array('name' => '营销管理'),
-    array('name' => '彩蛋管理'),
+    array('name' => '砸金蛋管理'),
 );
 ?>
 <div class="page-header">
@@ -12,7 +12,7 @@ $this->breadcrumbs = array(
         营销管理
         <small>
             <i class="fa fa-angle-double-right"></i>
-            彩蛋管理
+            砸金蛋管理
         </small>
     </h1>
 </div>
@@ -23,20 +23,13 @@ $this->breadcrumbs = array(
                 <div class="table-responsive">
                     <div class="tabbable">
                         <ul id="myTab" class="nav nav-tabs">
-                            <li class="<?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>active<?php } ?>">
-                                <a href="<?php echo Yii::app()->createUrl('egg', array('type' => GiftModel::TYPE_KEYWORDS)) ?>">
-                                    关键词彩蛋列表
+                            <li class="active">
+                                <a href="<?php echo Yii::app()->createUrl('scratch') ?>">
+                                    活动列表
                                 </a>
                             </li>
-                            <?php if ($wechatInfo->isAuth) { ?>
-                                <li class="<?php if ($type == GiftModel::TYPE_MENU) { ?>active<?php } ?>">
-                                    <a href="<?php echo Yii::app()->createUrl('egg', array('type' => GiftModel::TYPE_MENU)) ?>">
-                                        菜单彩蛋列表
-                                    </a>
-                                </li>
-                            <?php } ?>
                             <li>
-                                <a href="<?php echo Yii::app()->createUrl('/egg/egg/create', array('type' => $type)) ?>"
+                                <a href="<?php echo $this->createUrl('manager/create') ?>"
                                    class="btn btn-primary">添加</a>
                             </li>
                         </ul>
@@ -55,9 +48,8 @@ $this->breadcrumbs = array(
                                             </th>
                                             <th>ID</th>
                                             <th>活动名称</th>
-                                            <th><?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>关键词<?php } else { ?>菜单名<?php } ?></th>
-                                            <?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>
-                                                <th>是否精准匹配</th><?php } ?>
+                                            <th>关键词</th>
+                                            <th>是否精准匹配</th>
                                             <th>创建时间</th>
                                             <th>开始时间</th>
                                             <th>结束时间</th>
@@ -86,32 +78,27 @@ $this->breadcrumbs = array(
                                                     <?= $d->title ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>
-                                                        <?php foreach ($d->active_keywords as $keywords) { ?>
-                                                            <span
-                                                                class="label label-sm label-primary arrowed arrowed-right"><?= $keywords->name ?></span>
-                                                        <?php } ?>
-                                                    <?php } else { ?>
-                                                        <?php foreach ($d->active_menuaction as $menuaction) { ?>
-                                                            <span
-                                                                class="label label-sm label-primary arrowed arrowed-right"><?= $menuaction->action_menu->name ?></span>
-                                                        <?php } ?>
+
+                                                    <?php foreach ($d->active_keywords as $keywords) { ?>
+                                                        <span
+                                                            class="label label-sm label-primary arrowed arrowed-right"><?= $keywords->name ?></span>
                                                     <?php } ?>
+
                                                 </td>
-                                                <?php if ($type == GiftModel::TYPE_KEYWORDS) { ?>
-                                                    <td>
-                                                        <?php foreach ($d->active_keywords as $isAccurate) {
-                                                            if ($isAccurate->isAccurate) {
-                                                                ?>
-                                                                <span class="label label-sm label-success">是</span>
-                                                            <?php } else { ?>
-                                                                <span class="label label-sm label-warning">否</span>
-                                                            <?php
-                                                            }
-                                                            break;
-                                                        } ?>
-                                                    </td>
-                                                <?php } ?>
+
+                                                <td>
+                                                    <?php foreach ($d->active_keywords as $isAccurate) {
+                                                        if ($isAccurate->isAccurate) {
+                                                            ?>
+                                                            <span class="label label-sm label-success">是</span>
+                                                        <?php } else { ?>
+                                                            <span class="label label-sm label-warning">否</span>
+                                                        <?php
+                                                        }
+                                                        break;
+                                                    } ?>
+                                                </td>
+
                                                 <td><?= $d->created_at ?></td>
                                                 <td><?= $d->startTime ?></td>
                                                 <td><?= $d->endTime ?></td>
@@ -123,29 +110,39 @@ $this->breadcrumbs = array(
                                                 </td>
                                                 <td style="width:23%">
                                                     <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-                                                        <?php if ($d->ispaward) { ?>
-                                                            <a class="btn btn-xs btn-primary"
-                                                               href="<?php echo Yii::app()->createUrl('scratch/scratch/codes/id/' . $d->id) ?>">
-                                                                <i class="fa fa-list-ol bigger-120">礼包码</i>
-                                                            </a>
-                                                        <?php } ?>
                                                         <?php if (!$d->status) { ?>
-                                                            <!--<a class="btn btn-xs btn-info" href="<?php echo Yii::app()->createUrl('market/giftUpdate/id/' . $d->id) ?>">
+                                                            <a class="btn btn-xs btn-info" href="<?php echo $this->createUrl('manager/update/id/' . $d->id) ?>">
                                                                 <i class="fa fa-edit bigger-120">编辑</i>
                                                             </a>
-                                                            <a class="btn btn-xs btn-info status" rel="<?php echo Yii::app()->createUrl('ajax/giftStatus/id/' . $d->id) ?>" data="1" href="javascript:void(0)">
+                                                            <a class="btn btn-xs btn-info js_status" rel="<?php echo $this->createUrl('manager/status/id/' . $d->id) ?>" data="1" href="javascript:void(0)">
                                                                 <i class="fa fa-play bigger-120">启用</i>
-                                                            </a>-->
+                                                            </a>
+                                                            <a class="btn btn-xs btn-danger  bootbox-confirm" rel="<?= $this->createUrl('manager/delete/id/' . $d->id) ?>">
+                                                                <i class="fa fa-remove bigger-120">删除</i>
+                                                            </a>
                                                         <?php } else { ?>
-                                                            <!--<a class="btn btn-xs btn-info status" rel="<?php echo Yii::app()->createUrl('ajax/giftStatus/id/' . $d->id) ?>"  data="0" href="javascript:void(0)">
+                                                            <a class="btn btn-xs btn-info js_status" rel="<?php echo $this->createUrl('manager/status/id/' . $d->id) ?>"  data="0" href="javascript:void(0)">
                                                                 <i class="fa fa-stop bigger-120">停止</i>
-                                                            </a>-->
+                                                            </a>
                                                         <?php } ?>
-                                                        <a class="btn btn-xs btn-info" id="winner"
-                                                           rel="<?php echo Yii::app()->createUrl('scratch/scratch/winnerList/id/'.$d->id) ?>">中奖查询</a>
-                                                        <!--<a class="btn btn-xs btn-danger  bootbox-confirm" rel="<?= Yii::app()->createUrl('scratch/scratch/delete/id/' . $d->id) ?>">
-                                                            <i class="fa fa-remove bigger-120">删除</i>
-                                                        </a>-->
+                                                        <?php if($d->codeType==Globals::ACTIVE_AWARD_TYPE_MIX){?>
+                                                            <a href="<?php echo $this->createUrl('manager/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
+                                                                <i class="fa fa-list-ol bigger-120">礼包码</i>
+                                                            </a>
+                                                            <a class="btn btn-xs btn-danger js_winner" id="winner"
+                                                               rel="<?php echo $this->createUrl('manager/winnerList/id/'.$d->id) ?>">中奖查询</a>
+                                                        <?php }elseif($d->codeType==Globals::ACTIVE_AWARD_TYPE_VIRTUAL){?>
+                                                            <a href="<?php echo $this->createUrl('manager/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
+                                                                <i class="fa fa-list-ol bigger-120">礼包码</i>
+                                                            </a>
+                                                        <?php }elseif($d->ispaward){?>
+                                                            <a href="<?php echo $this->createUrl('manager/codes/id/'.$d->id) ?>" class="btn btn-xs btn-primary">
+                                                                <i class="fa fa-list-ol bigger-120">礼包码</i>
+                                                            </a>
+                                                        <?php }else{?>
+                                                            <a class="btn btn-xs btn-danger js_winner" id="winner"
+                                                               rel="<?php echo $this->createUrl('manager/winnerList/id/'.$d->id) ?>">中奖查询</a>
+                                                        <?php }?>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -182,28 +179,11 @@ $this->breadcrumbs = array(
                         class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">中奖者信息</h4>
             </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover" id="sample-table-1">
-                        <thead>
-                        <tr>
-                            <th>中奖等级</th>
-                            <th>中奖内容</th>
-                            <th class="hidden-480">中奖者电话</th>
-                            <th>
-                                中奖时间
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody id="winner_content">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                <iframe id="winnerContent" width="100%" height="400px" frameborder="0"></iframe>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
-        </div>
+            </div>
     </div>
 </div>
 <script>
@@ -228,22 +208,32 @@ $this->breadcrumbs = array(
                 }
             });
         });
-        $("#winner").click(function () {
+        $(".js_winner").click(function () {
+            showDialogLoading('myModal');
             var url = $(this).attr('rel');
-            var html = '';
-            $.getJSON(url, function (data) {
-                for (i = 0; i < data.length; i++) {
-                    html += ' <tr>' +
-                    '<td>' + data[i].grade + '</td>' +
-                    '<td>' + data[i].code + '</td>' +
-                    '<td>' + data[i].telphone + '</td>' +
-                    '<td>' + data[i].datetime + '</td>' +
-                    '</tr>';
-                }
-                $("#winner_content").html(html);
-                $('#myModal').modal('show');
+            $("#winnerContent").attr('src',url);
+            $("#winnerContent").load(function(){
+                closeDialogLoading('myModal');
             });
 
+        });
+        $(".js_status").click(function(){
+            var url = $(this).attr('rel');
+            var status = $(this).attr('data');
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: "status=" + status,
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    if (data.result == 0) {
+                        window.location.href = '';
+                    }else{
+                        alert(data.msg);
+                    }
+                }
+            });
         })
     })
 </script>

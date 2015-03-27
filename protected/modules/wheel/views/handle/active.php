@@ -69,26 +69,21 @@
     $(function () {
         var lostDeg = [0, 130];
         var prizeDeg = [220,170,310,90,40];//50经验礼包,90，270传奇卷轴,130元宝500，180 中级星石，320兽魂礼包
-        var prize = <?php echo $prize?>==0?null:<?php echo $prize?>;
-        var count = <?php echo $hasCount?>;
-        var totalCount = <?php echo $totalCount?>;
+        var remainCount = <?php echo $remainCount?>;
+        var isStop = <?php echo $isStop?>;
         var outter, inner, timer, running = false;
         $("#inner").rotate({
             bind:{
                 click:function(){
                     if (running)
                         return;
-                    if (count >=totalCount) {
-                        alert("您已经抽了 " + count + "次奖。明天再来吧!");
-                        return
-                    }
-                    if (prize != null) {
-                        alert("亲，你不能再参加本次活动了喔！下次再来吧~");
-                        return
+                    if (isStop == 0 || remainCount <=0) {
+                        alert('今天的刮奖次数已用完');
+                        return;
                     }
                     var a = 0;//40 兽魂礼包 90传奇抽奖券  130 谢谢参与 170 中级星级石 220 元宝 310 经验礼包 0谢谢参与
                     $.ajax({
-                        url: "<?php echo Yii::app()->createUrl('wheel/handle/active')?>",
+                        url: "<?php echo $this->createUrl('handle/active')?>",
                         dataType: "json",
                         async: false,
                         data: {
@@ -100,8 +95,7 @@
                         },
                         success: function (data) {
                             if (data.error == "invalid") {
-                                alert("您已经抽了 "+totalCount+" 次奖。明天再来吧");
-                                count = 3;
+                                alert(data.message);
                                 return
                             }
                             if (data.success) {
@@ -114,14 +108,13 @@
                                     $("#form").html('');
                                 }
                                 $("#encryption").val(data.encryption);
+                                remainCount--;
                             }
                             running = false;
-                            count++;
                         },
                         error: function () {
                             prize = null;
                             running = false;
-                            count++
                         },
                         timeout: 4000
                     })

@@ -34,31 +34,46 @@
         </div>
 
         <div class="space-4"></div>
-        <?php if ($type != GiftModel::TYPE_KEYWORDS) { ?>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'action', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <?php echo $form->dropDownList($model, 'action',$menuList, array('class' => 'col-xs-5 col-sm-2')); ?>
-                    <?php echo $form->error($model, 'action', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                </div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'keywords', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-9">
+                <?php echo $form->textField($model, 'keywords', array('class' => 'col-xs-10 col-sm-5')); ?>
+                <?php echo $form->error($model, 'keywords', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
-        <?php } else { ?>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'keywords', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-9">
-                    <?php echo $form->textField($model, 'keywords', array('class' => 'col-xs-10 col-sm-5')); ?>
-                    <?php echo $form->error($model, 'keywords', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'isAccurate', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo $form->checkBox($model, 'isAccurate', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php echo $form->error($model, 'isAccurate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
-            <div class="space-4"></div>
-            <div class="form-group">
-                <?php echo $form->labelEx($model, 'isAccurate', array('class' => BootStrapUI::formLabelClass)); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->checkBox($model, 'isAccurate', array('class' => 'col-xs-2 col-sm-2')); ?>
-                    <?php echo $form->error($model, 'isAccurate', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'codeType', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo $form->dropDownList($model, 'codeType',Globals::$activeAwardTypeList); ?>
+                <?php echo $form->error($model, 'codeType', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
-        <?php } ?>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'times', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo $form->textField($model, 'times', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php echo $form->error($model, 'times', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+                <i>等于0:不限,小于0整数:本活动可刮奖次数,大于0整数:每天可刮奖次数</i>
+            </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+            <?php echo $form->labelEx($model, 'predictCount', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo $form->textField($model, 'predictCount', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php echo $form->error($model, 'predictCount', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+            </div>
+        </div>
         <div class="space-4"></div>
         <div class="form-group">
             <?php echo $form->labelEx($model, 'isSensitive', array('class' => BootStrapUI::formLabelClass)); ?>
@@ -69,50 +84,53 @@
         </div>
         <div class="space-4"></div>
         <div class="form-group">
-            <?php echo $form->labelEx($model, 'times', array('class' => BootStrapUI::formLabelClass)); ?>
+            <?php echo $form->labelEx($model, 'ispaward', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-4">
-                <?php echo $form->textField($model, 'times', array('class' => 'col-xs-2 col-sm-2')); ?>
-                <?php echo $form->error($model, 'times', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-                <i>0:不限,-1:本活动可刮奖次数,1:每天可刮奖次数</i>
+                <?php echo $form->checkBox($model, 'ispaward', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php echo $form->error($model, 'ispaward', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
         <div class="space-4"></div>
         <div class="form-group">
             <?php echo $form->labelEx($model, 'awards', array('class' => BootStrapUI::formLabelClass)); ?>
             <span class="col-sm-9">
-                <button class="close red" type="button" style="float: none">
+                <button class="close red js_add" type="button" style="float: none">
                     <i class="fa fa-plus"></i>
                 </button>
-                <button class="close" type="button" style="float: none">
+                <button class="close js_cancel" type="button" style="float: none">
                     <i class="fa fa-remove"></i>
                 </button>
                 </span>
              </span>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-3">
+            <div class="col-sm-offset-3" id="awards">
+                <?php if($awards){?>
+                    <?php foreach($awards as $grade=>$award){?>
+                        <div  class="form-group">
+                            <?php echo CHtml::textField('mun'.$grade,$grade)?>等奖
+                            奖励:
+                            <?php echo CHtml::textField('award'.$grade,$award['name'])?>
+                            <?php echo CHtml::label('是否实物','isentity'.$grade)?><?php echo CHtml::checkBox('isentity1',$award['isentity'],array('class'=>'isentity'))?>
+                            <span>
+                                <?php echo CHtml::label('个数','isentity'.$grade)?>
+                                <?php echo CHtml::textField('count'.$grade,$award['count'])?>
+                                <span>
+                        </div>
+                        <?php }?>
+                <?php }else{?>
                 <div  class="form-group">
-                    一等奖:
-                    <?php echo CHtml::textField('award1')?>
-                    个数:
-                    <?php echo CHtml::textField('count1')?>
-                    <?php echo CHtml::label('是否实物','isentity1')?><?php echo CHtml::checkBox('isentity1',array('checked'=>'checked'))?>
-                </div>
-                <div  class="form-group">
-                    二等奖:
-                    <?php echo CHtml::textField('award2')?>
-                    个数:
-                    <?php echo CHtml::textField('count2')?>
-                    <?php echo CHtml::label('是否实物','isentity2')?><?php echo CHtml::checkBox('isentity2',array('checked'=>'checked'))?>
 
+                    <?php echo CHtml::textField('mun1')?>等奖
+                    奖励:
+                    <?php echo CHtml::textField('award1')?>
+                    <?php echo CHtml::label('是否实物','isentity1')?><?php echo CHtml::checkBox('isentity1',array('checked'=>'checked'),array('class'=>'isentity'))?>
+                    <span >
+                        <?php echo CHtml::label('个数','isentity1')?>
+                        <?php echo CHtml::textField('count1')?>
+                        <span>
                 </div>
-                <div class="form-group">
-                    三等奖:
-                    <?php echo CHtml::textField('award3')?>
-                    个数:
-                    <?php echo CHtml::textField('count3')?>
-                    <?php echo CHtml::label('是否实物','isentity3')?><?php echo CHtml::checkBox('isentity3',array('checked'=>'checked'))?>
-                </div>
+               <?php }?>
             </div>
         </div>
         <div class="space-4"></div>
@@ -130,25 +148,14 @@
             <div id="endTime" class="input-group date date-picker col-xs-3 col-sm-3">
                 <?php echo $form->textField($model, 'endTime', array('class' => 'form-control date-picker add-on', 'data-rule-minlength' => 3)); ?>
                 <span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>
-
-
                 <?php echo $form->error($model, 'endTime', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>
         <div class="space-4"></div>
         <div class="form-group">
-            <?php echo $form->labelEx($model, 'backgroundPic', array('class' =>  BootStrapUI::formLabelClass)); ?>
-            <div class="col-sm-5 col-lg-4 controls">
-                <?php echo $form->fileField($model,'backgroundPic',array('id'=>'id-input-file-1'))?>
-                <?php echo $form->error($model, 'backgroundPic', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-            </div>
-        </div>
-        <div class="space-4"></div>
-        <div class="form-group">
-            <?php echo $form->labelEx($model, 'button', array('class' =>  BootStrapUI::formLabelClass)); ?>
-            <div class="col-sm-5 col-lg-4 controls">
-                <?php echo $form->fileField($model,'button',array('id'=>'id-input-file-2'))?>
-                <?php echo $form->error($model, 'button', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
+            <?php echo CHtml::label('海报图片', 'focusImg', array('class' => BootStrapUI::formLabelClass)); ?>
+            <div class="col-sm-4">
+                <?php echo CHtml::fileField('focusImg', '',array('id'=>'id-input-file-1')); ?>
             </div>
         </div>
         <div class="space-4"></div>
@@ -160,7 +167,6 @@
                 </div>
                 <?php echo $form->hiddenField($model, 'unstartMsg', array('id' => 'unstartMsg')); ?>
                 <?php echo $form->error($model, 'unstartMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-
             </div>
         </div>
         <div class="space-4"></div>
@@ -173,7 +179,6 @@
                 </div>
                 <?php echo $form->hiddenField($model, 'unstartMsg', array('id' => 'unstartMsg')); ?>
                 <?php echo $form->error($model, 'unstartMsg', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
-
             </div>
         </div>
         <div class="space-4"></div>
@@ -205,6 +210,7 @@
         <div class="space-4"></div>
         <div class="clearfix form-actions">
             <div class="col-md-offset-3 col-md-9">
+                <?php echo CHtml::hiddenField('awardsCount')?>
                 <?php echo BootStrapUI::saveButton(); ?>
                 &nbsp; &nbsp; &nbsp;
                 <?php echo BootStrapUI::resetButton(); ?>
@@ -227,6 +233,8 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootstrap-wysiwyg.min.js"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets/js/bootbox.min.js"></script>
 <script>
+    var result = false;
+    var fileName = '<?php echo $model->focusImg?>';
     $().ready(function () {
         $("#startTime").datetimepicker({
             format: 'yyyy-MM-dd hh:mm:ss',
@@ -284,36 +292,94 @@
                 {name: 'unlink', className: 'btn-pink'}
             ]
         }).prev().addClass('wysiwyg-style2');
-        $('#id-input-file-1,#id-input-file-2').ace_file_input({
-            no_file:'未选择图片....',
+        $('#id-input-file-1').ace_file_input({
+            style:'well',
+            no_icon:'fa fa-picture-o',
             btn_choose:'选择',
             btn_change:'更改',
             droppable:false,
             onchange:null,
-            thumbnail:false //| true | large
-            //whitelist:'gif|png|jpg|jpeg'
+            thumbnail:'large', //| true | large
+            whitelist:'gif|png|jpg|jpeg',
             //blacklist:'exe|php'
             //onchange:''
             //
+            'before_change': function(files, dropped) {
+                var allowed_files = [];
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (typeof file === "string") {
+                        //IE8 and browsers that don't support File Object
+                        if (!(/\.(jpe?g|png|gif|bmp)$/i).test(file)) return false;
+                    }
+                    else {
+                        var type = $.trim(file.type);
+                        if (( type.length > 0 && !(/^image\/(jpe?g|png|gif|bmp)$/i).test(type) )
+                            || ( type.length == 0 && !(/\.(jpe?g|png|gif|bmp)$/i).test(file.name) )//for android's default browser which gives an empty string for file.type
+                        ) continue;//not an image so don't keep this file
+                    }
+                    allowed_files.push(file);
+                }
+
+                if(allowed_files.length == 0) return false;
+
+                return allowed_files;
+            }
         });
         $("#submit").click(function () {
-            var typeKeywords = <?php if($type==GiftModel::TYPE_KEYWORDS){echo 1;}else{echo 0;}?>;
-            $("#template").val($("#editor1").html());
-            $("#RTemplate").val($("#editor6").html());
-            $("#unstartMsg").val($("#editor2").html());
-            $("#codeOverMsg").val($("#editor3").html());
-            $("#endMsg").val($("#editor4").html());
-            $("#pauseMsg").val($("#editor5").html());
-            if (typeKeywords) {
-                var type = '<?php echo GiftModel::GIFT_TYPE?>';
+            if(result==false){
+                var count = $("#awards div").length;
+                $("#awardsCount").val(count);
+
+                $("#template").val($("#editor1").html());
+                $("#RTemplate").val($("#editor6").html());
+                $("#unstartMsg").val($("#editor2").html());
+                $("#codeOverMsg").val($("#editor3").html());
+                $("#endMsg").val($("#editor4").html());
+                $("#pauseMsg").val($("#editor5").html());
+                var type = '<?php echo Globals::TYPE_ACTIVE?>';
                 var responseId = '<?php echo $responseId?>';
                 var wechatId = '<?php echo $wechatId?>';
                 var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-                return keywordsCheck(wechatId, type, url, 'ScratchModel', responseId);
+                result = keywordsCheck(wechatId, type, url, 'ActiveModel', responseId) && checkAwards();
             }
-        })
+            return result
+        });
+        $(".js_add").click(function(){
+            var count = $("#awards div").length+1;
+            var html = '<div class="form-group">' +
+                '<input type="text" id="mun'+count+'" name="mun'+count+'" value="">等奖 ' +
+                '奖励: <input type="text" id="award'+count+'" name="award'+count+'" value="">  ' +
+                '<label for="isentity'+count+'">是否实物</label>' +
+                '<input type="checkbox" id="isentity'+count+'" name="isentity'+count+'" value="1" checked="checked" class="isentity">'+
+                '<span><label for="count'+count+'">个数</label>' +
+                '<input type="text" id="count'+count+'" name="count'+count+'" value="1" class="js_count"></span>'+
+                '</div>';
+            $("#awards").append(html);
+        });
+        $(".js_cancel").click(function(){
+            $("#awards div:last-child").remove();
+        });
+        if(fileName){
+            $(".file-name").html('<img src="'+fileName+'">');
+        }
     });
 
-
+function checkAwards(){
+    result = true;
+    var sum = 0;
+    var predictCount = $("#ActiveModel_predictCount").val();
+    $("#awards").children().each(function(i){
+        var num = i+1;
+        sum +=parseInt($("#count"+num).val());
+    });
+    if(predictCount<=sum){
+        result= false;
+    }
+    if(result==false){
+        alert('奖品数量有误');
+    }
+    return result;
+}
 </script>
 
