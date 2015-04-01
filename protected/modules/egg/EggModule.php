@@ -11,7 +11,6 @@ class EggModule extends CWebModule
 
 		// import the module-level models and components
 		$this->setImport(array(
-			'egg.models.*',
 			'egg.components.*',
 		));
 	}

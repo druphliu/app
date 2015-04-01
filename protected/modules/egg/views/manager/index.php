@@ -179,11 +179,11 @@ $this->breadcrumbs = array(
                         class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">中奖者信息</h4>
             </div>
-                <iframe id="winnerContent" width="100%" height="400px" frameborder="0"></iframe>
+            <iframe id="winnerContent" width="100%" height="400px" frameborder="0"></iframe>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
-            </div>
+        </div>
     </div>
 </div>
 <script>

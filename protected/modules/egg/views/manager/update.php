@@ -4,15 +4,15 @@
 $this->breadcrumbs = array(
     array('name' => '首页', 'url' => array('wechat/index')),
     array('name' => '营销管理'),
-    array('name' => '刮刮乐','url'=>array('/scratch/manager')),
+    array('name' => '砸金蛋','url'=>array('/scratch/manager')),
 );
 ?>
 <div class="page-header">
     <h1>
-        刮刮乐
+        砸金蛋
         <small>
             <i class="fa fa-angle-double-right"></i>
-            编辑刮刮乐活动
+            编辑砸金蛋活动
         </small>
     </h1>
 </div>

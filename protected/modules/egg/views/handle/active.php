@@ -18,14 +18,14 @@
     <ul class="eggList">
         <p class="hammer" id="hammer">锤子</p>
         <p class="resultTip" id="resultTip"><b id="result"></b></p>
-        <li><span></span><sup></sup></li>
+        <li><span>1</span><sup></sup></li>
+        <li><span>2</span><sup></sup></li>
+        <li><span>3</span><sup></sup></li>
     </ul>
 </div>
 <script>
-    var prize =
-    <?php echo $prize?>==
-    0 ? null :<?php echo $prize?>;
-    var count = <?php echo $hasCount?>;
+    var prize = <?php echo $prize?>;
+    var remainCount = <?php echo $remainCount?>;
     var totalCount = <?php echo $totalCount?>;
     $().ready(function () {
         $(".eggList li").hover(function () {
@@ -38,11 +38,11 @@
         });
     });
     function eggClick(obj) {
-        if (count >= totalCount) {
-            alert("您已经砸了 " + count + "次奖。明天再来吧!");
+        if (remainCount<=0) {
+            alert("您已经砸了 " + totalCount + "次奖。明天再来吧!");
             return
         }
-        if (prize != null) {
+        if (prize ==0) {
             alert("亲，你不能再参加本次活动了喔！下次再来吧~");
             return
         }
@@ -71,7 +71,12 @@
                         })
                             .animate({top: '50px', opacity: 1}, 300, function () {//中奖结果动画
                                 if (data.success == 1) {//返回结果
-                                    $("#result").html("恭喜，您中得" + data.name + "!");
+                                    if(data.isentity==0){
+                                        $("#result").html("恭喜，您中得" + data.gradeName + "!<br>礼包码为:<br>"+data.snCode);
+                                    }else{
+                                        $("#result").html("恭喜，您中得" + data.gradeName + "!");
+
+                                    }
                                 } else {
                                     $("#result").html("很遗憾,您没能中奖!");
                                 }
