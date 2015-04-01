@@ -4,6 +4,10 @@ class WheelModule extends CWebModule
 {
     private $_assetsUrl;
 
+    public $_awardList = array(
+        3 => array('prize' => array(90,30, 150, 270), 'lostPrize' => array(0, 60, 120, 180, 210, 240, 300, 330, 360))
+    );
+
     public function init()
     {
         // this method is called when the module is being created
@@ -14,6 +18,10 @@ class WheelModule extends CWebModule
             'wheel.models.*',
             'wheel.components.*',
         ));
+    }
+
+    public function getAwardList(){
+        return $this->_awardList;
     }
 
     public function getAssetsUrl()

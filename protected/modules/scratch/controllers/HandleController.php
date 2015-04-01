@@ -21,8 +21,9 @@ class HandleController extends CController
         list($openId, $activeId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
         $active = ActiveModel::model()->findByPk($activeId);
         //活动是否开始
-        if($active->startTime<=date('Y-m-d H:i:s') && $active->endTime >= date('Y-m-d H:i:s')&&$active->status != 0){
+        if ($active->status == 0 || $active->startTime > date('Y-m-d H:i:s') || $active->endTime < date('Y-m-d H:i:s'))
             $isStop = 0;
+        if($isStop==0){
             $totalCount = $active->times;
             $awards = unserialize($active->awards);
             //次数限制
