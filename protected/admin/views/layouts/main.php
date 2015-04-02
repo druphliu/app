@@ -429,7 +429,7 @@
 
 <div class="ace-settings-container" id="ace-settings-container">
     <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
-        <i class="icon-cog bigger-150"></i>
+        <i class="fa fa-cog bigger-150"></i>
     </div>
 
     <div class="ace-settings-box" id="ace-settings-box">

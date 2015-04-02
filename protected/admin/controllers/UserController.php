@@ -4,7 +4,7 @@ class UserController extends Controller
 {
 	public function actionIndex()
 	{
-        $dataProvider = new CActiveDataProvider('UserModel', array(
+        $dataProvider = new CActiveDataProvider('AdminUserModel', array(
             'criteria' => array(
                 'order' => 'uid desc',
             ),
@@ -17,9 +17,9 @@ class UserController extends Controller
 	}
 
     public function actionProfile(){
-        $model = UserModel::model()->find(array('condition'=>'username=:username','params'=>array(':username'=>Yii::app()->user->id)));
-        if (isset($_POST['UserModel'])) {
-            $model->attributes = $_POST['UserModel'];
+        $model = AdminUserModel::model()->find(array('condition'=>'username=:username','params'=>array(':username'=>Yii::app()->user->id)));
+        if (isset($_POST['AdminUserModel'])) {
+            $model->attributes = $_POST['AdminUserModel'];
             if ($model->validate()) {
                 $model->save();
                 $this->redirect(array('group/user'));

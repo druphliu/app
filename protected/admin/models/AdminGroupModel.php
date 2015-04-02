@@ -1,25 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "admin_group".
  *
- * The followings are the available columns in table 'member':
- * @property integer $uid
- * @property string $username
- * @property string $nickname
- * @property string $pswd
+ * The followings are the available columns in table 'admin_group':
  * @property integer $group_id
+ * @property string $name
+ * @property string $action
+ * @property integer $isSystem
  */
-class UserModel extends CActiveRecord
+class AdminGroupModel extends CActiveRecord
 {
-    public $repswd;
-    public $newPswd;
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'admin_user';
+		return 'admin_group';
 	}
 
 	/**
@@ -30,17 +27,13 @@ class UserModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username,group_id', 'required'),
-            array('pswd','required','on'=>'create'),
-            array('username','unique'),
-			array('group_id', 'numerical', 'integerOnly'=>true),
-			array('username, nickname', 'length', 'max'=>50),
-            array('pswd, repswd', 'length', 'max' => 32),
-            array('pswd', 'compare', 'compareAttribute'=>'repswd' ,'on'=>'create',"message"=>"两次密码不一致"),
-            array('newPswd', 'compare', 'compareAttribute'=>'repswd' ,'on'=>'update',"message"=>"两次密码不一致"),
+			array('name, action', 'required'),
+			array('isSystem', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>60),
+			array('action', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('uid, username, nickname, pswd, group_id', 'safe', 'on'=>'search'),
+			array('group_id, name, action, isSystem', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,13 +54,10 @@ class UserModel extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'uid' => 'Uid',
-			'username' => '用户名',
-			'nickname' => '昵称',
-			'pswd' => '密码',
-            'newPswd'=>'密码',
-            'repswd' => '重复密码',
-			'group_id' => '用户组',
+			'group_id' => 'Group',
+			'name' => 'Name',
+			'action' => 'Action',
+			'isSystem' => '是否系统组',
 		);
 	}
 
@@ -89,11 +79,10 @@ class UserModel extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('uid',$this->uid);
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('nickname',$this->nickname,true);
-		$criteria->compare('pswd',$this->pswd,true);
 		$criteria->compare('group_id',$this->group_id);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('action',$this->action,true);
+		$criteria->compare('isSystem',$this->isSystem);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -104,19 +93,10 @@ class UserModel extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return UserModel the static model class
+	 * @return AdminGroupModel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-
-    public function behaviors()
-    {
-        return array(
-            // 行为类名 => 类文件别名路径
-            'ActiveRecordLogableBehavior'=>
-                'backend.behaviors.ActiveRecordLogableBehavior',
-        );
-    }
 }

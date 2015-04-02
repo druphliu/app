@@ -6,13 +6,13 @@
                     <i class="<?=$menu['class']?>"></i>
                     <span class="menu-text"> <?=$name?> </span>
 
-                    <b class="arrow icon-angle-down"></b>
+                    <b class="arrow fa fa-angle-down"></b>
                 </a>
                 <ul class="submenu">
                     <?php foreach($menu['action'] as $subMenu){?>
                         <li  class="<?php if (strpos($subMenu['act'], $this->controller->action->id) !== false) { ?>active<?php }?>">
                             <a href="<?php echo Yii::app()->createUrl($subMenu['url'])?>">
-                                <i class="icon-double-angle-right"></i>
+                                <i class="fa fa-angle-double-right"></i>
                                 <?=$subMenu['name']?>
                             </a>
                         </li>

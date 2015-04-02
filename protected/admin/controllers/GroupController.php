@@ -6,9 +6,9 @@ class GroupController extends Controller
     {
 
         $model = new GroupModel();
-        if (isset($_POST['GroupModel'])) {
+        if (isset($_POST['AdminGroupModel'])) {
             // 收集用户输入的数据
-            $model->attributes = $_POST['GroupModel'];
+            $model->attributes = $_POST['AdminGroupModel'];
             if ($model->validate()) {
                 $model->save();
                 $this->redirect(array('index'));
@@ -20,7 +20,7 @@ class GroupController extends Controller
     public function actionIndex()
     {
         $this->layout = '//layouts/list';
-        $dataProvider = new CActiveDataProvider('GroupModel', array(
+        $dataProvider = new CActiveDataProvider('AdminGroupModel', array(
             'criteria' => array(
                 'order' => 'group_id desc',
             ),
@@ -34,9 +34,9 @@ class GroupController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = GroupModel::model()->findByPk($id);
-        if (isset($_POST['GroupModel'])) {
-            $model->attributes = $_POST['GroupModel'];
+        $model = AdminGroupModel::model()->findByPk($id);
+        if (isset($_POST['AdminGroupModel'])) {
+            $model->attributes = $_POST['AdminGroupModel'];
             if ($model->validate()) {
                 $model->save();
                 $this->redirect(array('index'));
@@ -47,7 +47,7 @@ class GroupController extends Controller
 
     public function actionDelete($id)
     {
-        $model = GroupModel::model()->findByPk($id);
+        $model = AdminGroupModel::model()->findByPk($id);
         if(!$model->isSystem){
             $model->delete();
         }
@@ -56,18 +56,18 @@ class GroupController extends Controller
     }
 
     public function actionView($id){
-        $data = GroupModel::model()->findByPk($id);
+        $data = AdminGroupModel::model()->findByPk($id);
         $this->render('view',array('data'=>$data));
     }
 
     public function actionUser()
     {
         $this->layout = '//layouts/list';
-        $group = GroupModel::model()->findall();
+        $group = AdminGroupModel::model()->findall();
         foreach ($group as $v) {
             $groupList[$v->group_id] = $v->name;
         }
-        $dataProvider = new CActiveDataProvider('UserModel', array(
+        $dataProvider = new CActiveDataProvider('AdminUserModel', array(
             'criteria' => array(
                 'order' => 'uid desc',
             ),
@@ -81,7 +81,7 @@ class GroupController extends Controller
 
     public function actionUserDelete($id)
     {
-        $model = UserModel::model()->findByPk($id);
+        $model = AdminUserModel::model()->findByPk($id);
         $model->delete();
         $this->redirect(array('group/user'));
     }
@@ -89,19 +89,19 @@ class GroupController extends Controller
     public function actionUserCreate()
     {
 
-        $model = new UserModel();
-        $group = GroupModel::model()->findall();
+        $model = new AdminUserModel();
+        $group = AdminGroupModel::model()->findall();
         foreach ($group as $v) {
             $groupList[$v->group_id] = $v->name;
         }
-        if (isset($_POST['UserModel'])) {
+        if (isset($_POST['AdminUserModel'])) {
             // 收集用户输入的数据
-            $model->attributes = $_POST['UserModel'];
+            $model->attributes = $_POST['AdminUserModel'];
             $model->scenario = 'create';
             if ($model->validate()) {
                 //检查用户是否重复
-                $model->pswd = md5($_POST['UserModel']['pswd']);
-                $model->repswd = md5($_POST['UserModel']['repswd']);
+                $model->pswd = md5($_POST['AdminUserModel']['pswd']);
+                $model->repswd = md5($_POST['AdminUserModel']['repswd']);
                 $model->save();
                 $this->redirect(array('group/user'));
             }
@@ -111,17 +111,17 @@ class GroupController extends Controller
 
     public function actionUserUpdate($id)
     {
-        $model = UserModel::model()->findByPk($id);
-        $group = GroupModel::model()->findall();
+        $model = AdminUserModel::model()->findByPk($id);
+        $group = AdminGroupModel::model()->findall();
         foreach ($group as $v) {
             $groupList[$v->group_id] = $v->name;
         }
-        if (isset($_POST['UserModel'])) {
-            $model->attributes = $_POST['UserModel'];
+        if (isset($_POST['AdminUserModel'])) {
+            $model->attributes = $_POST['AdminUserModel'];
             $model->scenario = 'update';
             if ($model->validate()) {
-                if ($_POST['UserModel']['newPswd']) {
-                    $model->pswd = md5($_POST['UserModel']['newPswd']);
+                if ($_POST['AdminUserModel']['newPswd']) {
+                    $model->pswd = md5($_POST['AdminUserModel']['newPswd']);
                 }
                 $model->save();
                 $this->redirect(array('group/user'));

@@ -21,18 +21,19 @@
             <?php echo $form->labelEx($model, 'action', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-9">
                 <?php $actions = explode(',', $model->action);
-                foreach (MemberMenu::$menuList as $name => $menu) {
+                foreach (Permission::$permissionList as $name => $menu) {
                     ?>
-                <fieldset style="margin:30px; border-radius:5px">
-                <legend>
-                    <?php echo Chtml::checkBox($menu['act'], in_array($menu['act'], $actions),
-                        array('class' => 'mainGroup', 'rel' => $menu['act'], 'value' => $menu['act'])); ?>
-                    <label for="<?= $menu['act'] ?>"><?php echo $name ?></label>
-                </legend>
-                    <?php foreach ($menu['action'] as $k => $action) { ?>
-                        <?php echo Chtml::checkBox($action['act'], in_array($action['act'], $actions), array('rel' => $menu['act'], 'class' => 'sub_' . $menu['act'] . " subGroup", 'value' => $action['act'])); ?>
-                        <label for="<?= $action['act'] ?>"><?php echo $action['name'] ?></label>
-                    <?php } ?>
+                    <fieldset style="margin:30px; border-radius:5px">
+                        <legend>
+                            <?php echo Chtml::checkBox($menu['act'], in_array($menu['act'], $actions),
+                                array('class' => 'mainGroup', 'rel' => $menu['act'], 'value' => $menu['act'])); ?>
+                            <label for="<?= $menu['act'] ?>"><?php echo $name ?></label>
+                        </legend>
+                        <?php foreach ($menu['action'] as $k => $action) { ?>
+                            <?php echo Chtml::checkBox($action['act'], in_array($action['act'], $actions),
+                                array('rel' => $menu['act'], 'class' => 'sub_' . $menu['act'] . " subGroup", 'value' => $action['act'])); ?>
+                            <label for="<?= $action['act'] ?>"><?php echo $action['name'] ?></label>
+                        <?php } ?>
                     </fieldset>
                 <?php } ?>
                 <?php echo $form->hiddenField($model, 'action'); ?>

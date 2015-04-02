@@ -9,7 +9,7 @@
 class AdminMenu extends CWidget{
     public $menus;
     public static $menuList = array(
-        '设置'=>array('controller'=>'setting', 'act'=>'setting','class'=>'fa fa-dashboard','action'=>array(
+       /* '设置'=>array('controller'=>'setting', 'act'=>'setting','class'=>'fa fa-dashboard','action'=>array(
             array('name'=>'系统设置','url'=>'setting/system','act'=>'setting_system','list_acl'=>array()),
             array('name'=>'基本信息','url'=>'setting/base','act'=>'setting_base','list_acl'=>array()),
 			array('name'=>'Email','url'=>'setting/email','act'=>'setting_email','list_acl'=>array()),
@@ -17,17 +17,18 @@ class AdminMenu extends CWidget{
         '系统管理员'=>array('controller'=>'group','act'=>'group','class'=>'fa fa-group','action'=>array(
             array('name'=>'系统管理组','url'=>'group/index','act'=>'group_index','list_acl'=>array()),
             array('name'=>'系统管理员','url'=>'group/user','act'=>'group_user','list_acl'=>array()),
-        )),
+        )),*/
 		'会员'=>array('controller'=>'member','act'=>'member','class'=>'fa fa-user','action'=>array(
-			array('name'=>'会员管理','url'=>'member/admin','act'=>'member_admin','list_acl'=>array())
+			array('name'=>'会员管理','url'=>'member/index','act'=>'member_index','list_acl'=>array()),
+           // array('name'=>'会员组管理','url'=>'member/group','act'=>'member_admin','list_acl'=>array())
 		)),
-		'日志管理'=>array('controller'=>'log','act'=>'log','class'=>'fa fa-exclamation-sign','action'=>array(
+		'日志管理'=>array('controller'=>'log','act'=>'log','class'=>'fa fa-history','action'=>array(
 			array('name'=>'系统日志','url'=>'log/index','act'=>'log_index','list_acl'=>array())
 		))
     );
     public static function GetUserMenu(){
         $userInfo = Yii::app()->session['userInfo'];
-        $groupInfo = GroupModel::model()->find(array('condition'=>'group_id=:group_id','params'=>array('group_id'=>$userInfo['group_id'])));
+        $groupInfo = AdminGroupModel::model()->find(array('condition'=>'group_id=:group_id','params'=>array('group_id'=>$userInfo['group_id'])));
         $actionArray = explode(',',$groupInfo->action);
         $menuList = self::$menuList;
         foreach($menuList as $k=>$m){
