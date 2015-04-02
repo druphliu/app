@@ -11,7 +11,7 @@ class MemberMenu extends CWidget
     public $menus;
     public static $menuList = array(
         '基础设置' => array('controller' => 'manager', 'act' => 'manager', 'class' => 'fa fa-gears', 'action' => array(
-            array('name' => '功能管理', 'url' => 'manager/index', 'act' => 'manager_index', 'list_acl' => array()),
+           // array('name' => '功能管理', 'url' => 'manager/index', 'act' => 'manager_index', 'list_acl' => array()),
             array('name' => '关注回复', 'url' => 'manager/subscribeReplay', 'act' => 'manager_subscribeReplay', 'list_acl' => array()),
             array('name' => '默认回复', 'url' => 'manager/defaultReplay', 'act' => 'manager_defaultReplay', 'list_acl' => array()),
             array('name' => '关键词回复', 'url' => 'manager/keyWords', 'act' => 'manager_keyWords', 'list_acl' => array()),
@@ -25,7 +25,7 @@ class MemberMenu extends CWidget
             array('name' => '礼包领取', 'url' => 'gift', 'act' => 'market_gift', 'list_acl' => array()),
             array('name' => '刮刮乐', 'url' => 'scratch', 'act' => 'market_scratch', 'list_acl' => array()),
 			array('name' => '大转盘', 'url' => 'wheel', 'act' => 'market_wheel', 'list_acl' => array()),
-            array('name' => '砸金蛋', 'url' => 'egg', 'act' => 'market_egg', 'list_acl' => array()),
+           // array('name' => '砸金蛋', 'url' => 'egg', 'act' => 'market_egg', 'list_acl' => array()),
             array('name' => '签到有奖', 'url' => 'registration', 'act' => 'market_registration', 'list_acl' => array()),
         )),
         '菜单管理' => array('controller' => 'menu', 'act' => 'menu', 'class' => 'fa fa-windows','url' => 'menu/action', 'action' => array(

@@ -165,7 +165,7 @@
                 <span class="red" id="theAward"></span>
             </p>
 
-            <?php if ($prize['grade'] == 0) { ?>
+            <?php if ($prize['grade'] == 0 || $prize['isentity']==0) { ?>
                 <p>
                     礼包码为：
 								<span class="red" id="sncode">
@@ -223,7 +223,7 @@
                     var grade = <?php echo $prize['grade']?>;
                     if (grade > 0) {
                         var award = "<?php echo isset($grades[$prize['grade']])?$grades[$prize['grade']]:0?>等奖";
-                        var sncode = '<?php echo $prize['name']?>';
+                        var sncode = '<?php echo isset($prize['snCode'])?$prize['snCode']:$prize['name']?>';
                     } else if (grade == 0) {
                         var award = "游戏礼包";
                         var sncode = '<?php echo $prize['name']?>';
@@ -234,7 +234,7 @@
                     document.getElementById('prize').innerHTML = award;
                     sncode ? document.getElementById('sncode').innerHTML = sncode : '';
                     $("#theAward").html(award);
-                    if (zjl && goon && isStop ==0) {
+                    if (zjl && goon && isStop ==1) {
                         //$("#zjl").fadeIn();
                         goon = false;
                         var url = '<?php echo $this->createUrl("handle/confirm")?>';

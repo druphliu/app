@@ -4,7 +4,8 @@ class ManagerController extends WechatManagerController
 {
     public function actionIndex()
     {
-        $this->render('index');
+        $this->redirect(array('subscribeReplay'));
+        //$this->render('index');
     }
 
     public function actionSubscribeReplay()

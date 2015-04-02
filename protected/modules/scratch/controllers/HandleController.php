@@ -23,7 +23,7 @@ class HandleController extends CController
         //活动是否开始
         if ($active->status == 0 || $active->startTime > date('Y-m-d H:i:s') || $active->endTime < date('Y-m-d H:i:s'))
             $isStop = 0;
-        if($isStop==0){
+        if($isStop==1){
             $totalCount = $active->times;
             $awards = unserialize($active->awards);
             //次数限制
@@ -51,7 +51,7 @@ class HandleController extends CController
             }
 
             //查看当前用户是否已中奖
-            $awardInfo = ActiveAwardsModel::model($table)->find('activeId=:activeId and openId=:openId and status<>0',
+            $awardInfo = ActiveAwardsModel::model($table)->find('activeId=:activeId and openId=:openId and status<>0 and grade>0',
                 array(':activeId' => $activeId, ':openId' => $openId));
             if (!$awardInfo && $remainCount) {
                 foreach ($awards as $k => $v) {
@@ -80,28 +80,45 @@ class HandleController extends CController
                     $awardCount = ActiveAwardsModel::model($table)->count('grade=:grade and activeId=:activeId and status<>0',
                         array(':grade' => $return['grade'], ':activeId' => $activeId)); //已中奖个数
                     if ($awardCount < $awards[$return['grade']]['count']) {//未超过系统设置中奖个数
-                        $awardModel = new ActiveAwardsModel($table);
-                        $awardModel->openId = $openId;
-                        $awardModel->activeId = $activeId;
-                        $awardModel->grade = $return['grade'];
-                        $awardModel->code = $return['name'];
-                        $awardModel->isentity = isset($awards[$return['grade']]['isentity']) ? $awards[$return['grade']]['isentity'] : 0;
-                        $awardModel->status = 0;
-                        $awardModel->type = $type;
-                        $awardModel->datetime = time();
-                        $awardModel->save();
+                        //实物将
+                        if($awards[$return['grade']]['isentity']){
+                            $return['isentity'] = 1;
+                            $awardModel = new ActiveAwardsModel($table);
+                            $awardModel->openId = $openId;
+                            $awardModel->activeId = $activeId;
+                            $awardModel->grade = $return['grade'];
+                            $awardModel->code = $return['name'];
+                            $awardModel->isentity = 1;
+                            $awardModel->status = 0;
+                            $awardModel->type = $type;
+                            $awardModel->datetime = time();
+                            $awardModel->save();
+                        }else{
+                        //虚拟 取code
+                            $awardModel = ActiveAwardsModel::model($table)->find('grade=:grade and activeId=:activeId and type=:type and openId is null',
+                                array(':grade'=>$return['grade'],':activeId'=>$activeId,':type'=>$type));
+                            if($awardModel){
+                                $awardModel->openId = $openId;
+                                $awardModel->datetime = time();
+                                $awardModel->save();
+                                $return['snCode'] = $awardModel->code;
+                                $return['isentity'] = 0;
+                            }else{
+                                $return['grade']=-1;
+                            }
+                        }
                     } else {
-                        //奖品达到系统设置个数,获取参与奖
-                        $participationAward = $this->_getParticipationAward($active,$openId,$type);
-                        if($participationAward)
-                            $return = $participationAward;
+                        $return['grade']=-1;
                     }
                 } else {
                     //获取参与奖
-                    $participationAward = $this->_getParticipationAward($active,$openId,$type);
-                    if($participationAward)
-                        $return = $participationAward;
+                    $return['grade']=-1;
                 }
+            }
+            if($return['grade']==-1){
+                $participationAward = $this->_getParticipationAward($active,$openId,$type);
+                if($participationAward)
+                    $return = $participationAward;
             }
         }
         $grades = array(1=>'一',2=>'二',3=>'三',4=>'四',5=>'五',6=>'六',7=>'七',8=>'八',9=>'九','10'=>'十');
@@ -169,6 +186,9 @@ class HandleController extends CController
     private function _getParticipationAward($active,$openId,$type){
         $table = 'active_awards';
         $activeId = $active->id;
+        $return['grade'] = -1;
+        $return['isentity'] = 0;
+        $return['name'] = '谢谢参与';
         if($active->ispaward){
             //开启了参与奖
             //查看是否已经赠送了礼包
@@ -180,13 +200,13 @@ class HandleController extends CController
                     array(':grade' => 0, ':activeId' => $activeId, ':type' => $type, ':status' => 0));
                 if ($code) {
                     $code->openId = $openId;
-                    $code->time = time();
+                    $code->datetime = time();
                     $code->save();
                     $return['grade'] = 0;
                     $return['name'] = $code->code;//礼包码
                 }
             }
         }
-        return isset($return) ? $return : '';
+        return $return;
     }
 }

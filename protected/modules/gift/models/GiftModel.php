@@ -98,18 +98,20 @@ class GiftModel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => 'Title',
+			'title' => '标题',
 			'wechatId' => 'Wechat',
-			'template' => 'Template',
-			'RTemplate' => 'Rtemplate',
+			'template' => '回复模板',
+			'RTemplate' => '重复领取回复',
 			'created_at' => 'Created At',
-			'status' => 'Status',
-			'unstartMsg' => 'Unstart Msg',
-			'endMsg' => 'End Msg',
-			'codeOverMsg' => 'Code Over Msg',
-			'pauseMsg' => 'Pause Msg',
-			'startTime' => 'Start Time',
-			'endTime' => 'End Time',
+			'status' => '状态',
+			'unstartMsg' => '未开始回复',
+			'endMsg' => '活动结束回复',
+			'codeOverMsg' => '礼包码领完回复',
+			'pauseMsg' => '停止模板',
+			'startTime' => '开始时间',
+			'endTime' => '结束时间',
+            'keywords'=>'关键词',
+            'isAccurate'=>'是否精准匹配'
 		);
 	}
 
