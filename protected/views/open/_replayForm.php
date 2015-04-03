@@ -15,8 +15,12 @@
                       return false;
                   }
                   else {
-                      form.children().removeClass("has-error");
-                      return true;
+                        var url = "'.$this->createUrl("ajax/checkKeywords").'";
+                        var type = "'.OpenReplayModel::OPEN_TYPE.'";
+                        var responseId = "'.$responseId.'";
+                        var wechatId = "'.$wechatId.'";
+                        form.children().removeClass("has-error");
+                        return keywordsCheck(wechatId, type, url, "OpenReplayModel", responseId,"name");
                   }
               }',
                 'afterValidateAttribute' => 'js:function(form, attribute, data, hasError) {
@@ -75,17 +79,6 @@
     var result = false;
     $().ready(function () {
     });
-    $("#submit").click(function () {
-        if(result==false){
-            var type = '<?php echo OpenReplayModel::OPEN_TYPE?>';
-            var responseId = '<?php echo $responseId?>';
-            var wechatId = '<?php echo $wechatId?>';
-            var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-            result = keywordsCheck(wechatId, type, url, 'OpenReplayModel', responseId,'name');
-        }
-        return result;
-
-    })
 
 </script>
 

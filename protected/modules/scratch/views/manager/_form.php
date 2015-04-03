@@ -14,8 +14,21 @@
                       return false;
                   }
                   else {
-                      form.children().removeClass("has-error");
-                      return true;
+                        form.children().removeClass("has-error");
+                        var count = $("#awards div").length;
+                        $("#awardsCount").val(count);
+                        $("#template").val($("#editor1").html());
+                        $("#RTemplate").val($("#editor6").html());
+                        $("#unstartMsg").val($("#editor2").html());
+                        $("#codeOverMsg").val($("#editor3").html());
+                        $("#endMsg").val($("#editor4").html());
+                        $("#pauseMsg").val($("#editor5").html());
+                        var type = "'.Globals::TYPE_ACTIVE.'";
+                        var responseId = "'.$responseId.'";
+                        var wechatId = "'.$wechatId.'";
+                        var url = "'.Yii::app()->createUrl("ajax/checkKeywords").'";
+                        return keywordsCheck(wechatId, type, url, "ActiveModel", responseId) && checkAwards();
+
                   }
               }',
                 'afterValidateAttribute' => 'js:function(form, attribute, data, hasError) {
@@ -325,25 +338,6 @@
 
                 return allowed_files;
             }
-        });
-        $("#submit").click(function () {
-            if(result==false){
-                var count = $("#awards div").length;
-                $("#awardsCount").val(count);
-
-                $("#template").val($("#editor1").html());
-                $("#RTemplate").val($("#editor6").html());
-                $("#unstartMsg").val($("#editor2").html());
-                $("#codeOverMsg").val($("#editor3").html());
-                $("#endMsg").val($("#editor4").html());
-                $("#pauseMsg").val($("#editor5").html());
-                var type = '<?php echo Globals::TYPE_ACTIVE?>';
-                var responseId = '<?php echo $responseId?>';
-                var wechatId = '<?php echo $wechatId?>';
-                var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-                result = keywordsCheck(wechatId, type, url, 'ActiveModel', responseId) && checkAwards();
-            }
-            return result
         });
         $(".js_add").click(function(){
             var count = $("#awards div").length+1;

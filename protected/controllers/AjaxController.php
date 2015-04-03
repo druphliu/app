@@ -13,7 +13,7 @@ class AjaxController extends Controller
      */
     public function actionCheckKeywords()
     {
-        $exitKeywords = '';
+        $exitKeywords = $sysKeywords='';
         $result = 1;
         $msg = "";
         $keyword = Yii::app()->request->getParam('keywords');
@@ -23,12 +23,12 @@ class AjaxController extends Controller
         if ($keyword && $wechatId) {
             $isAccurate = Yii::app()->request->getParam('isAccurate');
             $keywordArray = explode(',', $keyword);
-            foreach ($keywordArray as $k) {
+            foreach ($keywordArray as $keyword) {
                 $keywords = Yii::app()->db->createCommand()
                     ->select('name, isAccurate,type, responseId')
                     ->from('keywords')
                     ->where(array('and', 'wechatId=' . $wechatId,
-                        array('like', 'name', array('%' . $k . '%'))))
+                        array('like', 'name', array('%' . $keyword . '%'))))
                     ->queryAll();
                 if ($keywords) {
                     foreach ($keywords as $k) {
@@ -41,6 +41,7 @@ class AjaxController extends Controller
                                         if (!($responseId && ($k['type'] == $type && $k['responseId'] == $responseId)))
                                             $exitKeywords .= $k['name'] . ',';
                                     }
+
                                 } else {
                                     //新加关键字模糊匹配
                                     if (mb_strpos($k['name'], $keyword) !== false) {
@@ -57,6 +58,7 @@ class AjaxController extends Controller
                                         if (!($responseId && ($k['type'] == $type && $k['responseId'] == $responseId)))
                                             $exitKeywords .= $k['name'] . ',';
                                     }
+
                                 } else {
                                     //新加关键字模糊匹配
                                     if (mb_strpos($keyword, $k['name']) !== false || mb_strpos($k['name'], $keyword) !== false) {
@@ -67,11 +69,13 @@ class AjaxController extends Controller
                                 break;
                         }
                     }
-                    if ($exitKeywords) {
-                        $result = -1;
-                        $msg = '与关键词' . $exitKeywords . '冲突了';
-                    }
                 }
+                if(in_array($keyword,KeywordsModel::$sysKeywords))
+                    $sysKeywords .= $keyword . ',';
+            }
+            if ($exitKeywords||$sysKeywords) {
+                $result = -1;
+                $msg = $exitKeywords?'与关键词' . $exitKeywords . '冲突了':'与系统关键词'.$sysKeywords.'冲突了';
             }
         } else {
             $result = 0;
@@ -125,45 +129,6 @@ class AjaxController extends Controller
             $model->save();
         }
         echo json_encode(array('result' => $result));
-    }
-
-    /**
-     * 菜单值重复检查
-     */
-    public function actionCheckMenuName()
-    {
-        $name = Yii::app()->request->getParam('name');
-        $wechatId = Yii::app()->request->getParam('wechatId');
-        $id = intval(isset($_POST['id']) ? $_POST['id'] : $_GET['id']);
-        $result = 'true';
-        $criteria = new CDbCriteria;
-        $criteria->condition = 'wechatId=:wechatId and name=:name';
-        $criteria->condition = $id ? $criteria->condition . ' and id<>' . $id : $criteria->condition;
-        $criteria->params = array(':wechatId' => $wechatId, ':name' => $name);
-        $actionExit = MenuModel::model()->find($criteria);
-        if ($actionExit) {
-            $result = 'false';
-        }
-        echo $result;
-    }
-    /**
-     * 菜单值重复检查
-     */
-    public function actionCheckMenuKeywords()
-    {
-        $name = Yii::app()->request->getParam('name');
-        $wechatId = Yii::app()->request->getParam('wechatId');
-        $id = intval(isset($_POST['id']) ? $_POST['id'] : $_GET['id']);
-        $result = 'true';
-        /*$criteria = new CDbCriteria;
-        $criteria->condition = 'wechatId=:wechatId and name=:name';
-        $criteria->condition = $id ? $criteria->condition . ' and id<>' . $id : $criteria->condition;
-        $criteria->params = array(':wechatId' => $wechatId, ':name' => $name);
-        $actionExit = MenuModel::model()->find($criteria);
-        if ($actionExit) {
-            $result = 'false';
-        }*/
-        echo $result;
     }
 
     /**

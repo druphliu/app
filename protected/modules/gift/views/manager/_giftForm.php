@@ -14,8 +14,18 @@
                       return false;
                   }
                   else {
-                      form.children().removeClass("has-error");
-                      return true;
+                        $("#template").val($("#editor1").html());
+                        $("#RTemplate").val($("#editor6").html());
+                        $("#unstartMsg").val($("#editor2").html());
+                        $("#codeOverMsg").val($("#editor3").html());
+                        $("#endMsg").val($("#editor4").html());
+                        $("#pauseMsg").val($("#editor5").html());
+                        var type = "'.GiftModel::GIFT_TYPE.'";
+                        var responseId = "'.$responseId.'";
+                        var wechatId = "'.$wechatId.'";
+                        var url = "'.Yii::app()->createUrl("ajax/checkKeywords").'";
+                        form.children().removeClass("has-error");
+                        return keywordsCheck(wechatId, type, url, "GiftModel", responseId);;
                   }
               }',
                 'afterValidateAttribute' => 'js:function(form, attribute, data, hasError) {
@@ -232,22 +242,6 @@
             ]
         }).prev().addClass('wysiwyg-style2');
     });
-    $("#submit").click(function () {
-        if(result==false) {
-            $("#template").val($("#editor1").html());
-            $("#RTemplate").val($("#editor6").html());
-            $("#unstartMsg").val($("#editor2").html());
-            $("#codeOverMsg").val($("#editor3").html());
-            $("#endMsg").val($("#editor4").html());
-            $("#pauseMsg").val($("#editor5").html());
-            var type = '<?php echo GiftModel::GIFT_TYPE?>';
-            var responseId = '<?php echo $responseId?>';
-            var wechatId = '<?php echo $wechatId?>';
-            var url = '<?php echo Yii::app()->createUrl("ajax/checkKeywords")?>';
-            result = keywordsCheck(wechatId, type, url, 'GiftModel', responseId);
-        }
-        return result;
-    })
 
 </script>
 

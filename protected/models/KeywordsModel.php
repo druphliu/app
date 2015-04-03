@@ -13,6 +13,9 @@
  */
 class KeywordsModel extends CActiveRecord
 {
+
+    public static $sysKeywords =array('正版','混版','中奖查询');
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
