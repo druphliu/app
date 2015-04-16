@@ -160,7 +160,8 @@ $this->breadcrumbs = array(
                                     processData: false
                                 }).then(function (msg) {
                                     //remove loading
-                                    removeLoading();
+                                    $(".bootbox").remove();
+                                    $(".modal-backdrop").remove();
                                     //doneCal
                                     alert(msg);
                                     window.location.href = '';

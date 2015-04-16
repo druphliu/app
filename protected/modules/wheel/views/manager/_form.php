@@ -123,7 +123,7 @@
                             <?php echo CHtml::textField('mun'.$grade,$grade)?>等奖
                             奖励:
                             <?php echo CHtml::textField('award'.$grade,$award['name'])?>
-                            <?php echo CHtml::label('是否实物','isentity'.$grade)?><?php echo CHtml::checkBox('isentity1',$award['isentity'],array('class'=>'isentity'))?>
+                            <?php echo CHtml::label('是否实物','isentity'.$grade)?><?php echo CHtml::checkBox('isentity'.$grade,$award['isentity'],array('class'=>'isentity'))?>
                             <span>
                                 <?php echo CHtml::label('个数','isentity'.$grade)?>
                                 <?php echo CHtml::textField('count'.$grade,$award['count'])?>
@@ -344,7 +344,7 @@
                 '<input type="text" id="mun'+count+'" name="mun'+count+'" value="">等奖 ' +
                 '奖励: <input type="text" id="award'+count+'" name="award'+count+'" value="">  ' +
                 '<label for="isentity'+count+'">是否实物</label>' +
-                '<input type="checkbox" id="isentity'+count+'" name="isentity'+count+'" value="1" checked="checked" class="isentity">'+
+                '<input type="checkbox" id="isentity'+count+'" name="isentity'+count+'" value="1" class="isentity">'+
                 '<span><label for="count'+count+'">个数</label>' +
                 '<input type="text" id="count'+count+'" name="count'+count+'" value="1" class="js_count"></span>'+
                 '</div>';

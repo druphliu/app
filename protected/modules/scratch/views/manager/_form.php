@@ -345,7 +345,7 @@
                 '<input type="text" id="mun'+count+'" name="mun'+count+'" value="">等奖 ' +
                 '奖励: <input type="text" id="award'+count+'" name="award'+count+'" value="">  ' +
                 '<label for="isentity'+count+'">是否实物</label>' +
-                '<input type="checkbox" id="isentity'+count+'" name="isentity'+count+'" value="1" checked="checked" class="isentity">'+
+                '<input type="checkbox" id="isentity'+count+'" name="isentity'+count+'" value="1"  class="isentity">'+
                 '<span><label for="count'+count+'">个数</label>' +
                 '<input type="text" id="count'+count+'" name="count'+count+'" value="1" class="js_count"></span>'+
                 '</div>';

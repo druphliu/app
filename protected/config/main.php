@@ -31,19 +31,19 @@ return array(
             'ipFilters' => array('127.0.0.1', '::1','*'),
         ),
         'gift'=>array(
-            'defaultController' => 'Manager',
+            'defaultController' => 'manager',
         ),
         'scratch'=>array(
-            'defaultController' => 'scratch',
+            'defaultController' => 'manager',
         ),
 		'wheel'=>array(
-            'defaultController' => 'wheel',
+            'defaultController' => 'manager',
         ),
         'egg'=>array(
-            'defaultController' => 'egg',
+            'defaultController' => 'manager',
         ),
         'registration'=>array(
-            'defaultController' => 'registration',
+            'defaultController' => 'manager',
         )
 
     ),
@@ -134,7 +134,8 @@ return array(
     'params' => array(
         // this is used in contact page
         'adminEmail' => 'webmaster@example.com',
-        'siteUrl' => 'http://192.168.102.221:82',
+        'siteUrl' => 'http://192.168.102.222:82',
+        'imagePath'=>'upload/images',
         'scratchPath' => 'upload/market/scratch',
         'wheelPath'=>'upload/market/wheel',
     ),
