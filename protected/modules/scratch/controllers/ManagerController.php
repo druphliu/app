@@ -139,7 +139,7 @@ class ManagerController extends WechatManagerController
         $grades = array_keys($awardsList);
         $grade = Yii::app()->request->getParam('grade',key($awardsList));
         $this->layout = '//layouts/memberList';
-        $codeTable = 'active_awards';
+        $codeTable = ActiveAwardsModel::model()->getTableName($this->wechatInfo->id);
         $whereSql = 'activeId=' . $id . ' and grade=' .$grade ;
         $count = Yii::app()->db->createCommand('SELECT COUNT(*) FROM ' . $codeTable . ' where ' . $whereSql)->queryScalar();
         $sql = 'SELECT * FROM ' . $codeTable . ' where ' . $whereSql;
@@ -178,7 +178,7 @@ class ManagerController extends WechatManagerController
                     $code = fgets($handle, 4096);
                     //入库
                     if (trim($code)) {
-                        $tableName = 'active_awards';
+                        $tableName = ActiveAwardsModel::model()->getTableName($this->wechatInfo->id);
                         $CodeModel = new ActiveAwardsModel($tableName);
                         $CodeModel->activeId = $activeId;
                         $CodeModel->grade = $grade;
@@ -200,8 +200,8 @@ class ManagerController extends WechatManagerController
     public function actionWinnerList($id)
     {
         $this->layout = '//layouts/iframe';
-        $table = 'active_awards_info';
-        $tabActiveAwards = 'active_awards';
+        $table = ActiveAwardsInfoModel::model()->getTableName($this->wechatInfo->id);
+        $tabActiveAwards = ActiveAwardsModel::model()->getTableName($this->wechatInfo->id);
         $countSql = 'SELECT COUNT(*) FROM '.$table.' t left join '.$tabActiveAwards.' t2 on t.awardId=t2.id where t2.activeId='.$id;
         $count=Yii::app()->db->createCommand($countSql)->queryScalar();
         $sql='SELECT * FROM '.$table.' t left join '.$tabActiveAwards.' t2 on t.awardId=t2.id where t2.activeId='.$id;
@@ -245,7 +245,7 @@ class ManagerController extends WechatManagerController
         $grade = Yii::app()->request->getParam('grade');
         if($grade){
             $activeId=$id;
-            $tableName = 'active_awards';
+            $tableName = ActiveAwardsModel::model()->getTableName($this->wechatInfo->id);
             ActiveAwardsModel::model($tableName)->deleteAll('activeId=:activeId and grade=:grade',
                 array(':activeId'=>$activeId,':grade'=>$grade));
         }

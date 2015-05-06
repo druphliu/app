@@ -10,12 +10,12 @@ class HandleController extends CController
 {
     public function actionIndex()
     {
-        $logTable = 'active_log';
         $remainCount = $totalCount = 0;
         $isStop = 1;
         $code = Yii::app()->request->getParam('code');
         list($openId, $activeId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
         $active = ActiveModel::model()->findByPk($activeId);
+        $logTable = ActiveLogModel::model()->getTableName($active->wechatId);
         //活动是否开始
         if ($active->startTime <= date('Y-m-d H:i:s') && $active->endTime >= date('Y-m-d H:i:s') && $active->status != 0) {
             $isStop = 0;
@@ -56,11 +56,11 @@ class HandleController extends CController
         $probability = $remainCount = $totalCount = $isentity = $gradeNum = $awardId = 0;
         $grade = -1;
         $rand = rand(1, 100000);
-        $table = 'active_awards';
-        $logTable = 'active_log';
         $encryption = Yii::app()->request->getParam('encryption');
         list($openId, $activeId, $type) = explode('|', Globals::authcode($encryption, 'DECODE'));
         $active = ActiveModel::model()->findByPk($activeId);
+        $table = ActiveAwardsModel::model()->getTableName($active->wechatId);
+        $logTable = ActiveLogModel::model()->getTableName($active->wechatId);
         //活动是否开始
         if ($active->status == 0 || $active->startTime > date('Y-m-d H:i:s') || $active->endTime < date('Y-m-d H:i:s'))
             $prize = 0;
@@ -202,13 +202,13 @@ class HandleController extends CController
     public function actionSave()
     {//status 更新为2
         $success = false;
-        $table = 'active_awards';
-        $tableInfo = 'active_awards_info';
         $tel = $_POST['tel'];
         $msg = '中奖信息失效或系统异常';
         $encryption = $_POST['encryption'];
         list($openid, $grade, $activeId,$type,$awardId) = explode('|', Globals::authcode($encryption, 'DECODE'));
         $activeInfo = ActiveModel::model()->findByPk($activeId);
+        $table = ActiveAwardsModel::model()->getTableName($activeInfo->wechatId);
+        $tableInfo = ActiveAwardsInfoModel::model()->getTableName($activeInfo->wechatId);
         if ($activeInfo) {
             $awards = unserialize($activeInfo->awards);
             if ($awards[$grade]) {
@@ -232,8 +232,9 @@ class HandleController extends CController
 
     private function _getParticipationAward($active, $openId, $type)
     {
-        $table = 'active_awards';
         $activeId = $active->id;
+        $activeInfo = ActiveModel::model()->findByPk($activeId);
+        $table = ActiveAwardsModel::model()->getTableName($activeInfo->wechatId);
         $return['awardId'] = 0;
         $return['grade'] = -1;
         $return['name'] = '谢谢参与';

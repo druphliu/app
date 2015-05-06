@@ -11,6 +11,18 @@
  */
 class ActiveLogModel extends CActiveRecord
 {
+    const CREATE_TABLE_NAME = '{{active_log_%d}}';
+    const CREATE_TABLE_SQL = "CREATE TABLE `%s` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `openId` char(28) NOT NULL,
+  `activeId` int(10) NOT NULL COMMENT '活动Id',
+  `datetime` int(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=362 DEFAULT CHARSET=utf8;";
+    const TABLE_CREATE_OK = 1;
+    const TABLE_CREATE_FAILED = -1;
+    const TABLE_HAS_EXIST =3;
+
 	private static $tableName ;
 
 	public function __construct($table_name = '') {
@@ -105,4 +117,25 @@ class ActiveLogModel extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function createTable($wechatId)
+    {
+        $tableName = sprintf(self::CREATE_TABLE_NAME, $wechatId);
+        $sql = sprintf(self::CREATE_TABLE_SQL, $tableName);
+        if (yii::app()->db->createCommand(("SHOW TABLES LIKE '$tableName'"))->queryRow()) {
+            $return = self::TABLE_HAS_EXIST;
+        } else {
+            $result = yii::app()->db->createCommand($sql);
+            if ($result->query()) {
+                $return = self::TABLE_CREATE_OK;
+            } else {
+                $return = self::TABLE_CREATE_FAILED;
+            }
+        }
+        return $return;
+    }
+
+    public function getTableName($wechatId){
+        return sprintf(self::CREATE_TABLE_NAME, $wechatId);;
+    }
 }

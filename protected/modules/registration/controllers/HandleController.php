@@ -10,11 +10,11 @@ class HandleController extends CController
 {
     public function actionIndex()
     {
-        $logTable = 'active_log';
         $code = Yii::app()->request->getParam('code');
         $prize = 1;
         list($openId, $activeId, $type) = explode('|', Globals::authcode($code, 'DECODE'));//type 越狱或正版
         $active = ActiveModel::model()->findByPk($activeId);
+        $logTable = ActiveLogModel::model()->getTableName($active->wechatId);
         $startDate = $active->startTime;
         $endDate = $active->endTime;
         //活动是否开始
@@ -58,11 +58,11 @@ class HandleController extends CController
         $prize = 1;
         $msg = '活动已结束';
         $sinDate = 0;
-        $table = 'active_awards';
-        $logTable = 'active_log';
         $encryption = Yii::app()->request->getParam('encryption');
         list($openId, $activeId, $type) = explode('|', Globals::authcode($encryption, 'DECODE'));
         $active = ActiveModel::model()->findByPk($activeId);
+        $table = ActiveAwardsModel::model()->getTableName($active->wechatId);
+        $logTable = ActiveLogModel::model()->getTableName($active->wechatId);
         //活动是否开始
         if ($active->startTime > date('Y-m-d H:i:s')) {
             $prize = 1;

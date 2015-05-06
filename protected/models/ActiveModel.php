@@ -151,4 +151,12 @@ class ActiveModel extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public function afterSave(){
+        parent::afterSave();
+        $wechatId = $this->wechatId;
+        ActiveAwardsInfoModel::model()->createTable($wechatId);
+        ActiveAwardsModel::model()->createTable($wechatId);
+        ActiveLogModel::model()->createTable($wechatId);
+    }
 }

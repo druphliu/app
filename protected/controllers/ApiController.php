@@ -234,7 +234,10 @@ class ApiController extends Controller
 
     private function _getActiveReplay($responseId, $openId, $type){
         $active = ActiveModel::model()->findByPk($responseId);
-        $responseObj = $this->_getActive($responseId, $openId, $type,$active->type);
+        if($type>0)
+            $responseObj = $this->_getActive($responseId, $openId, $type,$active->type);
+        else
+            $responseObj = $this->_getActiveAwards($openId,$active->id,$active->type);
         return $responseObj;
     }
 
@@ -251,7 +254,7 @@ class ApiController extends Controller
         }
         //查看次数
         $totalCount = $active->times;
-        $logTable = 'active_log';
+        $logTable = ActiveLogModel::model()->getTableName($active->wechatId);
         if ($totalCount == -1) {//本活动只能参与一次
             $count = ActiveLogModel::model($logTable)->count('openId=:openId and activeId=:activeId',
                 array(':openId' => $openId, ':activeId' => $active->id));

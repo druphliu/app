@@ -199,8 +199,9 @@ class ManagerController extends WechatManagerController
     public function actionWinnerList($id)
     {
         $this->layout = '//layouts/iframe';
-        $table = 'active_awards_info';
-        $tabActiveAwards = 'active_awards';
+        $active = ActiveModel::model()->findByPk($id);
+        $table = ActiveAwardsInfoModel::model()->getTableName($active->wechatId);
+        $tabActiveAwards = ActiveAwardsModel::model()->getTableName($active->wechatId);
         $countSql = 'SELECT COUNT(*) FROM '.$table.' t left join '.$tabActiveAwards.' t2 on t.awardId=t2.id where t2.activeId='.$id;
         $count=Yii::app()->db->createCommand($countSql)->queryScalar();
         $sql='SELECT * FROM '.$table.' t left join '.$tabActiveAwards.' t2 on t.awardId=t2.id where t2.activeId='.$id;
@@ -219,24 +220,13 @@ class ManagerController extends WechatManagerController
 
     }
 
-    /**
-     * 刮刮乐活动开关
-     * @param $id
-     */
-    public function actionScratchStatus($id)
-    {
-        $status = Yii::app()->request->getParam('status');
-        $model = WheelModel::model()->findByPk($id);
-        $model->status = in_array($status, array(0, 1)) ? $status : 0;
-        $model->save();
-        echo json_encode(array('result' => 0));
-    }
 
     public function actionCodeTruncate($id){
         $grade = Yii::app()->request->getParam('grade');
         if($grade){
             $activeId=$id;
-            $tableName = 'active_awards';
+            $active = ActiveModel::model()->findByPk($activeId);
+            $tableName = ActiveAwardsModel::model()->getTableName($active->wechatId);
             ActiveAwardsModel::model($tableName)->deleteAll('activeId=:activeId and grade=:grade',
                 array(':activeId'=>$activeId,':grade'=>$grade));
         }

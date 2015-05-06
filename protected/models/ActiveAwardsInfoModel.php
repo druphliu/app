@@ -14,6 +14,21 @@
  */
 class ActiveAwardsInfoModel extends CActiveRecord
 {
+    const CREATE_TABLE_NAME = '{{active_awards_info_%d}}';
+    const CREATE_TABLE_SQL = "CREATE TABLE `%s` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `awardId` int(10) NOT NULL,
+  `username` varchar(30) DEFAULT NULL COMMENT '真实名字',
+  `tel` varchar(11) DEFAULT NULL COMMENT '联系电话',
+  `service` varchar(20) DEFAULT NULL COMMENT '所在区',
+  `roleName` varchar(30) DEFAULT NULL COMMENT '角色名字',
+  `type` tinyint(2) NOT NULL COMMENT '平台:wp android ios',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='实物中奖登记信息表';";
+    const TABLE_CREATE_OK = 1;
+    const TABLE_CREATE_FAILED = -1;
+    const TABLE_HAS_EXIST =3;
+
     private static $tableName ;
 
     public function __construct($table_name = '') {
@@ -123,5 +138,26 @@ class ActiveAwardsInfoModel extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function createTable($wechatId)
+    {
+        $tableName = sprintf(self::CREATE_TABLE_NAME, $wechatId);
+        $sql = sprintf(self::CREATE_TABLE_SQL, $tableName);
+        if (yii::app()->db->createCommand(("SHOW TABLES LIKE '$tableName'"))->queryRow()) {
+            $return = self::TABLE_HAS_EXIST;
+        } else {
+            $result = yii::app()->db->createCommand($sql);
+            if ($result->query()) {
+                $return = self::TABLE_CREATE_OK;
+            } else {
+                $return = self::TABLE_CREATE_FAILED;
+            }
+        }
+        return $return;
+    }
+
+    public function getTableName($wechatId){
+        return sprintf(self::CREATE_TABLE_NAME, $wechatId);;
+    }
 
 }

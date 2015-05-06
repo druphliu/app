@@ -12,14 +12,14 @@ class HandleController extends CController
     {
         $return['grade'] = -1;
         $return['name'] = '谢谢参与';
-        $logTable = 'active_log';
-        $table = 'active_awards';
         $probability = $remainCount = $totalCount = $dayLimit = 0;
         $isStop = 1;
         $rand = rand(1, 100000);
         $code = Yii::app()->request->getParam('code');
         list($openId, $activeId, $type) = explode('|', Globals::authcode($code, 'DECODE'));
         $active = ActiveModel::model()->findByPk($activeId);
+        $logTable = ActiveLogModel::model()->getTableName($active->wechatId);
+        $table = ActiveAwardsModel::model()->getTableName($active->wechatId);
         //活动是否开始
         if ($active->status == 0 || $active->startTime > date('Y-m-d H:i:s') || $active->endTime < date('Y-m-d H:i:s'))
             $isStop = 0;
@@ -130,11 +130,12 @@ class HandleController extends CController
 
     public function actionConfirm()
     {//status 更新为1,表明用户已经参
-        $logTable = 'active_log';
         $status = false;
         $encryption = $_POST['encryption'];
         $table = 'active_awards';
         list($openid, $grade, $activeId) = explode('|', Globals::authcode($encryption, 'DECODE'));
+        $active = ActiveModel::model()->findByPk($activeId);
+        $logTable = ActiveLogModel::model()->getTableName($active->wechatId);
         $code = ActiveAwardsModel::model($table)->find('grade=:grade and activeId=:activeId and openId=:openId',
             array(':grade' => $grade, ':activeId' => $activeId, ':openId' => $openid));
         if ($code) {
@@ -153,13 +154,14 @@ class HandleController extends CController
     public function actionSave()
     {//status 更新为2
         $success = false;
-        $awardsInfoTable = 'active_awards_info';
-        $awardTable = 'active_awards';
         $tel = $_POST['tel'];
         $msg = '中奖信息失效或系统异常';
         $encryption = $_POST['encryption'];
         $name = $_POST['code'];
         list($openid, $grade, $activeId) = explode('|', Globals::authcode($encryption, 'DECODE'));
+        $active = ActiveModel::model()->findByPk($activeId);
+        $awardTable = ActiveAwardsModel::model()->getTableName($active->wechatId);
+        $awardsInfoTable = ActiveAwardsInfoModel::model()->getTableName($active->wechatId);
         $scratchInfo = ActiveModel::model()->findByPk($activeId);
         $award = ActiveAwardsModel::model($awardTable)->find('openId=:openId and activeId=:activeId and grade=:grade',
             array(':openId' => $openid, ':activeId' => $activeId, ':grade' => $grade));
@@ -184,7 +186,7 @@ class HandleController extends CController
     }
 
     private function _getParticipationAward($active,$openId,$type){
-        $table = 'active_awards';
+        $table = ActiveAwardsModel::model()->getTableName($active->wechatId);
         $activeId = $active->id;
         $return['grade'] = -1;
         $return['isentity'] = 0;
