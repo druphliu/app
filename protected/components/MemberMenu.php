@@ -56,39 +56,40 @@ class MemberMenu extends CWidget
         $mangerAllowAction = array('manager', 'market', 'open','menu','scratch','wheel','egg','registration','gift');
         if (in_array($controllerId, $userAllowAction)) {
             $menuList = self::$userMenu;
+            $actionArray = $userAllowAction;
         } else if (in_array($controllerId, $mangerAllowAction)) {
             $userInfo = Yii::app()->session['userInfo'];
             $group = Yii::app()->session['group'];
             $actionArray = explode(',', $group[$userInfo['groupId']]->action);
             $menuList = self::$menuList;
-            foreach ($menuList as $k => $m) {
-                if(!Yii::app()->session['isAuth'] && $m['act']=='menu'){
-                    unset($menuList[$k]);//非认证帐号不显示菜单功能
+        }
+        foreach ($menuList as $k => $m) {
+            if(!Yii::app()->session['isAuth'] && $m['act']=='menu'){
+                unset($menuList[$k]);//非认证帐号不显示菜单功能
+            }
+            if (!in_array($m['act'], $actionArray)) {
+                unset($menuList[$k]);
+            }
+            if($m['action']){
+                foreach($m['action'] as $mkey=>$action){
+                    if($moduleId){
+                        if(strpos($action['act'],$moduleId)!==false){
+                            $menuList[$k]['isActive'] = true;
+                            $menuList[$k]['action'][$mkey]['isActive'] = true;
+                        };
+                    }else{
+                        if(strpos($m['act'],$controllerId)!==false){
+                            $menuList[$k]['isActive'] = true;
+                            if(strpos($action['act'],$actionId)!==false){
+                                $menuList[$k]['action'][$mkey]['isActive'] = true;
+                            }
+                        }
+                    }
                 }
-                if (!in_array($m['act'], $actionArray)) {
-                    unset($menuList[$k]);
+            }else{
+                if(strpos($m['act'],$controllerId)!==false){
+                    $menuList[$k]['isActive'] = true;
                 }
-				if($m['action']){
-				foreach($m['action'] as $mkey=>$action){
-					if($moduleId){
-						if(strpos($action['act'],$moduleId)!==false){
-							$menuList[$k]['isActive'] = true;
-							$menuList[$k]['action'][$mkey]['isActive'] = true;
-						};
-					}else{
-						if(strpos($m['act'],$controllerId)!==false){
-							$menuList[$k]['isActive'] = true;
-							if(strpos($action['act'],$actionId)!==false){
-								$menuList[$k]['action'][$mkey]['isActive'] = true;
-							}
-						}
-					}
-				}
-				}else{
-					if(strpos($m['act'],$controllerId)!==false){
-							$menuList[$k]['isActive'] = true;
-							}
-				}
             }
         }
         return $menuList;
