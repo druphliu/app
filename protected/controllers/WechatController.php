@@ -49,6 +49,7 @@ class WechatController extends MemberController
             unset($_POST['WechatModel']['type']);
             unset($_POST['WechatModel']['originalId']);
             $model->attributes = $_POST['WechatModel'];
+            $model->apiUrl = Yii::app()->params['siteUrl'] . Yii::app()->createUrl('/api/index/id/' . $model->originalId);
             if ($model->validate()) {
                 $model->save();
                 $this->showSuccess('修改成功！', Yii::app()->createUrl('wechat/index'));

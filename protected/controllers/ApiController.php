@@ -2,57 +2,68 @@
 
 class ApiController extends Controller
 {
-    public function actionIndex($id)
-    {
-        $response = '';
-        $originalId = $id;
-        $wechatInfo = WechatModel::model()->find('originalId=:originalId', array(':originalId' => $originalId));
-        if ($wechatInfo) {
-            $wechatApi = new WechatApi($wechatInfo->token);
-            switch (Yii::app()->request->requestType) {
-                case 'GET':
-                    if (Yii::app()->request->getParam('echostr')) {
-                        $response = $wechatApi->valid();
-                    }
-                    break;
-                case 'POST':
-                    $post_string = $GLOBALS["HTTP_RAW_POST_DATA"];
-                    $builder = new WeChatRequestBuilder();
-                    $request = $builder->builder($post_string);
-                    switch ($request) {
-                        case $request instanceof WeChatTextRequest:
-                            $response = $this->textResponse($wechatInfo->id, $request);
-                            break;
-                        case $request instanceof WeChatEventRequest:
-                            switch ($request->event_type) {
-                                case WeChatEventRequest::$type_subscribe:
-                                    $response = $this->subscribeResponse($wechatInfo, $request);
-                                    break;
-                                case WeChatEventRequest::$type_menu:
-                                    //menu response
-                                    $key = $request->event_key;
-                                    $response = $this->menuResponse($key, $request);
-                                    break;
-                                case WeChatEventRequest::$type_location:
-                                    //TODO 上报地址位置
-                                    break;
-                                case WeChatEventRequest::$type_scan:
-                                    //TODO 扫描二维码
-                                    break;
-                            }
-                            break;
-                        case $request instanceof WeChatLocationRequest:
-                            //TODO 地理位置消息
-                            break;
-                    }
-                    break;
-            }
-            echo $response;
+    private $wechatInfo;
+
+    public function beforeAction($action){
+        $originalId = Yii::app()->request->getParam('id');
+        if($originalId){
+            $this->wechatInfo = WechatModel::model()->find('originalId=:originalId', array(':originalId' => $originalId));
         }
+        if(!$this->wechatInfo)
+            return;
+        return parent::beforeAction($action);
     }
 
-    private function textResponse($wechatId, $request)
+    public function actionIndex()
     {
+        $response = '';
+
+        $wechatApi = new WechatApi($this->wechatInfo->token);
+        switch (Yii::app()->request->requestType) {
+            case 'GET':
+                if (Yii::app()->request->getParam('echostr')) {
+                    $response = $wechatApi->valid();
+                }
+                break;
+            case 'POST':
+                $post_string = $GLOBALS["HTTP_RAW_POST_DATA"];
+                $builder = new WeChatRequestBuilder();
+                $request = $builder->builder($post_string);
+                switch ($request) {
+                    case $request instanceof WeChatTextRequest:
+                        $response = $this->textResponse($request);
+                        break;
+                    case $request instanceof WeChatEventRequest:
+                        switch ($request->event_type) {
+                            case WeChatEventRequest::$type_subscribe:
+                                $response = $this->subscribeResponse($request);
+                                break;
+                            case WeChatEventRequest::$type_menu:
+                                //menu response
+                                $key = $request->event_key;
+                                $response = $this->menuResponse($key, $request);
+                                break;
+                            case WeChatEventRequest::$type_location:
+                                //TODO 上报地址位置
+                                break;
+                            case WeChatEventRequest::$type_scan:
+                                //TODO 扫描二维码
+                                break;
+                        }
+                        break;
+                    case $request instanceof WeChatLocationRequest:
+                        //TODO 地理位置消息
+                        break;
+                }
+                break;
+        }
+        echo $response;
+
+    }
+
+    private function textResponse($request)
+    {
+        $wechatId = $this->wechatInfo->id;
         $keyword = $legalType = '';
         $message = trim($request->content);
         //刮刮卡预处理
@@ -80,15 +91,15 @@ class ApiController extends Controller
             }
         }
         $type = $keyword ? $keyword->type : '';
-        $responseId = $keyword->responseId;
-        $response = $this->protocol($type, $wechatId, $responseId, $request->from_user_name,$legalType);
+        $responseId = $keyword ? $keyword->responseId : '';
+        $response = $this->protocol($type, $responseId, $request->from_user_name,$legalType);
         $xml = $response->_to_xml($request);
         return $xml;
     }
 
-    private function subscribeResponse($wechatInfo, $request)
+    private function subscribeResponse($request)
     {
-        $response = $this->_baseResponse($wechatInfo, $request, Globals::REPLAY_TYPE_SUBSCRIBE);
+        $response = $this->_baseResponse($request->from_user_name, Globals::REPLAY_TYPE_SUBSCRIBE);
         $xml = $response->_to_xml($request);
         return $xml;
     }
@@ -101,14 +112,14 @@ class ApiController extends Controller
             switch ($menuInfo->type) {
                 case Globals::TYPE_KEYWORDS:
                     $keywordsInfo = KeywordsModel::model()->findByPk($keywordsId);
-                    $response = $this->protocol($keywordsInfo->type, $keywordsInfo->wechatId, $keywordsInfo->responseId, $request->from_user_name);
+                    $response = $this->protocol($keywordsInfo->type, $keywordsInfo->responseId, $request->from_user_name);
                     break;
             }
         }
         return $response;
     }
 
-    private function protocol($type, $wechatId, $responseId, $openId,$legalType=0)
+    private function protocol($type, $responseId, $openId,$legalType=0)
     {
         switch ($type) {
             case TextReplayModel::TEXT_REPLAY_TYPE:
@@ -130,22 +141,22 @@ class ApiController extends Controller
                 $response = $this->_getActiveReplay($responseId,$openId,$legalType);
                 break;
             default:
-                $response = $this->_baseResponse($wechatId, $openId, Globals::REPLAY_TYPE_DEFAULT);
+                $response = $this->_baseResponse($openId, Globals::REPLAY_TYPE_DEFAULT);
                 break;
         }
         return $response;
     }
 
-    private function _baseResponse($wechatInfo, $openId, $replayType)
+    private function _baseResponse($openId, $replayType)
     {
-        $subscribeInfo = BasereplayModel::model()->find('wechatId=:wechatId and replayType=:replayType', array(':wechatId' => $wechatInfo->id, ':replayType' => $replayType));
+        $subscribeInfo = BasereplayModel::model()->find('wechatId=:wechatId and replayType=:replayType', array(':wechatId' => $this->wechatInfo->id, ':replayType' => $replayType));
         $type = $subscribeInfo ? $subscribeInfo->type : TextReplayModel::TEXT_REPLAY_TYPE;
         switch ($type) {
             case TextReplayModel::TEXT_REPLAY_TYPE:
                 if ($subscribeInfo) {
                     $response = $this->_getTextReplay($subscribeInfo->responseId, $openId);
                 } else {
-                    $content = $replayType == Globals::REPLAY_TYPE_SUBSCRIBE ? '感谢您关注' . $wechatInfo->name : '暂时不理解你说的';
+                    $content = $replayType == Globals::REPLAY_TYPE_SUBSCRIBE ? '感谢您关注' . $this->wechatInfo->name : '暂时不理解你说的';
                     $response = new WeChatTextResponse($content);
                 }
                 break;
@@ -296,7 +307,6 @@ class ApiController extends Controller
     /**
      * 活动中奖查询
      * @param $openId
-     * @param $wechatId
      * @param $type
      * @return string
      */

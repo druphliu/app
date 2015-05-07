@@ -140,7 +140,7 @@ class ManagerController extends WechatManagerController
         if (isset($_POST['TextReplayModel']) || isset($_POST['count'])) {
             if (!$model->wechatId) {
                 $model->wechatId = $this->wechatInfo->id;
-                $model->type = Globals::REPLAY_TYPE_DEFAULT;
+                $model->type = Globals::TYPE_BASE_REPLAY;
             }
             if ($type == TextReplayModel::TEXT_REPLAY_TYPE) {
                 $model->attributes = $_POST['TextReplayModel'];
