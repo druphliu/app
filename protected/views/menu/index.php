@@ -155,9 +155,9 @@ $this->breadcrumbs = array(
                         <?php echo CHtml::label('模拟关键词', 'action', array('class' => 'col-sm-3 col-lg-2 control-label required')) ?>
                         <div class="col-sm-5 col-lg-4 controls">
                             <input type="hidden" class="bigdrop" id="e7" style="width:210px"/>
-                            <div class="hide">
-                                <?php echo CHtml::textField('keywordsId', '', array('class' => 'form-control input-sm')) ?>
-                            </div>
+
+                                    <?php echo CHtml::textField('keywordsId', '',array('style'=>'position: absolute; z-index: -10;')) ?>
+
 
                         </div>
                     </div>
@@ -249,7 +249,7 @@ $this->breadcrumbs = array(
             errorElement: 'div',
             errorClass: 'help-block',
             focusInvalid: false,
-            ignore: "input[type='text']:hidden",
+         //   ignore: "input[type='text']:hidden",
             rules: {
                 name: {
                     required: true,
@@ -274,7 +274,7 @@ $this->breadcrumbs = array(
                 },
                 keywordsId: {
                     required: true,
-                    remote: {
+                    /*remote: {
                         url: "<?php echo Yii::app()->createUrl('ajax/checkMenuKeywords')?>", //后台处理程序
                         type: "get",  //数据发送方式
                         dataType: "json",       //接受数据格式
@@ -285,7 +285,7 @@ $this->breadcrumbs = array(
                             wechatId:<?php echo $wechatId?>,
                             id:$("#id").val()
                         }
-                    }
+                    }*/
                 }
             },
             messages: {

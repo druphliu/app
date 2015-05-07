@@ -154,7 +154,7 @@ class AjaxController extends Controller
     public function actionUpdateMenu($wechatId)
     {
         $status = -1;
-        $token = $this->_getToken($wechatId);
+        $token = Globals::getToken($wechatId);
         $tokenValue = $token['tokenValue'];
         if ($tokenValue) {
             //更新菜单
@@ -212,6 +212,23 @@ class AjaxController extends Controller
             $msg = '获取token异常';
         }
         echo json_encode(array('status' => $status, 'msg' => $msg));
+    }
+
+    public function actionCheckMenuName(){
+        $name = Yii::app()->request->getParam('name');
+        $wechatId= Yii::app()->request->getParam('wechatId');
+        $id = Yii::app()->request->getParam('id');
+        $notParam = $id?' and id<>'.$id:'';
+        $menu = MenuModel::model()->find('wechatId=:wechatId and name=:name '.$notParam, array(':name' => $name, ':wechatId' => $wechatId));
+        if($menu)
+            echo 'false';
+        else
+            echo 'true';
+
+    }
+
+    public function actionCheckMenuKeywords(){
+
     }
 
     public function actionDeleteMenu($wechatId)
