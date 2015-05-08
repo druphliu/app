@@ -132,9 +132,9 @@ class HandleController extends CController
     {//status 更新为1,表明用户已经参
         $status = false;
         $encryption = $_POST['encryption'];
-        $table = 'active_awards';
         list($openid, $grade, $activeId) = explode('|', Globals::authcode($encryption, 'DECODE'));
         $active = ActiveModel::model()->findByPk($activeId);
+        $table = ActiveAwardsModel::model()->getTableName($active->wechatId);
         $logTable = ActiveLogModel::model()->getTableName($active->wechatId);
         $code = ActiveAwardsModel::model($table)->find('grade=:grade and activeId=:activeId and openId=:openId',
             array(':grade' => $grade, ':activeId' => $activeId, ':openId' => $openid));

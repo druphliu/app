@@ -138,7 +138,7 @@ class ManagerController extends WechatManagerController
         $grades = array_keys($awardsList);
         $grade = Yii::app()->request->getParam('grade',key($awardsList));
         $this->layout = '//layouts/memberList';
-        $codeTable = 'active_awards';
+        $codeTable = ActiveAwardsModel::model()->getTableName($active->wechatId);
         $whereSql = 'activeId=' . $id . ' and grade=' .$grade ;
         $count = Yii::app()->db->createCommand('SELECT COUNT(*) FROM ' . $codeTable . ' where ' . $whereSql)->queryScalar();
         $sql = 'SELECT * FROM ' . $codeTable . ' where ' . $whereSql;
@@ -164,6 +164,7 @@ class ManagerController extends WechatManagerController
         $type = Yii::app()->request->getParam('type');
         $grade = Yii::app()->request->getParam('grade');
         $file = $_FILES;
+        $activeInfo = ActiveModel::model()->findByPk($activeId);
         if ($file && $activeId && $type) {
             $tmpFile = "upload/" . $_FILES["file"]["name"];
             if (file_exists($tmpFile)) {
@@ -177,7 +178,7 @@ class ManagerController extends WechatManagerController
                     $code = fgets($handle, 4096);
                     //入库
                     if (trim($code)) {
-                        $tableName = 'active_awards';
+                        $tableName = ActiveAwardsModel::model()->getTableName($activeInfo->wechatId);
                         $CodeModel = new ActiveAwardsModel($tableName);
                         $CodeModel->activeId = $activeId;
                         $CodeModel->grade = $grade;

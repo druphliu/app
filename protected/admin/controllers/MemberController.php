@@ -42,7 +42,7 @@ class MemberController extends Controller
             $model->scenario = 'pswd';
             $model->updated_at = time();
             if ($model->validate()) {
-                if($_POST['MemberModel']['newpswd'])
+                if(isset($_POST['MemberModel']['newpswd']) && $_POST['MemberModel']['newpswd'])
                     $model->pswd = md5($_POST['MemberModel']['newpswd']);
                 $model->save();
                 $this->redirect(array('index'));
@@ -56,7 +56,6 @@ class MemberController extends Controller
         $model = MemberModel::model()->findByPk($id);
         $model->delete();
         $this->redirect(array('index'));
-
     }
 
 

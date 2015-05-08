@@ -20,6 +20,10 @@ class WechatController extends MemberController
 
     public function actionAdd()
     {
+        //限制  只准创建一个用户
+        $count = WechatModel::model()->count('uid=:uid',array(':uid'=>Yii::app()->session['userInfo']['uid']));
+        if($count>=1)
+            $this->showError('你已创建账户,请勿重复创建');
         $model = new WechatModel();
         if (isset($_POST['WechatModel'])) {
             $dateTime = time();

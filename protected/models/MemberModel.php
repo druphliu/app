@@ -115,4 +115,5 @@ class MemberModel extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
 }

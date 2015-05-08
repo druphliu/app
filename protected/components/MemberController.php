@@ -25,7 +25,7 @@ class MemberController extends CController{
     {
         if (parent::beforeAction($action)) {
             if (Yii::app()->user->isGuest) {
-                $this->redirect(array('site/login'));
+                $this->redirect(array('/site/login'));
             } else {
                 $userInfo = MemberModel::model()->find('username=:username', array(':username' => Yii::app()->user->name));
                 foreach (GroupModel::model()->findAll() as $g) {
@@ -59,7 +59,7 @@ class MemberController extends CController{
             'type' => $type,
             'modal' => $modal
         );
-        $data['title'] = ($type == 1) ? "提示信息" : "错误信息";
+        $data['title'] = ($type == 1) ? "锟斤拷示锟斤拷息" : "锟斤拷锟斤拷锟斤拷息";
         if (empty($jumpurl)) {
             if ($type == 1) {
                 $data['jumpurl'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "javascript:window.close();";

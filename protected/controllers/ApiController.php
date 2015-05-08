@@ -245,7 +245,7 @@ class ApiController extends Controller
 
     private function _getActiveReplay($responseId, $openId, $type){
         $active = ActiveModel::model()->findByPk($responseId);
-        if($type>0)
+        if($type!==0)
             $responseObj = $this->_getActive($responseId, $openId, $type,$active->type);
         else
             $responseObj = $this->_getActiveAwards($openId,$active->id,$active->type);
@@ -258,7 +258,7 @@ class ApiController extends Controller
         $disable = 1;
         if (!$type) {
             $keywords = KeywordsModel::model()->find('type=:type and responseId=:responseId',
-                array(':type' => $activeType, ':responseId' => $responseId));
+                array(':type' => Globals::TYPE_ACTIVE, ':responseId' => $responseId));
             $content = '参与' . $active->title . '请回复:正版(混版)' . $keywords->name;
             $responseObj = new WeChatTextResponse($content);
             return $responseObj;
@@ -311,7 +311,7 @@ class ApiController extends Controller
      * @return string
      */
     private function _getActiveAwards($openId,$activeId,$type){
-        $table = 'active_awards';
+        $table = ActiveAwardsModel::model()->getTableName($this->wechatInfo->id);
         $content = '';
         $awardsList = ActiveAwardsModel::model($table)->findAll('activeId=:activeId and openId=:openId',
             array(':activeId'=>$activeId,':openId'=>$openId));
