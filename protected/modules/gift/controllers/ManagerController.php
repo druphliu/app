@@ -105,10 +105,12 @@ class ManagerController extends WechatManagerController
     public function actionDelete($id)
     {
         $model = GiftModel::model()->findByPk($id);
-        /* $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
-         GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));*/
+        $codeTable = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
+        GiftCodeModel::model($codeTable)->deleteAll('giftId=:giftId', array(':giftId' => $id));
+        //删除关键字
+        KeywordsModel::model()->find('responseId=:responseId and wechatId=:wechatId',array(':responseId'=>$id,':wechatId'=>$this->wechatInfo->id))->delete();
         $model->delete();
-        $this->showSuccess('删除成功', Yii::app()->createUrl('market/gift'));
+        $this->showSuccess('删除成功', $this->createUrl('gift'));
     }
 
     public function actionCodes($id)
