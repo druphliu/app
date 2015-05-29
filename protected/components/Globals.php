@@ -24,6 +24,7 @@ class Globals
     const TYPE_BASE_REPLAY = 'basereplay';
     const REPLAY_TYPE_SUBSCRIBE = 'subscribe';
     const REPLAY_TYPE_DEFAULT = 'default';
+    const CODE_TYPE_DEFAULT = 0;//不限
     const CODE_TYPE_LEGAL = 1; //正版
     const CODE_TYPE_UNLEGAL = 2;//越狱
     const SETTING_KEY_MENU = 'menu';
@@ -40,6 +41,7 @@ class Globals
         self::ACTIVE_AWARD_TYPE_VIRTUAL=>'虚拟奖项'
     );
     public static $codeTypeList = array(
+        self::CODE_TYPE_DEFAULT=>'不限',
        self::CODE_TYPE_LEGAL=>'正版',
         self::CODE_TYPE_UNLEGAL=>'混版'
     );

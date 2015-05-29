@@ -4,12 +4,13 @@ class ApiController extends Controller
 {
     private $wechatInfo;
 
-    public function beforeAction($action){
+    public function beforeAction($action)
+    {
         $originalId = Yii::app()->request->getParam('id');
-        if($originalId){
+        if ($originalId) {
             $this->wechatInfo = WechatModel::model()->find('originalId=:originalId', array(':originalId' => $originalId));
         }
-        if(!$this->wechatInfo)
+        if (!$this->wechatInfo)
             return;
         return parent::beforeAction($action);
     }
@@ -73,7 +74,7 @@ class ApiController extends Controller
         } elseif (mb_strpos($message, '混版') !== false) {
             $legalType = Globals::CODE_TYPE_UNLEGAL;
             $message = mb_substr($message, 6);
-        }elseif(mb_strpos($message,'中奖查询')){
+        } elseif (mb_strpos($message, '中奖查询')) {
             $legalType = -1;
             $message = mb_substr($message, 0, -12);
         }
@@ -92,15 +93,15 @@ class ApiController extends Controller
         }
         $type = $keyword ? $keyword->type : '';
         $responseId = $keyword ? $keyword->responseId : '';
-        $response = $this->protocol($type, $responseId, $request->from_user_name,$legalType);
-        $xml = $response->_to_xml($request);
+        $response = $this->protocol($type, $responseId, $request->from_user_name, $legalType);
+        $xml = $response ? $response->_to_xml($request) : '';
         return $xml;
     }
 
     private function subscribeResponse($request)
     {
         $response = $this->_baseResponse($request->from_user_name, Globals::REPLAY_TYPE_SUBSCRIBE);
-        $xml = $response->_to_xml($request);
+        $xml = $request ? $response->_to_xml($request) : '';
         return $xml;
     }
 
@@ -116,10 +117,11 @@ class ApiController extends Controller
                     break;
             }
         }
-        return $response;
+	$xml = $response ? $response->_to_xml($request) : '';
+        return $xml;
     }
 
-    private function protocol($type, $responseId, $openId,$legalType=0)
+    private function protocol($type, $responseId, $openId, $legalType = 0)
     {
         switch ($type) {
             case TextReplayModel::TEXT_REPLAY_TYPE:
@@ -128,17 +130,17 @@ class ApiController extends Controller
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
                 $response = $this->_getImageTextReplay($responseId, Globals::TYPE_KEYWORDS);
                 break;
-            case GiftModel::GIFT_TYPE:
+            case Globals::TYPE_GIFT:
                 //礼包领取
                 $response = $this->_getGiftReplay($responseId, $openId);
                 break;
-            case OpenReplayModel::OPEN_TYPE:
+            case Globals::TYPE_OPEN:
                 //转接
                 $response = $this->_getOpenReplay($responseId);
-                return $response;
+                die($response);
                 break;
             case Globals::TYPE_ACTIVE:
-                $response = $this->_getActiveReplay($responseId,$openId,$legalType);
+                $response = $this->_getActiveReplay($responseId, $openId, $legalType);
                 break;
             default:
                 $response = $this->_baseResponse($openId, Globals::REPLAY_TYPE_DEFAULT);
@@ -156,12 +158,12 @@ class ApiController extends Controller
                 if ($subscribeInfo) {
                     $response = $this->_getTextReplay($subscribeInfo->responseId, $openId);
                 } else {
-                    $content = $replayType == Globals::REPLAY_TYPE_SUBSCRIBE ? '感谢您关注' . $this->wechatInfo->name : '暂时不理解你说的';
-                    $response = new WeChatTextResponse($content);
+                    $content = $replayType == Globals::REPLAY_TYPE_SUBSCRIBE ? '感谢您关注' . $this->wechatInfo->name : '';
+                    $response = $content ? new WeChatTextResponse($content) : '';
                 }
                 break;
             case ImagetextreplayModel::IMAGE_TEXT_REPLAY_TYPE:
-                $response = $this->_getImageTextReplay($subscribeInfo->responseId, Globals::TYPE_SUBSCRIBE);
+                $response = $this->_getImageTextReplay($subscribeInfo->responseId, Globals::REPLAY_TYPE_SUBSCRIBE);
                 break;
         }
         return $response;
@@ -178,7 +180,7 @@ class ApiController extends Controller
         $responseInfo = TextReplayModel::model()->findByPk($responseId);
         $content = $responseInfo->content;
         $content = str_replace('fromUsername', $openId, $content);
-        $responseObj = new WeChatTextResponse(str_replace(array('<br>', '</br>'), chr(13), $content));
+        $responseObj = strip_tags($responseInfo->content) ? new WeChatTextResponse(str_replace(array('<br>', '</br>'), chr(13), $content)) : '';
         return $responseObj;
     }
 
@@ -243,20 +245,29 @@ class ApiController extends Controller
         return $result['content'] ? $result['content'] : '';
     }
 
-    private function _getActiveReplay($responseId, $openId, $type){
+    private function _getActiveReplay($responseId, $openId, $type)
+    {
         $active = ActiveModel::model()->findByPk($responseId);
-        if($type!==0)
-            $responseObj = $this->_getActive($responseId, $openId, $type,$active->type);
+        if ($type !== 0)
+            $responseObj = $this->_getActive($responseId, $openId, $type, $active->type);
         else
-            $responseObj = $this->_getActiveAwards($openId,$active->id,$active->type);
+            $responseObj = $this->_getActiveAwards($openId, $active->id, $active->type);
         return $responseObj;
     }
 
-    private function _getActive($responseId, $openId, $type,$activeType)
+    /**
+     * 活动响应
+     * @param $responseId 活动ID
+     * @param $openId
+     * @param $type 正混版类型,默认不区分
+     * @param $activeType 活动类型(礼包码，刮刮乐。。。)
+     * @return WeChatArticleResponse|WeChatTextResponse
+     */
+    private function _getActive($responseId, $openId, $type=0, $activeType)
     {
         $active = ActiveModel::model()->findByPk($responseId);
         $disable = 1;
-        if (!$type) {
+        if (!$type && $active->isSensitive) {
             $keywords = KeywordsModel::model()->find('type=:type and responseId=:responseId',
                 array(':type' => Globals::TYPE_ACTIVE, ':responseId' => $responseId));
             $content = '参与' . $active->title . '请回复:正版(混版)' . $keywords->name;
@@ -295,10 +306,10 @@ class ApiController extends Controller
         } else {
             $string = $openId . '|' . $responseId . '|' . $type;
             $code = Globals::authcode($string, 'ENCODE');
-            $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl($activeType.'/handle', array('code' => $code));
+            $url = Yii::app()->params['siteUrl'] . Yii::app()->createUrl($activeType . '/handle', array('code' => $code));
             $responseObj = new WeChatArticleResponse();
-            $picUrl = $active->focusImg ? $active->focusImg : 'assets/images/'.$active->type . '.jpg';
-            $responseObj->add_article($active->title, $active->desc, Yii::app()->params['siteUrl'].'/'.$picUrl, $url);
+            $picUrl = $active->focusImg ? $active->focusImg : 'assets/images/' . $active->type . '.jpg';
+            $responseObj->add_article($active->title, $active->desc, Yii::app()->params['siteUrl'] . '/' . $picUrl, $url);
         }
         $responseObj = isset($responseObj) ? $responseObj : new WeChatTextResponse($content);
         return $responseObj;
@@ -310,19 +321,20 @@ class ApiController extends Controller
      * @param $type
      * @return string
      */
-    private function _getActiveAwards($openId,$activeId,$type){
+    private function _getActiveAwards($openId, $activeId, $type)
+    {
         $table = ActiveAwardsModel::model()->getTableName($this->wechatInfo->id);
         $content = '';
         $awardsList = ActiveAwardsModel::model($table)->findAll('activeId=:activeId and openId=:openId',
-            array(':activeId'=>$activeId,':openId'=>$openId));
-        foreach($awardsList as $a){
-            switch($type){
+            array(':activeId' => $activeId, ':openId' => $openId));
+        foreach ($awardsList as $a) {
+            switch ($type) {
                 case Globals::TYPE_REGISTRATION:
-                    $content .= '签到'.$a->grade.'礼包:'.$a->code."\n";
+                    $content .= '签到' . $a->grade . '礼包:' . $a->code . "\n";
                     break;
                 default:
-                    $content .=$a->grade.'等奖礼包:'.$a->code."\n";
-                        break;
+                    $content .= $a->grade . '等奖礼包:' . $a->code . "\n";
+                    break;
             }
         }
         return $content ? $content : '暂无中奖信息';

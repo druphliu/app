@@ -31,6 +31,7 @@ $this->breadcrumbs = array(
                             <li>
                                 <a href="javascript:void(0)" class="btn btn-primary" id="import">导入</a>
                             </li>
+                            <li><a href="javascript:void(0)" class="btn btn-primary" id="export">导出剩余</a> </li>
                             <?php if($data)?>
                                 <li>
                                     <a href="javascript:void(0)" class="btn btn-waring" id="truncate">清空</a>
@@ -192,6 +193,10 @@ $this->breadcrumbs = array(
                     return true;
                 }
             });
+        });
+        $("#export").click(function(){
+            var url = '<?php echo $this->createUrl("manager/codeExport/id/".$giftId)?>';
+            window.open(url);
         });
         $("#truncate").click(function(){
             bootbox.confirm('确定清空？',function(result){

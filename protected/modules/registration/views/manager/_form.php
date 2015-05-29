@@ -65,7 +65,11 @@
         <div class="form-group">
             <?php echo $form->labelEx($model, 'isSensitive', array('class' => BootStrapUI::formLabelClass)); ?>
             <div class="col-sm-4">
-                <?php echo $form->checkBox($model, 'isSensitive', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php if(Yii::app()->getController()->getAction()->id=='update'){?>
+                <?php echo $form->checkBox($model, 'isSensitive', array('class' => 'col-xs-2 col-sm-2','disabled'=>'disabled')); ?>
+                <?php }else{?>
+                    <?php echo $form->checkBox($model, 'isSensitive', array('class' => 'col-xs-2 col-sm-2')); ?>
+                <?php }?>
                 <?php echo $form->error($model, 'isSensitive', array('class' => 'help-block col-xs-12 col-sm-reset inline')); ?>
             </div>
         </div>

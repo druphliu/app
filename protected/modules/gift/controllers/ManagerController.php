@@ -167,6 +167,27 @@ class ManagerController extends WechatManagerController
         echo $msg;
     }
 
+    public function actionCodeExport($id){
+        $giftId = $id;
+        $tableName = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);
+        $sql = "select code from $tableName where giftId=$giftId and openId is null";
+        $command  = Yii::app()->db->createCommand($sql);
+        $list = $command->queryAll();
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel ->getActiveSheet()->fromArray(
+            $list, // 赋值的数组
+            NULL, // 忽略的值,不会在excel中显示
+            'A1' // 赋值的起始位置
+        );
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="剩余礼包码.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+        $objWriter->save('php://output');
+        $objPHPExcel->disconnectWorksheets();
+        unset($objPHPExcel);
+    }
+
     public function actionCodeDelete($id)
     {
         $tableName = sprintf(GiftModel::CREATE_CODE_TABLE_NAME, $this->wechatInfo->id);

@@ -360,18 +360,55 @@
     });
 
 function checkAwards(){
+    var entityValue = <?php echo Globals::ACTIVE_AWARD_TYPE_ENTITY?>;
+    var virtualValue = <?php echo Globals::ACTIVE_AWARD_TYPE_VIRTUAL?>;
+    var mixValue = <?php echo Globals::ACTIVE_AWARD_TYPE_MIX?>;
+    var entity = false;
+    var virtual = false;
     result = true;
     var sum = 0;
     var predictCount = $("#ActiveModel_predictCount").val();
-    $("#awards").children().each(function(i){
-        var num = i+1;
-        sum +=parseInt($("#count"+num).val());
+    $("#awards").children().each(function (i) {
+        var num = i + 1;
+        var val = $("#count" + num).val() ? parseInt($("#count" + num).val()) : 0;
+        if (val <= 0)
+            result = false;
+        if($("#isentity"+num).is(':checked'))
+            entity = entity || true;
+        else
+            virtual = virtual || true;
+        sum += val;
     });
     if(predictCount<=sum){
         result= false;
     }
     if(result==false){
         alert('奖品数量有误');
+    }
+    switch (parseInt($("#ActiveModel_codeType").val())){
+        case virtualValue:
+            //虚拟
+                if(entity){
+                    alert('奖项类型与实际奖项不符');
+                    result = false;
+                    $("#ActiveModel_codeType").focus();
+                }
+            break;
+        case entityValue:
+            //实物
+            if(virtual){
+                alert('奖项类型与实际奖项不符');
+                result = false;
+                $("#ActiveModel_codeType").focus();
+            }
+            break;
+        case mixValue:
+            if(!(virtual&&entity)){
+                alert('奖项类型与实际奖项不符');
+                result = false;
+                $("#ActiveModel_codeType").focus();
+            }
+            break;
     }
     return result;
 }

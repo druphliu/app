@@ -134,6 +134,11 @@ class ManagerController extends WechatManagerController
         ActiveModel::model()->deleteByPk($id,'wechatId=:wechatId',array(':wechatId'=>$this->wechatInfo->id));
         //删除关键词
         KeywordsModel::model()->deleteAll('responseId=:responseId and type=:type',array(':responseId'=>$id,':type'=>Globals::TYPE_ACTIVE));
+        //删除礼包码
+        $awardsTable = ActiveAwardsModel::model()->getTableName($this->wechatInfo->id);
+        ActiveAwardsModel::model($awardsTable)->deleteAll('activeId=:activeId',array(':activeId'=>$id));
+        //删除日志
+        $awardsLogTable = ActiveLogModel::model()->getTableName($this->wechatInfo->id);
         $this->showSuccess('删除成功',Yii::app()->createUrl('registration'));
     }
 
@@ -187,17 +192,17 @@ class ManagerController extends WechatManagerController
             )
         ));
         $this->render('code', array('data' => $dataProvider->getData(), 'pages' => $dataProvider->getPagination(),
-            'activeId' => $id, 'grades' => $grades,'currentGrade'=>$grade));
+            'activeId' => $id, 'grades' => $grades,'currentGrade'=>$grade,'active'=>$active));
     }
 
     public function actionCodeImport()
     {
         set_time_limit(0);
         $activeId = Yii::app()->request->getParam('activeId');
-        $type = Yii::app()->request->getParam('type');
+        $type = Yii::app()->request->getParam('type',Globals::CODE_TYPE_DEFAULT);
         $grade = Yii::app()->request->getParam('grade');
         $file = $_FILES;
-        if ($file && $activeId && $type && $grade) {
+        if ($file && $activeId && $grade) {
             $tmpFile = "upload/" . $_FILES["file"]["name"];
             if (file_exists($tmpFile)) {
                 @unlink($_FILES["file"]["name"]);
@@ -227,6 +232,38 @@ class ManagerController extends WechatManagerController
             $msg = '提交错误';
         }
         echo $msg;
+    }
+
+    public function actionCodeExport($id){
+        $activeId = $id;
+        $activeAwardsTable = ActiveAwardsModel::model()->getTableName($this->wechatInfo->id);
+        $sql = "select * from $activeAwardsTable  where activeId=$activeId  group by grade";
+        $command  = Yii::app()->db->createCommand($sql);
+        $grades = $command->queryAll();
+        $objPHPExcel = new PHPExcel();
+        foreach($grades as $k=>$grade){
+            $gradeName = $grade['grade']==0?'参与奖':$grade['grade'].'等奖';
+            $sql = "select code,type from $activeAwardsTable where activeId=$activeId and  grade={$grade['grade']} and openId is null";
+            $arrHeader = array(array('code','类型('.Globals::CODE_TYPE_DEFAULT.':不限'.Globals::CODE_TYPE_LEGAL.':正版'.Globals::CODE_TYPE_UNLEGAL.':越狱)'));
+            $command  = Yii::app()->db->createCommand($sql);
+            $list = $command->queryAll();
+            $arrExcelInfo = array_merge($arrHeader, $list);
+            $objPHPExcel->createSheet();
+            $objPHPExcel->setactivesheetindex($k);
+            $objPHPExcel ->getActiveSheet()->setTitle($gradeName)->fromArray(
+                $arrExcelInfo, // 赋值的数组
+                NULL, // 忽略的值,不会在excel中显示
+                'A1' // 赋值的起始位置
+            );
+        }
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="剩余礼包码.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+        $objWriter->save('php://output');
+
+        $objPHPExcel->disconnectWorksheets();
+        unset($objPHPExcel);
     }
 
     public function actionCodeDelete($id)

@@ -44,6 +44,9 @@ $this->breadcrumbs = array(
                             <li>
                                 <a href="javascript:void(0)" class="btn btn-primary" id="import">导入</a>
                             </li>
+                            <li>
+                                <a href="javascript:void(0)" class="btn btn-primary" id="export">导出剩余</a>
+                            </li>
                             <?php if($data){?>
                             <li>
                                 <a href="javascript:void(0)" class="btn btn-waring" id="truncate">清空</a>
@@ -64,7 +67,7 @@ $this->breadcrumbs = array(
                                                 </label>
                                             </th>
                                             <th>ID</th>
-                                            <th>版本</th>
+                                            <?php if($active->isSensitive){?><th>版本</th><?php }?>
                                             <th>CODE</th>
                                             <th>是否领取</th>
                                             <th></th>
@@ -87,9 +90,11 @@ $this->breadcrumbs = array(
                                                 <td>
                                                     <?= $i ?>
                                                 </td>
+                                                <?php if($active->isSensitive){?>
                                                 <td>
                                                     <?= Globals::$codeTypeList[$d['type']] ?>
                                                 </td>
+                                                <?php }?>
                                                 <td>
                                                     <?php echo $d['code']; //substr_replace($d->code, '*****', 4, 5) ?>
                                                 </td>
@@ -135,6 +140,13 @@ $this->breadcrumbs = array(
 <script>
     $().ready(function () {
         $("#import").click(function () {
+            var code_type = <?php if($active->isSensitive){?>
+                '<div class="col-md-8"> ' +
+                '<select name="type" id="type">' +
+                '<option value="<?php echo Globals::CODE_TYPE_LEGAL?>" selected="selected">正版</option>' +
+                '<option value="<?php echo Globals::CODE_TYPE_UNLEGAL?>">混版</option>' +
+                '</select>' +
+                '</div>'<?php }else{?>''<?php }?>;
             bootbox.dialog({
                     title: "导入礼包码",
                     message: '<div class="row"> ' +
@@ -147,12 +159,7 @@ $this->breadcrumbs = array(
                         '<input type="file" id="id-input-file-2" name="code"/>' +
                         '<input type="hidden" name="activeId" id="activeId" value="<?=$activeId?>" />' +
                         '<i>仅支持txt格式文件,参考格式<a target="_blank" href="upload/eg.txt">查看</a></i></div> ' +
-                        '<div class="col-md-8"> ' +
-                        '<select name="type" id="type">' +
-                        '<option value="<?php echo Globals::CODE_TYPE_LEGAL?>" selected="selected">正版</option>' +
-                        '<option value="<?php echo Globals::CODE_TYPE_UNLEGAL?>">混版</option>' +
-                        '</select>' +
-                        '</div>'+
+                    code_type+
                         '</form> </div> </div>',
                     buttons: {
                         success: {
@@ -175,7 +182,7 @@ $this->breadcrumbs = array(
                                 data.append('file', file);
                                 data.append('activeId', $('#activeId').val());
                                 data.append('grade',<?php echo $currentGrade?>);
-                                data.append('type', $('#type').val())
+                                data.append('type', $('#type').val()?$('#type').val():0)
                                 $.ajax({
                                     type: 'POST',
                                     url: '<?php echo $this->createUrl('manager/codeImport')?>',
@@ -223,6 +230,10 @@ $this->breadcrumbs = array(
                     return true;
                 }
             });
+        });
+        $("#export").click(function(){
+            var url = '<?php echo $this->createUrl("manager/codeExport/id/".$activeId)?>';
+            window.open(url);
         });
     $("#truncate").click(function(){
         bootbox.confirm('确认要清空？',function(result){
