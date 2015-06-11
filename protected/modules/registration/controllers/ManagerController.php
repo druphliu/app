@@ -170,7 +170,7 @@ class ManagerController extends WechatManagerController
         $awards = unserialize($active->awards);
         foreach($awards as $g=>$a){
             if(!$a['isentity']){
-                $awardsList[$g] = $a;
+                $awardsList[$a['count']] = $a;
             }
         }
         $grades = array_keys($awardsList);

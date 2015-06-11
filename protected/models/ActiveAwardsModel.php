@@ -24,11 +24,11 @@ class ActiveAwardsModel extends CActiveRecord
   `code` varchar(150) NOT NULL COMMENT '中奖码或者中奖详情(实物中奖即为奖品详情，礼包码类即为码值)',
   `isentity` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否实物',
   `openId` varchar(28) DEFAULT NULL,
-  `type` tinyint(2) NOT NULL DEFAULT '1' COMMENT '类型(用于礼包码区分正版和越狱),1:正版,2:越狱',
+  `type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '类型(用于礼包码区分正版和越狱),1:正版,2:越狱 0:不区分',
   `datetime` int(10) DEFAULT NULL COMMENT '中奖时间',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态：0未中奖，1中奖未确认，2成功领取',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=464 DEFAULT CHARSET=utf8;";
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
     const TABLE_CREATE_OK = 1;
     const TABLE_CREATE_FAILED = -1;
     const TABLE_HAS_EXIST =3;

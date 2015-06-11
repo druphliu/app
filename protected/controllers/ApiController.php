@@ -248,7 +248,7 @@ class ApiController extends Controller
     private function _getActiveReplay($responseId, $openId, $type)
     {
         $active = ActiveModel::model()->findByPk($responseId);
-        if ($type !== 0)
+        if ($type !== -1)
             $responseObj = $this->_getActive($responseId, $openId, $type, $active->type);
         else
             $responseObj = $this->_getActiveAwards($openId, $active->id, $active->type);

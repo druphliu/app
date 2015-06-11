@@ -54,6 +54,7 @@ class HandleController extends CController
 
     public function actionActive()
     {
+        $awards = array();
         $result = -1;
         $prize = 1;
         $msg = '活动已结束';
@@ -86,7 +87,10 @@ class HandleController extends CController
                     array(':activeId' => $activeId, ':openId' => $openId));
                 $count = $count+1;
                 $awardsArray = unserialize($active->awards);
-                if(isset($awardsArray[$count])){
+                foreach($awardsArray as $a){
+                    $awards[$a['count']] = $a;
+                }
+                if(isset($awards[$count])){
                     //获取礼包码
                     $code = ActiveAwardsModel::model($table)->find('activeId=:activeId and grade=:grade and
                         type=:type and openId is null', array(':activeId' => $activeId, ':grade' => $count,':type'=>$type));

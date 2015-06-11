@@ -44,11 +44,11 @@ class ActiveModel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('wechatId, title, awards', 'required'),
+			array('wechatId, title, awards,predictCount', 'required'),
 			array('wechatId, ispaward, predictCount, codeType, isSensitive, status, times', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>12),
 			array('title, unstartMsg, endMsg, pauseMsg,focusImg', 'length', 'max'=>255),
-			array('awards', 'length', 'max'=>1000),
+			array('awards', 'length', 'max'=>1500),
 			array('startTime, endTime, desc', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

@@ -4,8 +4,8 @@
  * @date 2011-05-12 
  * @class milo.base 
  * <p>
- * ·½·¨¼¯Ö÷Òª°üÀ¨£ºnamespace¡¢extendÏà¹Ø·½·¨¡¢isÅĞ¶Ï¶ÔÏóÏµÁĞ<br/>
- * ±¾ÀàÖĞËùÓĞ·½·¨±»°ó¶¨µ½window¶ÔÏóÖĞ£¬¿ÉÖ±½Ó¶Ô·½·¨Ãû½øĞĞµ÷ÓÃ¡£<br/>
+ * æ–¹æ³•é›†ä¸»è¦åŒ…æ‹¬ï¼šnamespaceã€extendç›¸å…³æ–¹æ³•ã€isåˆ¤æ–­å¯¹è±¡ç³»åˆ—<br/>
+ * æœ¬ç±»ä¸­æ‰€æœ‰æ–¹æ³•è¢«ç»‘å®šåˆ°windowå¯¹è±¡ä¸­ï¼Œå¯ç›´æ¥å¯¹æ–¹æ³•åè¿›è¡Œè°ƒç”¨ã€‚<br/>
  * </p>
  * <p>
  * Example code:
@@ -18,7 +18,7 @@ console.log(isUndefined(b[4])); //true
  *</code></pre>
  * </p>
  * <p>
- * ´´½¨×ÓÀà£º
+ * åˆ›å»ºå­ç±»ï¼š
  * <pre><code>
 var cal1 = cloneClass(Calendar);
 var cal2 = cloneClass(Calendar);
@@ -27,9 +27,9 @@ var cal2 = cloneClass(Calendar);
  */
  
 /**
- * ´¦ÀíÃüÃû¿Õ¼ä
- * @param {string} ¿Õ¼äÃû³Æ£¬¿É¶à¸ö 
- * @return {object} ¶ÔÏó
+ * å¤„ç†å‘½åç©ºé—´
+ * @param {string} ç©ºé—´åç§°ï¼Œå¯å¤šä¸ª 
+ * @return {object} å¯¹è±¡
  */	 
 namespace = function(){
     var argus = arguments;
@@ -48,9 +48,9 @@ namespace("milo.base");
 
 (function(){
 	/**
-	 * Îª¶ÔÏó½øĞĞÀ©Õ¹ÊôĞÔºÍ·½·¨
-	 * @param {object} object ¶ÔÏó
-	 * @return {bool} ÊÇ/·ñ
+	 * ä¸ºå¯¹è±¡è¿›è¡Œæ‰©å±•å±æ€§å’Œæ–¹æ³•
+	 * @param {object} object å¯¹è±¡
+	 * @return {bool} æ˜¯/å¦
 	 */	 
 	milo.base.extend = function(destination, source) {
 		if (destination == null) {
@@ -79,9 +79,9 @@ namespace("milo.base");
 	}
 	
 	/**
-	 * Ô­ĞÍ¼Ì³ĞÀà
-	 * @param {object} object »ùÀà
-	 * @return {object} Éú³ÉµÄ×ÓÀà
+	 * åŸå‹ç»§æ‰¿ç±»
+	 * @param {object} object åŸºç±»
+	 * @return {object} ç”Ÿæˆçš„å­ç±»
 	 */	 
 	milo.base.cloneClass = function(object){		
 		if(!isObject(object)) return object;
@@ -94,58 +94,58 @@ namespace("milo.base");
 
 	milo.base.extend( milo.base, {
 		/**
-		 * ÅĞ¶Ï¶ÔÏóÊÇ·ñ¶¨Òå
-		 * ÆäÊµÖ»¶Ô¶ÔÏóÖĞµÄÔªËØÅĞ¶ÏÓĞĞ§£¬ÈçÊÇ´¿±äÁ¿£¬´Ë·½·¨»áÎŞ·¨µ÷ÓÃ£¬ĞèÒªÍâÃæ¼Ótry
-		 * @param {object} object ¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­å¯¹è±¡æ˜¯å¦å®šä¹‰
+		 * å…¶å®åªå¯¹å¯¹è±¡ä¸­çš„å…ƒç´ åˆ¤æ–­æœ‰æ•ˆï¼Œå¦‚æ˜¯çº¯å˜é‡ï¼Œæ­¤æ–¹æ³•ä¼šæ— æ³•è°ƒç”¨ï¼Œéœ€è¦å¤–é¢åŠ try
+		 * @param {object} object å¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isUndefined : function(o){ 
     		 	return o === undefined && typeof o == "undefined";
     	},
 		/**
-		 * ÅĞ¶Ï¶ÔÏóÊÇ·ñÊı×é
-		 * @param {object} object ¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­å¯¹è±¡æ˜¯å¦æ•°ç»„
+		 * @param {object} object å¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isArray : function(obj) {
 			return getParamType(obj).toLowerCase() === "array";
 		},		
 		/**
-		 * ÅĞ¶Ï¶ÔÏóÊÇ·ñº¯Êı
-		 * @param {object} object ¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­å¯¹è±¡æ˜¯å¦å‡½æ•°
+		 * @param {object} object å¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isFunction : function(obj){
 			return getParamType(obj).toLowerCase() === "function";
 		},		
 /**
-		 * ÅĞ¶Ï¶ÔÏóÊÇ·ñÊıÖµ
-		 * @param {object} object ¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­å¯¹è±¡æ˜¯å¦æ•°å€¼
+		 * @param {object} object å¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isNumber : function(obj) {
 			return getParamType(obj).toLowerCase() === "number";
 		},		
 		/**
-		 * ÅĞ¶Ï¶ÔÏóÊÇ·ñ¶ÔÏó
-		 * @param {object} object ¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­å¯¹è±¡æ˜¯å¦å¯¹è±¡
+		 * @param {object} object å¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isObject : function(obj) {
 			return getParamType(obj).toLowerCase() === "object";
 		},
 		/**
-		 * ÅĞ¶Ï¶ÔÏóÊÇ·ñ×Ö·û´®
-		 * @param {object} object ¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­å¯¹è±¡æ˜¯å¦å­—ç¬¦ä¸²
+		 * @param {object} object å¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isString : function(obj) {
 			return getParamType(obj).toLowerCase() === "string";
 		},		
 		/**
-		 * ÅĞ¶Ï¶ÔÏóÊÇ·ñDOMÔªËØ
-		 * @param {object} obj DOM¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­å¯¹è±¡æ˜¯å¦DOMå…ƒç´ 
+		 * @param {object} obj DOMå¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isDom : function(obj){
     		try{
@@ -160,17 +160,17 @@ namespace("milo.base");
      		return Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase();
     	},
     	/**
-		 * ÅĞ¶ÏÊÇ·ñ²¼¶ûÖµ
-		 * @param {object} object ¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­æ˜¯å¦å¸ƒå°”å€¼
+		 * @param {object} object å¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isBoolean : function(obj) {
 			return getParamType(obj).toLowerCase() === "boolean";
 		},
 		/**
-		 * ÅĞ¶Ï¶ÔÏóÊÇ·ñÈÕÆÚ
-		 * @param {object} object ¶ÔÏó
-		 * @return {bool} ÊÇ/·ñ
+		 * åˆ¤æ–­å¯¹è±¡æ˜¯å¦æ—¥æœŸ
+		 * @param {object} object å¯¹è±¡
+		 * @return {bool} æ˜¯/å¦
 		 */
 		isDate : function(obj){
 			return getParamType(obj).toLowerCase() === "date";
@@ -178,8 +178,8 @@ namespace("milo.base");
     	
     	
     	/**
-		 * »ñÈ¡dom¶ÔÏó
-		 * @param {string|dom} domµÄid,class,tagname
+		 * è·å–domå¯¹è±¡
+		 * @param {string|dom} domçš„id,class,tagname
 		 * @return {dom} 
 		 */
 		g : function(obj){
@@ -247,11 +247,11 @@ namespace("milo.base");
 
 	
 	/**
-	 * »ñÈ¡¶ÔÏóÀàĞÍ
+	 * è·å–å¯¹è±¡ç±»å‹
 	 * @private
-	 * @param {object} object ¶ÔÏó
-	 * @return {string} ÀàĞÍ
-	 * ¿ÉÅĞ¶ÏÀàĞÍ£ºBoolean Number String Function Array Date RegExp Object
+	 * @param {object} object å¯¹è±¡
+	 * @return {string} ç±»å‹
+	 * å¯åˆ¤æ–­ç±»å‹ï¼šBoolean Number String Function Array Date RegExp Object
 	 */	
 	function getParamType(obj){
 		return obj == null ? String(obj) : 
@@ -267,7 +267,7 @@ milo.g = g;
  * @version 0.1.0.0 
  * @date 2011-11-21
  * @class milo.config
- * Í¨ÓÃÅäÖÃÉèÖÃ
+ * é€šç”¨é…ç½®è®¾ç½®
  */
  
 namespace("milo.config");
@@ -284,8 +284,8 @@ namespace("milo.browser");
 
 (function(browser){	
 	
-	browser.version= false; //·µ»ØÏµÍ³µÄ°æ±¾
-	browser.bVersion= false;//·µ»Øwebkitä¯ÀÀÆ÷µÄ°æ±¾
+	browser.version= false; //è¿”å›ç³»ç»Ÿçš„ç‰ˆæœ¬
+	browser.bVersion= false;//è¿”å›webkitæµè§ˆå™¨çš„ç‰ˆæœ¬
     browser.ua = navigator.userAgent;
     
 	browser.android = function(){
@@ -363,8 +363,8 @@ namespace("milo.browser");
 		return os_boolean;
 	}
 	/**
-	* ¸Ã·½·¨ÓÃÓÚÈ¡µÃÎÄµµÇøÓòµÄ¸ß¿í
-	* @return ÎÄµµÇøÓòµÄ¸ß¿í
+	* è¯¥æ–¹æ³•ç”¨äºå–å¾—æ–‡æ¡£åŒºåŸŸçš„é«˜å®½
+	* @return æ–‡æ¡£åŒºåŸŸçš„é«˜å®½
 	*/	
 	browser.screen = function(){
       return {
@@ -374,24 +374,24 @@ namespace("milo.browser");
 	}
 	
 	/**
-	* ¸Ã·½·¨ÓÃÓÚÈ¡µÃ¿ÉÊÓÇøÓòµÄ¿í
-	* @return ¿ÉÊÓÇøÓòµÄ¸ß¶È
+	* è¯¥æ–¹æ³•ç”¨äºå–å¾—å¯è§†åŒºåŸŸçš„å®½
+	* @return å¯è§†åŒºåŸŸçš„é«˜åº¦
 	*/		
 	browser.wh = function(){
 		return document.documentElement.clientHeight;
 	}
 
 	/**
-	* ¸Ã·½·¨ÓÃÓÚÈ¡µÃ¿ÉÊÓÇøÓòµÄ¿í
-	* @return ¿ÉÊÓÇøÓòµÄ¿í
+	* è¯¥æ–¹æ³•ç”¨äºå–å¾—å¯è§†åŒºåŸŸçš„å®½
+	* @return å¯è§†åŒºåŸŸçš„å®½
 	*/		
 	browser.ww = function(){
 		return document.documentElement.clientWidth;
 	}
 	
 	/**
-	* ¸Ã·½·¨ÓÃÓÚÅĞ¶Ïµ±Ç°×´Ì¬Ê±ºáÆÁ»¹ÊÇÊúÆÁ
-	* @return Èç¹ûÎªÊúÆÁ·µ»Øtrue ·ñÔò·µ»Øfalse
+	* è¯¥æ–¹æ³•ç”¨äºåˆ¤æ–­å½“å‰çŠ¶æ€æ—¶æ¨ªå±è¿˜æ˜¯ç«–å±
+	* @return å¦‚æœä¸ºç«–å±è¿”å›true å¦åˆ™è¿”å›false
 	*/	
 	browser.hv= function() {
 		if(browser.wh()/browser.ww()>1){
@@ -402,7 +402,7 @@ namespace("milo.browser");
 	}
 	
 	/**
-	* ¸Ã·½·¨ÓÃÓÚÔÚiosÉÏÒş²Øµ¼º½Ìõ
+	* è¯¥æ–¹æ³•ç”¨äºåœ¨iosä¸Šéšè—å¯¼èˆªæ¡
 	*/
 	browser.hideUrl= function() {
 		setTimeout(function() {
@@ -419,16 +419,16 @@ namespace("milo.browser");
  * @demo http://gameact.qq.com/milo/core/load.html
  * @extends milo.base
  * <br/>
- * °´Ğè¼ÓÔØjs/cssµÄ»ù´¡Ä£¿é<br/>
- * ±¾ÀàÖĞËùÓĞ·½·¨±»°ó¶¨µ½window¶ÔÏóÖĞ£¬¿ÉÖ±½Ó¶Ô·½·¨Ãû½øĞĞµ÷ÓÃ¡£<br/>
+ * æŒ‰éœ€åŠ è½½js/cssçš„åŸºç¡€æ¨¡å—<br/>
+ * æœ¬ç±»ä¸­æ‰€æœ‰æ–¹æ³•è¢«ç»‘å®šåˆ°windowå¯¹è±¡ä¸­ï¼Œå¯ç›´æ¥å¯¹æ–¹æ³•åè¿›è¡Œè°ƒç”¨ã€‚<br/>
  * modified by cathzhang on 2011-08-11 <br/>
- * modified content ÓÅ»¯ÁËloadscript·½·¨Ê¹Ö®¿É±»¶ÀÁ¢µ÷ÓÃ<br/>
- * ajax¿çÓòÎÊÌâÉĞÎ´½â¾ö£¨Ôİ²»´¦Àí£©<br/>
- * includer¶ÔÏóµÄparent¼°depÊôĞÔ×ÜÊÇ¿´²»Ì«Ë³ÑÛ£¨modified on 2011-10-10 ÂôÃÈÈÕ°¡£©<br/>
+ * modified content ä¼˜åŒ–äº†loadscriptæ–¹æ³•ä½¿ä¹‹å¯è¢«ç‹¬ç«‹è°ƒç”¨<br/>
+ * ajaxè·¨åŸŸé—®é¢˜å°šæœªè§£å†³ï¼ˆæš‚ä¸å¤„ç†ï¼‰<br/>
+ * includerå¯¹è±¡çš„parentåŠdepå±æ€§æ€»æ˜¯çœ‹ä¸å¤ªé¡ºçœ¼ï¼ˆmodified on 2011-10-10 å–èŒæ—¥å•Šï¼‰<br/>
  * modified by cathzhang on 2011-10-11 <br/>
- * modified content µ÷ÕûÄ£¿é»¯µ÷ÓÃ·½°¸ <br/> 
+ * modified content è°ƒæ•´æ¨¡å—åŒ–è°ƒç”¨æ–¹æ¡ˆ <br/> 
  * <p>
- * ¼ÓÔØpersonÀà:
+ * åŠ è½½personç±»:
  * <pre><code>
 need(["person"], function(person){
 	alert("name:" + person.name);
@@ -436,7 +436,7 @@ need(["person"], function(person){
  *</code></pre>
  * </p>
  * <p>
- * personÀàµÄ¶¨Òå£º(Ö±½Ó·µ»ØÄäÃû¶ÔÏó)
+ * personç±»çš„å®šä¹‰ï¼š(ç›´æ¥è¿”å›åŒ¿åå¯¹è±¡)
  * <pre><code>
 define({
 	name : 'angel',
@@ -445,7 +445,7 @@ define({
  * </code></pre>
  * </p>
  * <p>
- * personÀàµÄ¶¨ÒåÍêÕûĞ´·¨£º
+ * personç±»çš„å®šä¹‰å®Œæ•´å†™æ³•ï¼š
  * <pre><code>
 define('person',[], function(){
 	return {
@@ -456,7 +456,7 @@ define('person',[], function(){
  * </code></pre>
  * </p>
  * <p>
- * ¶¨ÒåÄ£¿éÀàÓĞÒÀÀµµÄÊ±ºò£º
+ * å®šä¹‰æ¨¡å—ç±»æœ‰ä¾èµ–çš„æ—¶å€™ï¼š
  * <pre><code>
 define(["animal"],function(animal) {
         return {
@@ -474,7 +474,7 @@ define(["animal"],function(animal) {
  * </code></pre>
  * </p>
  * <p>
- * ¸÷Ä£¿éµÄÂ·¾¶»á¶¨Òåµ½£º<b>http://ossweb-img.qq.com/images/js/milo/biz</b>
+ * å„æ¨¡å—çš„è·¯å¾„ä¼šå®šä¹‰åˆ°ï¼š<b>http://ossweb-img.qq.com/images/js/milo/biz</b>
  * </p> 
  */
 
@@ -484,18 +484,18 @@ namespace("milo.loader");
 
 (function(loader){	
 	var __loading = null,
-		loaded = {}, //ÊÇ·ñÏÂÔØ
-		loading = {}, //ÕıÔÚÏÂÔØ  ÏÂÔØÇ°¾Í½¨Á¢£¬ÒÔ´¦ÀíÍ¬Ê±¶à´ÎÇëÇó£¬µ«´Ë´¦Ğ´ÁË£¬¾Í¶Ô²»×¡loadedÁË£¬ĞèÖØ¹¹
-		queue = [];  //defineµÄdeps¶ÓÁĞ 
-		//modulemap = {};//¼ÓÔØ¶ÓÁĞ	
+		loaded = {}, //æ˜¯å¦ä¸‹è½½
+		loading = {}, //æ­£åœ¨ä¸‹è½½  ä¸‹è½½å‰å°±å»ºç«‹ï¼Œä»¥å¤„ç†åŒæ—¶å¤šæ¬¡è¯·æ±‚ï¼Œä½†æ­¤å¤„å†™äº†ï¼Œå°±å¯¹ä¸ä½loadedäº†ï¼Œéœ€é‡æ„
+		queue = [];  //defineçš„depsé˜Ÿåˆ— 
+		//modulemap = {};//åŠ è½½é˜Ÿåˆ—	
 		
 	// add by dickma
-	loader.modulemap={} ; //È«¾ÖµÄModule¼¯ºÏ 
+	loader.modulemap={} ; //å…¨å±€çš„Moduleé›†åˆ 
 	loader.defineMap=[];
-	loader.isMainLoaded=0; //MainÊÇ·ñÒÑ¾­¼ÓÔØµÄ±êÊ¶Âë
+	loader.isMainLoaded=0; //Mainæ˜¯å¦å·²ç»åŠ è½½çš„æ ‡è¯†ç 
 	
 	
-    //DefineµÄMapÀïµÄÄ£¿éÄÚÈİ£¬½øĞĞÔ¤Need by dickma
+    //Defineçš„Mapé‡Œçš„æ¨¡å—å†…å®¹ï¼Œè¿›è¡Œé¢„Need by dickma
 
 	loader.preNeed=function(){
 		loader.need(loader.defineMap,null);
@@ -503,37 +503,37 @@ namespace("milo.loader");
 	
 	
 	/**
-	 * ¼ÓÔØ¶ÔÏó·½·¨ ¶ÔÓ¦Ä£¿éĞèÓĞdefine·½·¨¶¨Òå£¬·ñÔò·µ»ØÖĞÎŞ·¨Ê¹ÓÃ
-	 * @param {array} modules Ä£¿éÃû³Æ 
-	 * @param {function} callback »Øµ÷ »Øµ÷·½·¨ÖĞµÄ²ÎÊıÎª¼ÓÔØÄ£¿éµÄ·µ»Ø
+	 * åŠ è½½å¯¹è±¡æ–¹æ³• å¯¹åº”æ¨¡å—éœ€æœ‰defineæ–¹æ³•å®šä¹‰ï¼Œå¦åˆ™è¿”å›ä¸­æ— æ³•ä½¿ç”¨
+	 * @param {array} modules æ¨¡å—åç§° 
+	 * @param {function} callback å›è°ƒ å›è°ƒæ–¹æ³•ä¸­çš„å‚æ•°ä¸ºåŠ è½½æ¨¡å—çš„è¿”å›
 	 * @return {undefined} undefined 
 	 */
 	loader.need = function(modules,callback){
-		//²ÎÊı²»×÷³¤¶ÈÅĞ¶Ï£¬ÓÉ»Øµ÷Ê±×Ô¶¯¶ÔÓ¦£¬Èç¶àÔòundefined£¬ÈçÈ±ÔòÎŞ·¨Ê¹ÓÃ
-		//**Èçcallback²»ÊÇfunction»ò²»´æÔÚÔò²»½øĞĞ»Øµ÷
-		//**modulesÖ»×÷Êı×éÅĞ¶Ï¡£
+		//å‚æ•°ä¸ä½œé•¿åº¦åˆ¤æ–­ï¼Œç”±å›è°ƒæ—¶è‡ªåŠ¨å¯¹åº”ï¼Œå¦‚å¤šåˆ™undefinedï¼Œå¦‚ç¼ºåˆ™æ— æ³•ä½¿ç”¨
+		//**å¦‚callbackä¸æ˜¯functionæˆ–ä¸å­˜åœ¨åˆ™ä¸è¿›è¡Œå›è°ƒ
+		//**modulesåªä½œæ•°ç»„åˆ¤æ–­ã€‚
 		if (!isArray(modules) ) { 
 			modules = new Array(modules)
         }
 		
 		var mc = moduleContainer("", modules, callback);
 		start(mc);
-		//**¿¼ÂÇÊÇ·ñÔö¿§ÖĞ¼ä¹ı¶É²ã£¬ÒÔÔö¼ÓÍ¨ÓÃĞÔ¼°¿ÉÒÆÖµĞÔ
-		//**ÏÂÒ»ÆÚ¿¼ÂÇÀ©Õ¹£¬ÔÊĞí±¾·½·¨returnµÃµ½Ò»¸ö¶ÔÏó£¬ÒÔÖ±½ÓÊ¹ÓÃ¶ÔÏóµÄ·½·¨£¨talk£©
+		//**è€ƒè™‘æ˜¯å¦å¢å’–ä¸­é—´è¿‡æ¸¡å±‚ï¼Œä»¥å¢åŠ é€šç”¨æ€§åŠå¯ç§»å€¼æ€§
+		//**ä¸‹ä¸€æœŸè€ƒè™‘æ‰©å±•ï¼Œå…è®¸æœ¬æ–¹æ³•returnå¾—åˆ°ä¸€ä¸ªå¯¹è±¡ï¼Œä»¥ç›´æ¥ä½¿ç”¨å¯¹è±¡çš„æ–¹æ³•ï¼ˆtalkï¼‰
 		
 		return undefined;
 	}
 	
 	/**
-	 * Ä£¿é¶¨Òå·½·¨
-	 * @param {string} name ÏÂÔØ¶ÔÏó
-	 * @param {array} modules ÏÂÔØ¶ÔÏó
-	 * @param {function} callback ÏÂÔØ¶ÔÏó
+	 * æ¨¡å—å®šä¹‰æ–¹æ³•
+	 * @param {string} name ä¸‹è½½å¯¹è±¡
+	 * @param {array} modules ä¸‹è½½å¯¹è±¡
+	 * @param {function} callback ä¸‹è½½å¯¹è±¡
 	 * @return {undefined} undefined 
 	 */
 	loader.define = function(name,deps,callback){
-		//ÎŞname²ÎÊıÊ±´ÓÎÄ¼şÃûÈ¡name£¨urlcb»Øµ÷ÖĞ´¦Àí£©
-		//ÎŞdeps£¬Ôò[]		
+		//æ— nameå‚æ•°æ—¶ä»æ–‡ä»¶åå–nameï¼ˆurlcbå›è°ƒä¸­å¤„ç†ï¼‰
+		//æ— depsï¼Œåˆ™[]		
 		if (!isString(name)){
 			callback = deps;
 			deps = name;
@@ -549,7 +549,7 @@ namespace("milo.loader");
 			name = "noname_"+(Math.floor(Math.random()*1000000));	
 		}	
 
-		//**callback·Çfunction ÎªobjectÊ±£¬Ö±½ÓÎªname·µ»Øobject£¨cb»Øµ÷ÖĞ£©
+		//**callbackéfunction ä¸ºobjectæ—¶ï¼Œç›´æ¥ä¸ºnameè¿”å›objectï¼ˆcbå›è°ƒä¸­ï¼‰
 		
 		queue.push([name, deps, callback]);
 		
@@ -558,7 +558,7 @@ namespace("milo.loader");
 		return undefined;
 	}
 	
-	//jqueryÖ§³Ö
+	//jqueryæ”¯æŒ
 	
 	
 	loader.define.amd = {
@@ -570,12 +570,12 @@ namespace("milo.loader");
 	
 	
 	/**
-	 * ¼ÓÔØÎÄ¼ş·½·¨(¶à¸öÎÄ¼ş)
-	 * ÊÊºÏ½øĞĞ¿çÓòÇëÇó
+	 * åŠ è½½æ–‡ä»¶æ–¹æ³•(å¤šä¸ªæ–‡ä»¶)
+	 * é€‚åˆè¿›è¡Œè·¨åŸŸè¯·æ±‚
 	 * @public
-	 * @param {array} filepaths ĞèÒª¼ÓÔØ½Å±¾
-	 * @param {function} callback »Øµ÷·½·¨ÖĞ´øÓĞÒ»²ÎÊı±íÃ÷¼ÓÔØÊÇ·ñ³É¹¦¡£
-	 * @return {undefined} ÎŞ
+	 * @param {array} filepaths éœ€è¦åŠ è½½è„šæœ¬
+	 * @param {function} callback å›è°ƒæ–¹æ³•ä¸­å¸¦æœ‰ä¸€å‚æ•°è¡¨æ˜åŠ è½½æ˜¯å¦æˆåŠŸã€‚
+	 * @return {undefined} æ— 
 	 */
 	loader.include = function(filepaths, callback){
 		var files = new Array();
@@ -586,9 +586,9 @@ namespace("milo.loader");
 	}
 	
 	/**
-	 * ¼ÓÔØ½Å±¾»ù´¡·½·¨£¨µ¥Ò»ÎÄ¼ş£©
-	 * @param {string} url Â·¾¶ urlÂ·¾¶²»×öÈÎºÎÑéÖ¤
-	 * @param {function} callback »Øµ÷·½·¨  ·½·¨²ÎÊı±íÃ÷ÊÇ·ñ¼ÓÔØ³É¹¦
+	 * åŠ è½½è„šæœ¬åŸºç¡€æ–¹æ³•ï¼ˆå•ä¸€æ–‡ä»¶ï¼‰
+	 * @param {string} url è·¯å¾„ urlè·¯å¾„ä¸åšä»»ä½•éªŒè¯
+	 * @param {function} callback å›è°ƒæ–¹æ³•  æ–¹æ³•å‚æ•°è¡¨æ˜æ˜¯å¦åŠ è½½æˆåŠŸ
 	 * @return {undefined} undefined 
 	 */
 	loader.loadScript = function(url, callback){
@@ -597,9 +597,9 @@ namespace("milo.loader");
 	}
 	
 	/**
-	 * ¼ÓÔØCSS»ù´¡ÑùÊ½ 
-	 * @param {string} url Â·¾¶ urlÈçÒÔhttp¿ªÍ·£¬Ôò°´Ä£¿éÃûÏàÍ¬¹æÔò£¬Ìí¼Ópath¼°css£¬Èç²»ÊÇcss½áÎ²£¬Ôò²»Óè¼ÓÔØ
-	 * @param {function} callback »Øµ÷·½·¨  ·½·¨²ÎÊı±íÃ÷ÊÇ·ñ¼ÓÔØ³É¹¦
+	 * åŠ è½½CSSåŸºç¡€æ ·å¼ 
+	 * @param {string} url è·¯å¾„ urlå¦‚ä»¥httpå¼€å¤´ï¼Œåˆ™æŒ‰æ¨¡å—åç›¸åŒè§„åˆ™ï¼Œæ·»åŠ pathåŠcssï¼Œå¦‚ä¸æ˜¯cssç»“å°¾ï¼Œåˆ™ä¸äºˆåŠ è½½
+	 * @param {function} callback å›è°ƒæ–¹æ³•  æ–¹æ³•å‚æ•°è¡¨æ˜æ˜¯å¦åŠ è½½æˆåŠŸ
 	 * @return {undefined} undefined 
 	 */
 	loader.loadCSS = function(url, callback){
@@ -616,17 +616,17 @@ namespace("milo.loader");
 	}
 	
 	/******************************************************/
-	/*****************need¼°define´¦Àí*********************/
+	/*****************needåŠdefineå¤„ç†*********************/
 	/******************************************************/
 	
 	/**
-	 * ÄÚÈİ¼ÓÔØÆ÷
+	 * å†…å®¹åŠ è½½å™¨
 	 * @private
-	 * @param {string} name ÏÂÔØÃû³Æ
-	 * @param {array} modules ÒÀÀµÄ£¿é¶ÔÏó
-	 * @param {function} callback »Øµ÷·½·¨
+	 * @param {string} name ä¸‹è½½åç§°
+	 * @param {array} modules ä¾èµ–æ¨¡å—å¯¹è±¡
+	 * @param {function} callback å›è°ƒæ–¹æ³•
 	 * @return {object} object 
-	 * Ã¿Ò»¸öÃüÁî¶ÔĞèÒªÏÂÔØµÄÎÄ¼ş¼´Ôö¼ÓÒ»¸ö¼ÓÔØÆ÷
+	 * æ¯ä¸€ä¸ªå‘½ä»¤å¯¹éœ€è¦ä¸‹è½½çš„æ–‡ä»¶å³å¢åŠ ä¸€ä¸ªåŠ è½½å™¨
 	 */
 	function moduleContainer(name, modules, callback){	
 		var needown = 0,
@@ -638,8 +638,8 @@ namespace("milo.loader");
 		for(var i=0 ; i < modules.length; i++){
 			var url = getModulePath(modules[i]);
 			needown ++;
-			//ÒÑÏÂÔØ¹ıµÄÄ£¿é½øĞĞ´¦Àí£¬±íÃ÷ÒÑÏÂÔØ
-			//µ«²»´¦ÀímapedÇé¿ö£¬ÓÉ»Øµ÷Í³Ò»´¦Àí		
+			//å·²ä¸‹è½½è¿‡çš„æ¨¡å—è¿›è¡Œå¤„ç†ï¼Œè¡¨æ˜å·²ä¸‹è½½
+			//ä½†ä¸å¤„ç†mapedæƒ…å†µï¼Œç”±å›è°ƒç»Ÿä¸€å¤„ç†		
 
             //modify by dickma
 			if (modules[i]=="util.zepto" && typeof(Zepto)!=="undefined"){
@@ -659,27 +659,27 @@ namespace("milo.loader");
 		}
 
 		return {
-			name : name, //Ä£¿éÃû
-			modules : modules, //ÒÀÀµÄ£¿éÃû
-			need : need,   //ÒÀÀµ¶ÔÏóÊı×é(ÓÃÓÚloadÏÂÔØ)
-			res : new Array(), //ÒÀÀµ¶ÔÏó½á¹û ½á¹û¼¯
-			//**¶ÔÓÚ¶ÔÏóµÄÊ±¼ä´¦Àí»¹ĞèÒªµ÷Õû
-			expires : (modules.length) * milo.config.expires, //¹ıÆÚÊ±¼ä
-			callback : callback, //Ä£¿é¼ÓÔØÍê³ÉºóµÄ»Øµ÷
-			needown : needown,  //ĞèÒªÏÂÔØÊı
-			hasdown : hasdown,	//ÒÑÏÂÔØÊı
-			hasmaped : hasmaped, //ÒÑ³É¹¦¶¨ÒåÊı
+			name : name, //æ¨¡å—å
+			modules : modules, //ä¾èµ–æ¨¡å—å
+			need : need,   //ä¾èµ–å¯¹è±¡æ•°ç»„(ç”¨äºloadä¸‹è½½)
+			res : new Array(), //ä¾èµ–å¯¹è±¡ç»“æœ ç»“æœé›†
+			//**å¯¹äºå¯¹è±¡çš„æ—¶é—´å¤„ç†è¿˜éœ€è¦è°ƒæ•´
+			expires : (modules.length) * milo.config.expires, //è¿‡æœŸæ—¶é—´
+			callback : callback, //æ¨¡å—åŠ è½½å®Œæˆåçš„å›è°ƒ
+			needown : needown,  //éœ€è¦ä¸‹è½½æ•°
+			hasdown : hasdown,	//å·²ä¸‹è½½æ•°
+			hasmaped : hasmaped, //å·²æˆåŠŸå®šä¹‰æ•°
 
 			/**
-			 * µ¥ÎÄ¼şÏÂÔØ³É¹¦ºó»Øµ÷
-			 * @param {bool} ret ÏÂÔØÇé¿ö
-			 * @param {string} name Ä£¿éÃû³Æ
+			 * å•æ–‡ä»¶ä¸‹è½½æˆåŠŸåå›è°ƒ
+			 * @param {bool} ret ä¸‹è½½æƒ…å†µ
+			 * @param {string} name æ¨¡å—åç§°
 			 * @return {undefined} undefined 
-			 * »ñÈ¡ÎÄ¼şÄÚµÄdefine¶ÔÏó£¬´´½¨ĞÂmc
-			 * ĞÂÔö startPos ²ÎÊı£¬¿ªÊ¼È¡µÄÎ»ÖÃ¡£Ìá¹©¶Ô¾ßÃûº¯Êı´òÂÒ´ÎĞòµÄ¼ÓÔØÖ§³Ö£¬ by Dickma at 2014.01.27  
+			 * è·å–æ–‡ä»¶å†…çš„defineå¯¹è±¡ï¼Œåˆ›å»ºæ–°mc
+			 * æ–°å¢ startPos å‚æ•°ï¼Œå¼€å§‹å–çš„ä½ç½®ã€‚æä¾›å¯¹å…·åå‡½æ•°æ‰“ä¹±æ¬¡åºçš„åŠ è½½æ”¯æŒï¼Œ by Dickma at 2014.01.27  
 			 */
 			loadUrlCallback : function(ret, name,startPos){
-				//ÎŞÂÛÊÇ·ñ³É¹¦¶¼Ôö¼ÓÒÑÏÂÔØÊı£¬±íÃ÷ÒÑ´¦Àí
+				//æ— è®ºæ˜¯å¦æˆåŠŸéƒ½å¢åŠ å·²ä¸‹è½½æ•°ï¼Œè¡¨æ˜å·²å¤„ç†
 				this.hasdown ++;	
 				//console.log("loadUrlCallback:"+name+" -> "+ret);
 				if(ret){					
@@ -703,48 +703,48 @@ namespace("milo.loader");
 					
 					
 					
-					//**ÈçdepsÃû×ÖÓënameÃû×Ö²»Ò»ÖÂÊ±¡£¡£¡£ÄÇÃ´¡£¡£¡£ÄÇÃ´¡£¡£
+					//**å¦‚depsåå­—ä¸nameåå­—ä¸ä¸€è‡´æ—¶ã€‚ã€‚ã€‚é‚£ä¹ˆã€‚ã€‚ã€‚é‚£ä¹ˆã€‚ã€‚
 					//if (deps[0] == null){
 						deps[0] = name;
 					//}
-					//Ã¿ĞÂ½¨Ò»¸ödepsÔò´¦Àí					
+					//æ¯æ–°å»ºä¸€ä¸ªdepsåˆ™å¤„ç†					
 					var mc = moduleContainer.apply(null,deps);
 					start(mc);					
 				}
 				else{
-					//Ê§°ÜÌáÇ°´¦Àí½á¹û	
+					//å¤±è´¥æå‰å¤„ç†ç»“æœ	
 					//this.res[name] = "undefined"; 	
 					milo.loader.modulemap[name] = "undefined"; 	
 				}
 			},		
 			
 			/**
-			 * mcËùÓĞÎÄ¼şÏÂÔØ³É¹¦ºó»Øµ÷
-			 * @param {bool} ret ÏÂÔØÇé¿ö
-			 * @param {string} name Ä£¿éÃû³Æ
+			 * mcæ‰€æœ‰æ–‡ä»¶ä¸‹è½½æˆåŠŸåå›è°ƒ
+			 * @param {bool} ret ä¸‹è½½æƒ…å†µ
+			 * @param {string} name æ¨¡å—åç§°
 			 * @return {undefined} undefined 
-			 * µÈ´ımaped³É¹¦ºó
+			 * ç­‰å¾…mapedæˆåŠŸå
 			 */
 			loadInluderCallback : function(ret){		
 				if (!ret){
-					//**¿´Ê§°ÜÊÇ·ñ¿ÉÌáÇ°´¦Àí½á¹û
-					//Ê§°Ü´¦Àí	
-					//¸øÄ£¿éÖĞÎ´¶¨ÒåÄ£¿éÖÃÎªundefined
-					//²¢ÖÃmapedÊıÁ¿					
+					//**çœ‹å¤±è´¥æ˜¯å¦å¯æå‰å¤„ç†ç»“æœ
+					//å¤±è´¥å¤„ç†	
+					//ç»™æ¨¡å—ä¸­æœªå®šä¹‰æ¨¡å—ç½®ä¸ºundefined
+					//å¹¶ç½®mapedæ•°é‡					
 				}				
 				this.checkMaped();
 			},
 			
 			/**
-			 * mcËùÓĞÎÄ¼şÏÂÔØ³É¹¦ºó»Øµ÷
-			 * @param {bool} ret ÏÂÔØÇé¿ö
-			 * @param {string} name Ä£¿éÃû³Æ
+			 * mcæ‰€æœ‰æ–‡ä»¶ä¸‹è½½æˆåŠŸåå›è°ƒ
+			 * @param {bool} ret ä¸‹è½½æƒ…å†µ
+			 * @param {string} name æ¨¡å—åç§°
 			 * @return {undefined} undefined 
-			 * µÈ´ımaped³É¹¦ºó
+			 * ç­‰å¾…mapedæˆåŠŸå
 			 */
 			completeLoad : function(maped){	
 				var ret = [];
-				//**È¡contentµÄdeps¶ÔÓ¦²émodulemap´æÔÚÓë·ñ
+				//**å–contentçš„depså¯¹åº”æŸ¥modulemapå­˜åœ¨ä¸å¦
 				for(var i=0 ; i < this.modules.length; i++){
 					ret.push(this.res[this.modules[i]]);
 				}
@@ -760,12 +760,12 @@ namespace("milo.loader");
 			},
 			
 			/**
-			 * ¼ì²éÊÇ·ñÒÑÓĞmapedµÄ¶ÔÏó
+			 * æ£€æŸ¥æ˜¯å¦å·²æœ‰mapedçš„å¯¹è±¡
 			 * @return {undefined} undefined 
-			 * ÔÚÏŞ¶¨Ê±¼äÄÚ¼ì²émodulemap
+			 * åœ¨é™å®šæ—¶é—´å†…æ£€æŸ¥modulemap
 			 */
 			checkMaped : function(){
-				//Èçmodulemap´æÔÚmaped¶ÔÏó£¬ÔòÎªresÌí¼Ó¡£
+				//å¦‚modulemapå­˜åœ¨mapedå¯¹è±¡ï¼Œåˆ™ä¸ºresæ·»åŠ ã€‚
 				for(var i=0 ; i < this.modules.length; i++){
 					if (isUndefined(this.res[this.modules[i]]) 
 					  && !isUndefined(milo.loader.modulemap[this.modules[i]])
@@ -774,13 +774,13 @@ namespace("milo.loader");
 						this.hasmaped ++ ;
 					}
 				}
-				//¼ÓÔØÍê³É
+				//åŠ è½½å®Œæˆ
 				if (this.hasmaped == this.needown){
 					this.completeLoad.apply(this, [true]);
 					return;
 				}
 				
-				//¼ÓÔØ³¬Ê±
+				//åŠ è½½è¶…æ—¶
 				if (this.hasmaped < this.needown && this.expires<=0){
 					for(var i=0 ; i < this.modules.length; i++){
 						if (!isObject(milo.loader.modulemap[this.modules[i]])){
@@ -792,7 +792,7 @@ namespace("milo.loader");
 					return;
 				}
 								
-				//¼ÌĞø¼àÌı
+				//ç»§ç»­ç›‘å¬
 				if (this.hasmaped < this.needown  && this.expires>0){			
 					this.expires = this.expires - 50;
 					var mc = this
@@ -806,9 +806,9 @@ namespace("milo.loader");
 	}
 	
 	/**
-	 * load¼ÓÔØ¿ªÊ¼
+	 * loadåŠ è½½å¼€å§‹
 	 * @private
-	 * @param {object} mc ÏÂÔØ¶ÔÏó
+	 * @param {object} mc ä¸‹è½½å¯¹è±¡
 	 * @return {undefined} undefined 
 	 */
 	function start(mc){	
@@ -817,12 +817,12 @@ namespace("milo.loader");
 		//for(var key=0 ; key < need.length; key++){
 	    for(var key in need){			
 			//console.log(key+" -> "+milo.loader.modulemap[key])
-			 //Èç¹ûmodulemapÀïÓĞ£¬¾ÍÖ±½Ó·µ»Ø¡£ by dickma  2014.2.10
+			 //å¦‚æœmodulemapé‡Œæœ‰ï¼Œå°±ç›´æ¥è¿”å›ã€‚ by dickma  2014.2.10
 			if (milo.loader.modulemap[key]){ 
 				 mc.loadUrlCallback.apply(mc, [milo.loader.modulemap[key], key]);	
 			}else{
 			    
-				//ÅĞ¶ÏÓĞÃ»ÓĞ¼ÓÔØ¹ı by dickma  2014.1.15
+				//åˆ¤æ–­æœ‰æ²¡æœ‰åŠ è½½è¿‡ by dickma  2014.1.15
 				
 				
 				var loaded=false;
@@ -844,14 +844,14 @@ namespace("milo.loader");
 			
 			
 		}
-		//¼ì²é¼ÓÔØ×´Ì¬
+		//æ£€æŸ¥åŠ è½½çŠ¶æ€
 		checkloaded(mc);	
 	}
 	
 	/**
-	 * ÏÂÔØÎÄ¼ş
+	 * ä¸‹è½½æ–‡ä»¶
 	 * @private
-	 * @param {object} mc ÏÂÔØ¶ÔÏó
+	 * @param {object} mc ä¸‹è½½å¯¹è±¡
 	 * @return {undefined} undefined 
 	 */
 	function load(url, name, mc){
@@ -866,26 +866,26 @@ namespace("milo.loader");
 	}
 	
 	/**
-	 * ¼ì²é¼ÓÔØÇé¿ö
+	 * æ£€æŸ¥åŠ è½½æƒ…å†µ
 	 * @private
-	 * @param {object} mc ÏÂÔØ¶ÔÏó
+	 * @param {object} mc ä¸‹è½½å¯¹è±¡
 	 * @return {undefined} undefined 
 	 */
 	function checkloaded(mc){
-		//¼ÓÔØÍê³É
+		//åŠ è½½å®Œæˆ
 		if (mc.hasdown == mc.needown){
 			mc.loadInluderCallback.apply(mc, [true]);
 			return;
 		}
 		
-		//¼ÓÔØ³¬Ê±
+		//åŠ è½½è¶…æ—¶
 		if (mc.hasdown < mc.needown && mc.expires<=0){
-			//**²»ÓÃµÈexpires,¶Ôµ¥¸öÎÄ¼şÊ§°ÜµÄ¿ÉÒÔÌáÇ°ÅĞ¶Ï
+			//**ä¸ç”¨ç­‰expires,å¯¹å•ä¸ªæ–‡ä»¶å¤±è´¥çš„å¯ä»¥æå‰åˆ¤æ–­
 			mc.loadInluderCallback.apply(mc, [false]);
 			return;
 		}
 		
-		//¼ÌĞø¼àÌı
+		//ç»§ç»­ç›‘å¬
 		if (mc.hasdown < mc.needown  && mc.expires>0){			
 			mc.expires = mc.expires - 50;
 			setTimeout(
@@ -896,13 +896,13 @@ namespace("milo.loader");
 	}
 	
 	/**
-	 * »ñÈ¡½Å±¾Â·¾¶
-	 * ÒÔhttp://¿ªÍ·µÄ£¬Îªfullpath
-	 * ÆäËüµÄ¾ùÊÓÎªÏà¶ÔÂ·¾¶
-	 * ×éºÏÂ·¾¶»òÄ£¿é·½Ê½¿¼ÂÇÖĞ
+	 * è·å–è„šæœ¬è·¯å¾„
+	 * ä»¥http://å¼€å¤´çš„ï¼Œä¸ºfullpath
+	 * å…¶å®ƒçš„å‡è§†ä¸ºç›¸å¯¹è·¯å¾„
+	 * ç»„åˆè·¯å¾„æˆ–æ¨¡å—æ–¹å¼è€ƒè™‘ä¸­
 	 * @private
-	 * @param {string} filepath Â·¾¶
-	 * @return {string} fullpath È«¾ÖÂ·¾¶ 
+	 * @param {string} filepath è·¯å¾„
+	 * @return {string} fullpath å…¨å±€è·¯å¾„ 
 	 */
 	function getModulePath(filepath){
 		if (filepath.search(/^http:\/\//i) == -1){
@@ -916,28 +916,28 @@ namespace("milo.loader");
 	}
 	
 	/**
-	 * »ñÈ¡Ä£¿éÃû³Æ
-	 * ÒÔhttp://¿ªÍ·µÄ£¬Îªfullpath
-	 * ÆäËüµÄ¾ùÊÓÎªÏà¶ÔÂ·¾¶
-	 * ×éºÏÂ·¾¶»òÄ£¿é·½Ê½¿¼ÂÇÖĞ
+	 * è·å–æ¨¡å—åç§°
+	 * ä»¥http://å¼€å¤´çš„ï¼Œä¸ºfullpath
+	 * å…¶å®ƒçš„å‡è§†ä¸ºç›¸å¯¹è·¯å¾„
+	 * ç»„åˆè·¯å¾„æˆ–æ¨¡å—æ–¹å¼è€ƒè™‘ä¸­
 	 * @private
-	 * @param {string} filepath Â·¾¶
-	 * @return {string} fullpath È«¾ÖÂ·¾¶ 
+	 * @param {string} filepath è·¯å¾„
+	 * @return {string} fullpath å…¨å±€è·¯å¾„ 
 	 */
 	function getModuleName(){
 		return null;
 	}
 	
 	/******************************************************/
-	/*****************includer´¦Àí*************************/
+	/*****************includerå¤„ç†*************************/
 	/******************************************************/
 	
 	/**
-	 * includerÄÚÈİ¼ÓÔØÆ÷
+	 * includerå†…å®¹åŠ è½½å™¨
 	 * @private
-	 * @param {string} name ÏÂÔØÃû³Æ
-	 * @param {array} files ÒÀÀµÄ£¿é¶ÔÏó
-	 * @param {function} callback »Øµ÷·½·¨
+	 * @param {string} name ä¸‹è½½åç§°
+	 * @param {array} files ä¾èµ–æ¨¡å—å¯¹è±¡
+	 * @param {function} callback å›è°ƒæ–¹æ³•
 	 * @return {object} object 
 	 */
 	function includerContainer(files, callback){	
@@ -957,20 +957,20 @@ namespace("milo.loader");
 
 		return {
 			files : files,
-			need : need,   //ÒÀÀµ¶ÔÏóÊı×é(ÓÃÓÚloadÏÂÔØ)
-			res : new Array(), //ÒÀÀµ¶ÔÏó½á¹û ½á¹û¼¯
-			expires : needown * milo.config.expires, //¹ıÆÚÊ±¼ä
-			callback : callback, //Ä£¿é¼ÓÔØÍê³ÉºóµÄ»Øµ÷
-			needown : needown,  //ĞèÒªÏÂÔØÊı
-			hasdown : hasdown,	//ÒÑÏÂÔØÊı
+			need : need,   //ä¾èµ–å¯¹è±¡æ•°ç»„(ç”¨äºloadä¸‹è½½)
+			res : new Array(), //ä¾èµ–å¯¹è±¡ç»“æœ ç»“æœé›†
+			expires : needown * milo.config.expires, //è¿‡æœŸæ—¶é—´
+			callback : callback, //æ¨¡å—åŠ è½½å®Œæˆåçš„å›è°ƒ
+			needown : needown,  //éœ€è¦ä¸‹è½½æ•°
+			hasdown : hasdown,	//å·²ä¸‹è½½æ•°
 
 			/**
-			 * µ¥ÎÄ¼şÏÂÔØ³É¹¦ºó»Øµ÷
+			 * å•æ–‡ä»¶ä¸‹è½½æˆåŠŸåå›è°ƒ
 			 * @private
-			 * @param {bool} ret ÏÂÔØÇé¿ö
-			 * @param {string} name Ä£¿éÃû³Æ
+			 * @param {bool} ret ä¸‹è½½æƒ…å†µ
+			 * @param {string} name æ¨¡å—åç§°
 			 * @return {undefined} undefined 
-			 * »ñÈ¡ÎÄ¼şÄÚµÄdefine¶ÔÏó£¬´´½¨ĞÂmc
+			 * è·å–æ–‡ä»¶å†…çš„defineå¯¹è±¡ï¼Œåˆ›å»ºæ–°mc
 			 */
 			loadUrlCallback : function(ret, name){
 				if(ret)	this.hasdown ++;
@@ -978,7 +978,7 @@ namespace("milo.loader");
 			},		
 			
 			/**
-			 * ËùÓĞÎÄ¼şÏÂÔØ³É¹¦ºó»Øµ÷
+			 * æ‰€æœ‰æ–‡ä»¶ä¸‹è½½æˆåŠŸåå›è°ƒ
 			 * @private
 			 */
 			loadInluderCallback : function(ret){
@@ -992,14 +992,14 @@ namespace("milo.loader");
 	}
 	
 	/******************************************************/
-	/*****************¼ÓÔØ½Å±¾Í¨ÓÃ·½·¨²¿*******************/
+	/*****************åŠ è½½è„šæœ¬é€šç”¨æ–¹æ³•éƒ¨*******************/
 	/******************************************************/
 	
 	/**
-	 * ¼ÓÔØ½Å±¾»ù´¡·½·¨
+	 * åŠ è½½è„šæœ¬åŸºç¡€æ–¹æ³•
 	 * @private
-	 * @param {string} filepath Â·¾¶
-	 * @param {function} callback »Øµ÷·½·¨
+	 * @param {string} filepath è·¯å¾„
+	 * @param {function} callback å›è°ƒæ–¹æ³•
 	 * @return {undefined} undefined 
 	 */
 	function loadScript(url, callback){
@@ -1028,8 +1028,8 @@ namespace("milo.loader");
 	}
 	
 	/**
-	 * ¼ÓÔØÑùÊ½»ù´¡·½·¨
-	 * Ôİ²»´¦Àí¼ÓÔØµÄÇé¿ö£¬¾ùÈÏÎª¼ÓÔØ³É¹¦¡£
+	 * åŠ è½½æ ·å¼åŸºç¡€æ–¹æ³•
+	 * æš‚ä¸å¤„ç†åŠ è½½çš„æƒ…å†µï¼Œå‡è®¤ä¸ºåŠ è½½æˆåŠŸã€‚
 	 * @private
 	 */
 	function loadCSS(url, callback){
@@ -1043,10 +1043,10 @@ namespace("milo.loader");
 	}
 	
 	/**
-	 * ¼ÓÔØ½Å±¾Íê³ÉºóµÄ´¦Àí
+	 * åŠ è½½è„šæœ¬å®Œæˆåçš„å¤„ç†
 	 * @private
 	 * @param {dom} node script DOM
-	 * @param {function} callback »Øµ÷·½·¨
+	 * @param {function} callback å›è°ƒæ–¹æ³•
 	 * @return {undefined} undefined 
 	 */
 	function onload(node, callback){		
@@ -1084,7 +1084,7 @@ extend(window, milo.loader);
  * @version 0.1.0.0
  * @date 2011-08-01
  * @class milo.dom
- * ±¾ÀàÖĞËùÓĞ·½·¨±»°ó¶¨µ½milo¶ÔÏóÖĞ£¬Í¨¹ı¶Ômilo.·½·¨Ãû½øĞĞµ÷ÓÃ¡£<br/>
+ * æœ¬ç±»ä¸­æ‰€æœ‰æ–¹æ³•è¢«ç»‘å®šåˆ°miloå¯¹è±¡ä¸­ï¼Œé€šè¿‡å¯¹milo.æ–¹æ³•åè¿›è¡Œè°ƒç”¨ã€‚<br/>
  */
 
 namespace("milo.dom");
@@ -1094,60 +1094,60 @@ namespace("milo.dom");
     var userAgent = navigator.userAgent.toLowerCase();
     extend( dom, {
         /**
-         * ÅĞ¶Ïä¯ÀÀÆ÷ÀàĞÍ
+         * åˆ¤æ–­æµè§ˆå™¨ç±»å‹
          */
         browser : {
             /**
-             * »ñÈ¡°æ±¾ºÅ
+             * è·å–ç‰ˆæœ¬å·
              */
             version: (userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [0,'0'])[1],
             /**
-             * ÊÇ·ñwebkitä¯ÀÀÆ÷
+             * æ˜¯å¦webkitæµè§ˆå™¨
              */
             webkit: /webkit/.test( userAgent ),
             /**
-             * ÊÇ·ñoperaä¯ÀÀÆ÷
+             * æ˜¯å¦operaæµè§ˆå™¨
              */
             opera: /opera/.test( userAgent ),
             /**
-             * ÊÇ·ñIEä¯ÀÀÆ÷
+             * æ˜¯å¦IEæµè§ˆå™¨
              */
             msie: /msie/.test( userAgent ) && !/opera/.test( userAgent ),
             /**
-             * ÊÇ·ñmozillaä¯ÀÀÆ÷
+             * æ˜¯å¦mozillaæµè§ˆå™¨
              */
             mozilla: /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent ),
             /**
-             * ÊÇ·ñTTä¯ÀÀÆ÷
+             * æ˜¯å¦TTæµè§ˆå™¨
              */
             tt: /tencenttraveler/.test( userAgent ),
             /**
-             * ÊÇ·ñchromeä¯ÀÀÆ÷
+             * æ˜¯å¦chromeæµè§ˆå™¨
              */
             chrome: /chrome/.test( userAgent ),
             /**
-             * ÊÇ·ñfirefoxä¯ÀÀÆ÷
+             * æ˜¯å¦firefoxæµè§ˆå™¨
              */
             firefox: /firefox/.test( userAgent ),
             /**
-             * ÊÇ·ñsafariä¯ÀÀÆ÷
+             * æ˜¯å¦safariæµè§ˆå™¨
              */
             safari: /safari/.test( userAgent ),
             /**
-             * ÊÇ·ñgeckoä¯ÀÀÆ÷
+             * æ˜¯å¦geckoæµè§ˆå™¨
              */
             gecko: /gecko/.test( userAgent ),
             /**
-             * ÊÇ·ñIE6
+             * æ˜¯å¦IE6
              */
             ie6: this.msie && this.version.substr(0,1) == '6'
 
         },
 
         /**
-         * ÅĞ¶ÏDOM¶ÔÏóÊÇ·ñ´æÔÚÑùÊ½ÀàÃû³Æ
-         * @param {dom} element dom¶ÔÏó
-         * @param {string} className ÑùÊ½Ãû³Æ
+         * åˆ¤æ–­DOMå¯¹è±¡æ˜¯å¦å­˜åœ¨æ ·å¼ç±»åç§°
+         * @param {dom} element domå¯¹è±¡
+         * @param {string} className æ ·å¼åç§°
          * @return {bool}
          */
         hasClassName : function(element, className) {
@@ -1157,9 +1157,9 @@ namespace("milo.dom");
         },
 
         /**
-         * ÎªDOM¶ÔÏóÔö¼ÓÑùÊ½ÀàÃû³Æ
-         * @param {dom} element dom¶ÔÏó
-         * @param {string} className ÑùÊ½Ãû³Æ
+         * ä¸ºDOMå¯¹è±¡å¢åŠ æ ·å¼ç±»åç§°
+         * @param {dom} element domå¯¹è±¡
+         * @param {string} className æ ·å¼åç§°
          * @return {dom}
          */
         addClassName : function(element, className) {
@@ -1169,9 +1169,9 @@ namespace("milo.dom");
         },
 
         /**
-         * ÎªDOM¶ÔÏóÉ¾³ıÑùÊ½ÀàÃû³Æ
-         * @param {dom} element dom¶ÔÏó
-         * @param {string} className ÑùÊ½Ãû³Æ
+         * ä¸ºDOMå¯¹è±¡åˆ é™¤æ ·å¼ç±»åç§°
+         * @param {dom} element domå¯¹è±¡
+         * @param {string} className æ ·å¼åç§°
          * @return {dom}
          */
         removeClassName : function(element, className) {
@@ -1180,18 +1180,18 @@ namespace("milo.dom");
             return element;
         },
         /**
-         * »ñÈ¡urlÖĞµÄ²ÎÊıÖµ
-         * @param {string} pa ²ÎÊıÃû³Æ
-         * @return {string} ²ÎÊıÖµ
+         * è·å–urlä¸­çš„å‚æ•°å€¼
+         * @param {string} pa å‚æ•°åç§°
+         * @return {string} å‚æ•°å€¼
          */
         request: function(pa){ 
 			var url = window.location.href.replace(/#+.*$/, ''),
 				params = url.substring(url.indexOf("?")+1,url.length).split("&"),
 				param = {} ;
 			for (var i=0; i<params.length; i++){  
-				var pos = params[i].indexOf('='),//²éÕÒname=value  
+				var pos = params[i].indexOf('='),//æŸ¥æ‰¾name=value  
 					key = params[i].substring(0,pos),
-					val = params[i].substring(pos+1);//ÌáÈ¡value 
+					val = params[i].substring(pos+1);//æå–value 
 				param[key] = val;
 			} 
 			return (typeof(param[pa])=="undefined") ? "" : param[pa];
@@ -1242,7 +1242,7 @@ namespace("milo.dom");
         },
 
         /**
-         * ¼¯ºÏ±éÀú£¬Ã¿¸ökeyÔËĞĞcallbackº¯Êı£¬·µ»ØÔËĞĞºóµÄ¼¯ºÏ
+         * é›†åˆéå†ï¼Œæ¯ä¸ªkeyè¿è¡Œcallbackå‡½æ•°ï¼Œè¿”å›è¿è¡Œåçš„é›†åˆ
          * @param
          * @return
          */
@@ -1449,9 +1449,9 @@ namespace("milo.dom");
         },
 
         /**
-         * Îªdom¶ÔÏóÉèÖÃÑùÊ½
-         * @param {dom} ele dom¶ÔÏó
-         * @param {object} styles ÑùÊ½¶ÔÏó like:{width:100,height:100}
+         * ä¸ºdomå¯¹è±¡è®¾ç½®æ ·å¼
+         * @param {dom} ele domå¯¹è±¡
+         * @param {object} styles æ ·å¼å¯¹è±¡ like:{width:100,height:100}
          * @return undefined
          */
         setStyle: function(ele, styles){
@@ -1461,10 +1461,10 @@ namespace("milo.dom");
         },
 
         /**
-         * Îªdom¶ÔÏó»ñÈ¡Ñ¡¶¨ÊôĞÔµÄÑùÊ½
-         * @param {dom} ele dom¶ÔÏó
-         * @param {string} prop ÊôĞÔÃû³Æ
-         * @return ÊôĞÔÑùÊ½
+         * ä¸ºdomå¯¹è±¡è·å–é€‰å®šå±æ€§çš„æ ·å¼
+         * @param {dom} ele domå¯¹è±¡
+         * @param {string} prop å±æ€§åç§°
+         * @return å±æ€§æ ·å¼
          */
         getStyle: function(el, prop){
             var viewCSS = isFunction(document.defaultView) //(typeof document.defaultView == 'function')
@@ -1478,24 +1478,24 @@ namespace("milo.dom");
         },
 
         /**
-         * »ñÈ¡Ò³Ãæ×î´ó¸ß¶È
-         * @return ÊôĞÔÑùÊ½
+         * è·å–é¡µé¢æœ€å¤§é«˜åº¦
+         * @return å±æ€§æ ·å¼
          */
         getMaxH: function(){
             return (this.getPageHeight() > this.getWinHeight() ? this.getPageHeight() : this.getWinHeight())
         },
 
         /**
-         * »ñÈ¡Ò³Ãæ×î´ó¿í¶È
-         * @return ÊôĞÔÑùÊ½
+         * è·å–é¡µé¢æœ€å¤§å®½åº¦
+         * @return å±æ€§æ ·å¼
          */
         getMaxW: function(){
             return (this.getPageWidth() > this.getWinWidth() ? this.getPageWidth() : this.getWinWidth())
         },
 
         /**
-         * ÍøÒ³ÄÚÈİ¸ß¶È
-         * @return {int} ÍøÒ³ÄÚÈİ¸ß¶È
+         * ç½‘é¡µå†…å®¹é«˜åº¦
+         * @return {int} ç½‘é¡µå†…å®¹é«˜åº¦
          */
         getPageHeight: function(){
             var h = (window.innerHeight && window.scrollMaxY) ? (window.innerHeight + window.scrollMaxY) : (document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight);
@@ -1503,16 +1503,16 @@ namespace("milo.dom");
         },
 
         /**
-         * ÍøÒ³ÄÚÈİ¿í¶È
-         * @return {int} ÍøÒ³ÄÚÈİ¿í¶È
+         * ç½‘é¡µå†…å®¹å®½åº¦
+         * @return {int} ç½‘é¡µå†…å®¹å®½åº¦
          */
         getPageWidth: function(){
             return (window.innerWidth && window.scrollMaxX) ? (window.innerWidth + window.scrollMaxX) : (document.body.scrollWidth > document.body.offsetWidth ? document.body.scrollWidth : document.body.offsetWidth);
         },
 
         /**
-         * ä¯ÀÀÆ÷¿ÉÊÓÇøÓò¸ß¶È
-         * @return {int} Íø¿ÉÊÓÇøÓò¸ß¶È
+         * æµè§ˆå™¨å¯è§†åŒºåŸŸé«˜åº¦
+         * @return {int} ç½‘å¯è§†åŒºåŸŸé«˜åº¦
          */
         getWinHeight: function(){
             return (window.innerHeight) ? window.innerHeight :
@@ -1522,17 +1522,17 @@ namespace("milo.dom");
         },
 
         /**
-         * ä¯ÀÀÆ÷¿ÉÊÓÇøÓò¿í¶È
-         * @return {int} Íø¿ÉÊÓÇøÓò¿í¶È
+         * æµè§ˆå™¨å¯è§†åŒºåŸŸå®½åº¦
+         * @return {int} ç½‘å¯è§†åŒºåŸŸå®½åº¦
          */
         getWinWidth: function(){
             return (window.innerWidth) ? window.innerWidth : (document.documentElement && document.documentElement.clientWidth) ? document.documentElement.clientWidth : document.body.offsetWidth
         },
 
         /**
-         * ÉèÖÃdomÍ¸Ã÷¶È
-         * @param {dom} ele dom¶ÔÏó
-         * @param {int} level Í¸Ã÷¶ÈÖµ£¨0-100µÄÕûÊı£©
+         * è®¾ç½®domé€æ˜åº¦
+         * @param {dom} ele domå¯¹è±¡
+         * @param {int} level é€æ˜åº¦å€¼ï¼ˆ0-100çš„æ•´æ•°ï¼‰
          * @return {undefined}
          */
         setOpacity: function(ele, level){
@@ -1544,8 +1544,8 @@ namespace("milo.dom");
             }
         },
         /**
-         * »ñÈ¡Ò³ÃæÖĞ¶ÔÏóµÄ¾ø¶ÔXÎ»ÖÃ
-         * @param {dom} e dom¶ÔÏó
+         * è·å–é¡µé¢ä¸­å¯¹è±¡çš„ç»å¯¹Xä½ç½®
+         * @param {dom} e domå¯¹è±¡
          * @return {int}
          */
         getX: function(e) {
@@ -1554,8 +1554,8 @@ namespace("milo.dom");
             return t
         },
         /**
-         * »ñÈ¡Ò³ÃæÖĞ¶ÔÏóµÄ¾ø¶ÔYÎ»ÖÃ
-         * @param {dom} e dom¶ÔÏó
+         * è·å–é¡µé¢ä¸­å¯¹è±¡çš„ç»å¯¹Yä½ç½®
+         * @param {dom} e domå¯¹è±¡
          * @return {int}
          */
         getY: function(e) {
@@ -1602,10 +1602,10 @@ namespace("milo.dom");
  * @date 2011-07-21
  * @demo http://gameact.qq.com/milo/core/bases.html
  * @class milo.array 
- * ·½·¨¼¯Ö÷ÌåÀ´×ÔÓÚÔ­ÓĞoss_base.jsÖĞÎªarray¶ÔÏóÌí¼ÓµÄ²¿·ÖÔ­ĞÍ·½·¨£¬<br/>
- * ĞŞ¸ÄÇé¿öÈçÏÂ£º<br/>
- * Ôö¼Ó·½·¨getLength,getArrayKey,hasValue,filter,unique<br/>
- * ±¾ÀàÖĞËùÓĞ·½·¨±»°ó¶¨µ½milo¶ÔÏóÖĞ£¬Í¨¹ı¶Ômilo.·½·¨Ãû½øĞĞµ÷ÓÃ¡£<br/> 
+ * æ–¹æ³•é›†ä¸»ä½“æ¥è‡ªäºåŸæœ‰oss_base.jsä¸­ä¸ºarrayå¯¹è±¡æ·»åŠ çš„éƒ¨åˆ†åŸå‹æ–¹æ³•ï¼Œ<br/>
+ * ä¿®æ”¹æƒ…å†µå¦‚ä¸‹ï¼š<br/>
+ * å¢åŠ æ–¹æ³•getLength,getArrayKey,hasValue,filter,unique<br/>
+ * æœ¬ç±»ä¸­æ‰€æœ‰æ–¹æ³•è¢«ç»‘å®šåˆ°miloå¯¹è±¡ä¸­ï¼Œé€šè¿‡å¯¹milo.æ–¹æ³•åè¿›è¡Œè°ƒç”¨ã€‚<br/> 
  * <p>
  * Example:
  * <pre><code>
@@ -1613,7 +1613,7 @@ var a=['1','2','3','4'] ;
 var b=['1','2','5','23432',2] ;
 alert(milo.filter(a,b))  //["3","4"] 
 var c = milo.unique(a,b)
-alert(c);				 //Êä³ö["3","4",'5','23432'] 
+alert(c);				 //è¾“å‡º["3","4",'5','23432'] 
  *</code></pre>
  * </p>
  
@@ -1625,9 +1625,9 @@ namespace("milo.array");
 var array = milo.array;
 extend( array, {
 	/**
-	 * ÅĞ¶ÏÊı×éÄÚÈİ¸öÊı
-	 * @param {array} array ¶ÔÏó
-	 * @return {int} ³¤¶È
+	 * åˆ¤æ–­æ•°ç»„å†…å®¹ä¸ªæ•°
+	 * @param {array} array å¯¹è±¡
+	 * @return {int} é•¿åº¦
 	 */
 	getLength : function(arr){
 		var l = 0;
@@ -1637,9 +1637,9 @@ extend( array, {
 		return l;
 	},
 	/**
-	 * ¸´ÖÆÊı×é
-	 * @param {array} array ¶ÔÏó
-	 * @return {array} ĞÂÊı×é¶ÔÏó
+	 * å¤åˆ¶æ•°ç»„
+	 * @param {array} array å¯¹è±¡
+	 * @return {array} æ–°æ•°ç»„å¯¹è±¡
 	 */
 	clone : function(arr){
 		var a = [];
@@ -1649,10 +1649,10 @@ extend( array, {
 		return a;
 	},
 	/**
-	 * ÅĞ¶ÏÊı×éÖĞÊÇ·ñ´æÔÚÕâ¸öÖµ
-	 * @param {array} arr Êı×é¶ÔÏó
-	 * @param {object} value ¶ÔÏó
-	 * @return {bool} ÊÇ/·ñ
+	 * åˆ¤æ–­æ•°ç»„ä¸­æ˜¯å¦å­˜åœ¨è¿™ä¸ªå€¼
+	 * @param {array} arr æ•°ç»„å¯¹è±¡
+	 * @param {object} value å¯¹è±¡
+	 * @return {bool} æ˜¯/å¦
 	 */
 	hasValue : function(arr, value){
 		var find = false;
@@ -1663,9 +1663,9 @@ extend( array, {
 		return find;
 	},
 	/**
-	 * ¸ù¾İÖµ»ñµÃÊı×éÖĞµÄkey
-	 * @param {array} arr Êı×é¶ÔÏó
-	 * @param {object} value ¶ÔÏó
+	 * æ ¹æ®å€¼è·å¾—æ•°ç»„ä¸­çš„key
+	 * @param {array} arr æ•°ç»„å¯¹è±¡
+	 * @param {object} value å¯¹è±¡
 	 * @return {string} key
 	 */
 	getArrayKey : function(arr, value){
@@ -1677,9 +1677,9 @@ extend( array, {
 		return findKey;
 	},
 	/**
-	 * ·µ»Øa1Êı×éÓĞa2Ã»ÓĞµÄÖµ
-	 * @param {array} a1 Êı×é¶ÔÏó
-	 * @param {array} a2 Êı×é¶ÔÏó
+	 * è¿”å›a1æ•°ç»„æœ‰a2æ²¡æœ‰çš„å€¼
+	 * @param {array} a1 æ•°ç»„å¯¹è±¡
+	 * @param {array} a2 æ•°ç»„å¯¹è±¡
 	 * @return {array} key
 	 */
 	filter : function (a1, a2) {
@@ -1691,9 +1691,9 @@ extend( array, {
 		return res;
 	},
 	/**
-	 * Á½¸öÊı×éµÄÖµµÄ½»¼¯
-	 * @param {array} arr Êı×é
-	 * @param {array} arr Êı×é
+	 * ä¸¤ä¸ªæ•°ç»„çš„å€¼çš„äº¤é›†
+	 * @param {array} arr æ•°ç»„
+	 * @param {array} arr æ•°ç»„
 	 * @return {array} key
 	 */
 	unique : function (a1, a2) {
@@ -1704,21 +1704,21 @@ extend( array, {
  * @author cathzhang
  * @version 0.1.0.0 
  * @date 2011-07-21
- * @class milo.string ×Ö·û´®Àà
- * ·½·¨¼¯Ö÷ÌåÀ´×ÔÓÚÔ­ÓĞoss_base.jsÖĞÎªstring¶ÔÏóÌí¼ÓµÄÔ­ĞÍ·½·¨<br/>
- * ĞŞ¸ÄÇé¿öÈçÏÂ£º<br/>
- * É¾³ı·½·¨replaceAll£ºÊ¹ÓÃÕıÔò/g¿ÉÒÔËÑ³öÈ«²¿<br/>
- * ĞŞ¸Ä·½·¨replacePairs£ºµ÷ÓÃµÄreplaceAll·½·¨¸ÄÎªÓÃreplace·½·¨£¬ÕıÔò·½·¨<br/>
- * É¾³ı·½·¨encode£º±àÂëÖ±½Ó¿ÉÓÃescape<br/>
- * É¾³ı·½·¨unencode£º½âÂëÖ±½Ó¿ÉÓÃunescape<br/>
- * É¾³ı·½·¨toInputValue: ÓëtoHTMLÏà²î²»´ó<br/>
- * É¾³ı·½·¨toTextArea: ÓëtoHTMLÏà²î²»´ó<br/>
- * É¾³ı·½·¨isEmpty: ÒâÒå²»´ó£¬ÊÇ·ñĞèÒªtrimºóÅĞ¶Ïlength£¬Õâ¸öĞèÒªÊµ¼ÊĞèÒªÀ´¼ìÑé<br/>
- * ¸üÃû·½·¨isAllNumÎªisNumberString<br/>
- * ÒÆ³ı·½·¨isIntÖÁmilo.numberÀà<br/>
- * ÒÆ³ı·½·¨isFloatÖÁmilo.numberÀà<br/>
- * ÒÆ³ı·½·¨isQQÖÁmilo.numberÀà<br/>
- * ±¾ÀàÖĞËùÓĞ·½·¨±»°ó¶¨µ½milo¶ÔÏóÖĞ£¬Í¨¹ı¶Ômilo.·½·¨Ãû½øĞĞµ÷ÓÃ¡£<br/> 
+ * @class milo.string å­—ç¬¦ä¸²ç±»
+ * æ–¹æ³•é›†ä¸»ä½“æ¥è‡ªäºåŸæœ‰oss_base.jsä¸­ä¸ºstringå¯¹è±¡æ·»åŠ çš„åŸå‹æ–¹æ³•<br/>
+ * ä¿®æ”¹æƒ…å†µå¦‚ä¸‹ï¼š<br/>
+ * åˆ é™¤æ–¹æ³•replaceAllï¼šä½¿ç”¨æ­£åˆ™/gå¯ä»¥æœå‡ºå…¨éƒ¨<br/>
+ * ä¿®æ”¹æ–¹æ³•replacePairsï¼šè°ƒç”¨çš„replaceAllæ–¹æ³•æ”¹ä¸ºç”¨replaceæ–¹æ³•ï¼Œæ­£åˆ™æ–¹æ³•<br/>
+ * åˆ é™¤æ–¹æ³•encodeï¼šç¼–ç ç›´æ¥å¯ç”¨escape<br/>
+ * åˆ é™¤æ–¹æ³•unencodeï¼šè§£ç ç›´æ¥å¯ç”¨unescape<br/>
+ * åˆ é™¤æ–¹æ³•toInputValue: ä¸toHTMLç›¸å·®ä¸å¤§<br/>
+ * åˆ é™¤æ–¹æ³•toTextArea: ä¸toHTMLç›¸å·®ä¸å¤§<br/>
+ * åˆ é™¤æ–¹æ³•isEmpty: æ„ä¹‰ä¸å¤§ï¼Œæ˜¯å¦éœ€è¦trimååˆ¤æ–­lengthï¼Œè¿™ä¸ªéœ€è¦å®é™…éœ€è¦æ¥æ£€éªŒ<br/>
+ * æ›´åæ–¹æ³•isAllNumä¸ºisNumberString<br/>
+ * ç§»é™¤æ–¹æ³•isIntè‡³milo.numberç±»<br/>
+ * ç§»é™¤æ–¹æ³•isFloatè‡³milo.numberç±»<br/>
+ * ç§»é™¤æ–¹æ³•isQQè‡³milo.numberç±»<br/>
+ * æœ¬ç±»ä¸­æ‰€æœ‰æ–¹æ³•è¢«ç»‘å®šåˆ°miloå¯¹è±¡ä¸­ï¼Œé€šè¿‡å¯¹milo.æ–¹æ³•åè¿›è¡Œè°ƒç”¨ã€‚<br/> 
  * <p>
  * Example:
  * <pre><code>
@@ -1734,9 +1734,9 @@ namespace("milo.string");
 var string = milo.string;
 extend( string, {
 	/**
-	 * ²éÕÒ×Ö·û´®µÄ×Ö½Ú³¤¶È<br/>
-	 * ÖĞÎÄËã2 Ó¢ÎÄËã1<br/>
-	 * @param {string} str ×Ö·û´®
+	 * æŸ¥æ‰¾å­—ç¬¦ä¸²çš„å­—èŠ‚é•¿åº¦<br/>
+	 * ä¸­æ–‡ç®—2 è‹±æ–‡ç®—1<br/>
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {int}
 	 */
 	getByteLength : function(str){
@@ -1749,27 +1749,27 @@ extend( string, {
 		return bytes;
 	},
 	/**
-	 * ²éÕÒÓĞ¶àÉÙ¸öË«×Ö½Ú×Ö·û
-	 * @param {string} str ×Ö·û´®
+	 * æŸ¥æ‰¾æœ‰å¤šå°‘ä¸ªåŒå­—èŠ‚å­—ç¬¦
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {int}
 	 */
 	getDwordNum : function(str){
 		return string.getByteLength(str) - str.length;
 	},
 	/**
-	 * ²éÕÒÓĞ¶àÉÙ¸öºº×Ö×Ö·û
-	 * @param {string} str ×Ö·û´®
+	 * æŸ¥æ‰¾æœ‰å¤šå°‘ä¸ªæ±‰å­—å­—ç¬¦
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {int}
 	 */
 	getChineseNum : function(str){
 		return str.length - str.replace(/[\u4e00-\u9fa5]/g,"").length;
 	},
 	/**
-	 * ½ØÈ¡ÖĞÎÄ×Ö·û´®<br/>
-	 * È¡iMaxBytes »ò×îºóÒ»¸öÖĞÎÄ×Ö·û³öÏÖµÄµØ·½Ìæ»»×Ö·û<br/>
-	 * @param {string} str ×Ö·û´®
-	 * @param {int} iMaxBytes ×Ö·û´®
-	 * @param {string} sSuffix Ìæ²¹×Ö·û´®
+	 * æˆªå–ä¸­æ–‡å­—ç¬¦ä¸²<br/>
+	 * å–iMaxBytes æˆ–æœ€åä¸€ä¸ªä¸­æ–‡å­—ç¬¦å‡ºç°çš„åœ°æ–¹æ›¿æ¢å­—ç¬¦<br/>
+	 * @param {string} str å­—ç¬¦ä¸²
+	 * @param {int} iMaxBytes å­—ç¬¦ä¸²
+	 * @param {string} sSuffix æ›¿è¡¥å­—ç¬¦ä¸²
 	 * @return {string}
 	 */
 	cutChinese : function(str, iMaxBytes, sSuffix){
@@ -1785,35 +1785,35 @@ extend( string, {
 		return (bytes-iMaxBytes == 1 ? str.substr(0,i-1) : str.substr(0,i) ) + sSuffix;
 	},
 	/**
-	 * È¥µô×Ö·û´®×ó±ßµÄ·Ç¿Õ×Ö·û
-	 * @param {string} str ×Ö·û´®
+	 * å»æ‰å­—ç¬¦ä¸²å·¦è¾¹çš„éç©ºå­—ç¬¦
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {string}
 	 */
 	trimLeft : function(str){
 		return str.replace(/^\s+/,"");
 	},
 	/**
-	 * È¥µô×Ö·û´®ÓÒ±ßµÄ·Ç¿Õ×Ö·û
-	 * @param {string} str ×Ö·û´®
+	 * å»æ‰å­—ç¬¦ä¸²å³è¾¹çš„éç©ºå­—ç¬¦
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {string}
 	 */
 	trimRight : function(str){
 		return str.replace(/\s+$/,"");
 	},
 	/**
-	 * È¥µô×Ö·û´®×óÓÒÁ½±ßµÄ·Ç¿Õ×Ö·û
-	 * @param {string} str ×Ö·û´®
+	 * å»æ‰å­—ç¬¦ä¸²å·¦å³ä¸¤è¾¹çš„éç©ºå­—ç¬¦
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {string}
 	 */
 	trim : function(str){
 		return milo.trimRight(milo.trimLeft(str));
 	},
 	/**
-	 * ³É¶Ô×Ö·û´®Ìæ»»
-	 * @param {string} str ×Ö·û´®
-	 * @param {array} str ×Ö·û´®<br/>
-	      array°üº¬Á½¸ö [0] ²éÕÒÄÚÈİ£¬[1] Ìæ»»ÄÚÈİ<br/>
-		  array¿ÉÒÔ³öÏÖ¶à´Î<br/>
+	 * æˆå¯¹å­—ç¬¦ä¸²æ›¿æ¢
+	 * @param {string} str å­—ç¬¦ä¸²
+	 * @param {array} str å­—ç¬¦ä¸²<br/>
+	      arrayåŒ…å«ä¸¤ä¸ª [0] æŸ¥æ‰¾å†…å®¹ï¼Œ[1] æ›¿æ¢å†…å®¹<br/>
+		  arrayå¯ä»¥å‡ºç°å¤šæ¬¡<br/>
 	 * @return {string}
 	 */
 	replacePairs : function(){
@@ -1825,8 +1825,8 @@ extend( string, {
 		return str;
 	},
 	/**
-	 * ×Ö·û´®Ìæ»»ÎªHTML±àÂëĞÎÊ½
-	 * @param {string} str ×Ö·û´®
+	 * å­—ç¬¦ä¸²æ›¿æ¢ä¸ºHTMLç¼–ç å½¢å¼
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {string}
 	 */
 	toHtml : function(str){
@@ -1846,40 +1846,40 @@ extend( string, {
 		return milo.replacePairs.apply(this, [str].concat(CONVERT_ARRAY));
 	},
 	/**
-	 * Ğ£ÑéÓÊÏäµØÖ·
-	 * @param {string} str ×Ö·û´®
+	 * æ ¡éªŒé‚®ç®±åœ°å€
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isMail : function(str){
 		return /^(?:[\w-]+\.?)*[\w-]+@(?:[\w-]+\.)+[\w]{2,3}$/.test(str);    
 	},
 	/**
-	 * Ğ£ÑéÆÕÍ¨µç»°¡¢´«ÕæºÅÂë£º¿ÉÒÔ¡°+¡±¿ªÍ·£¬³ıÊı×ÖÍâ£¬¿Éº¬ÓĞ¡°-¡±
-	 * @param {string} str ×Ö·û´®
+	 * æ ¡éªŒæ™®é€šç”µè¯ã€ä¼ çœŸå·ç ï¼šå¯ä»¥â€œ+â€å¼€å¤´ï¼Œé™¤æ•°å­—å¤–ï¼Œå¯å«æœ‰â€œ-â€
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isTel : function(str){
 		return /^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/.test(str);
 	},
 	/**
-	 * Ğ£ÑéÊÖ»úºÅÂë£º±ØĞëÒÔÊı×Ö¿ªÍ·
-	 * @param {string} str ×Ö·û´®
+	 * æ ¡éªŒæ‰‹æœºå·ç ï¼šå¿…é¡»ä»¥æ•°å­—å¼€å¤´
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isMobile : function(str){
 		return /^1[34578]\d{9}$/.test(str);
 	},
 	/**
-	 * Ğ£ÑéÓÊÕş±àÂë
-	 * @param {string} str ×Ö·û´®
+	 * æ ¡éªŒé‚®æ”¿ç¼–ç 
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isZipCode : function(str){
 		return /^(\d){6}$/.test(str);
 	},
 	/**
-	 * ÊÇ·ñÉí·İÖ¤ºÅÂë
-	 * @param {string} str ×Ö·û´®
+	 * æ˜¯å¦èº«ä»½è¯å·ç 
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isIDCard : function(str){
@@ -1895,7 +1895,7 @@ extend( string, {
 			return cId;
 		}
 		var Is18IDCard = function(IDNum) {
-			var aCity={11:"±±¾©",12:"Ìì½ò",13:"ºÓ±±",14:"É½Î÷",15:"ÄÚÃÉ¹Å",21:"ÁÉÄş",22:"¼ªÁÖ",23:"ºÚÁú½­",31:"ÉÏº£",32:"½­ËÕ",33:"Õã½­",34:"°²»Õ",35:"¸£½¨",36:"½­Î÷",37:"É½¶«",41:"ºÓÄÏ",42:"ºş±±",43:"ºşÄÏ",44:"¹ã¶«",45:"¹ãÎ÷",46:"º£ÄÏ",50:"ÖØÇì",51:"ËÄ´¨",52:"¹óÖİ",53:"ÔÆÄÏ",54:"Î÷²Ø",61:"ÉÂÎ÷",62:"¸ÊËà",63:"Çàº£",64:"ÄşÏÄ",65:"ĞÂ½®",71:"Ì¨Íå",81:"Ïã¸Û",82:"°ÄÃÅ",91:"¹úÍâ"};
+			var aCity={11:"åŒ—äº¬",12:"å¤©æ´¥",13:"æ²³åŒ—",14:"å±±è¥¿",15:"å†…è’™å¤",21:"è¾½å®",22:"å‰æ—",23:"é»‘é¾™æ±Ÿ",31:"ä¸Šæµ·",32:"æ±Ÿè‹",33:"æµ™æ±Ÿ",34:"å®‰å¾½",35:"ç¦å»º",36:"æ±Ÿè¥¿",37:"å±±ä¸œ",41:"æ²³å—",42:"æ¹–åŒ—",43:"æ¹–å—",44:"å¹¿ä¸œ",45:"å¹¿è¥¿",46:"æµ·å—",50:"é‡åº†",51:"å››å·",52:"è´µå·",53:"äº‘å—",54:"è¥¿è—",61:"é™•è¥¿",62:"ç”˜è‚ƒ",63:"é’æµ·",64:"å®å¤",65:"æ–°ç–†",71:"å°æ¹¾",81:"é¦™æ¸¯",82:"æ¾³é—¨",91:"å›½å¤–"};
 		
 			var iSum=0, info="", sID=IDNum;
 			if(!/^\d{17}(\d|x)$/i.test(sID)) {
@@ -1921,32 +1921,32 @@ extend( string, {
 		return str.length==15 ? Is18IDCard(C15ToC18(str)) : Is18IDCard(str);
 	},	
 	/**
-	 * ÊÇ·ñÈ«²¿ÊÇÖĞÎÄ
-	 * @param {string} str ×Ö·û´®
+	 * æ˜¯å¦å…¨éƒ¨æ˜¯ä¸­æ–‡
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isChinese : function(str){
 		return milo.getChineseNum(str)==str.length ? true : false;
 	},
 	/**
-	 * ÊÇ·ñÈ«²¿ÊÇÓ¢ÎÄ
-	 * @param {string} str ×Ö·û´®
+	 * æ˜¯å¦å…¨éƒ¨æ˜¯è‹±æ–‡
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isEnglish : function(str){
 		return /^[A-Za-z]+$/.test(str);
 	},
 	/**
-	 * ÊÇ·ñÁ´½ÓµØÖ·
-	 * @param {string} str ×Ö·û´®
+	 * æ˜¯å¦é“¾æ¥åœ°å€
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isURL : function(str){
 		return /^http:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/.test(str);
 	},
 	/**
-	 * ÊÇ·ñÊı×Ö×Ö·û´®
-	 * @param {string} str ×Ö·û´®
+	 * æ˜¯å¦æ•°å­—å­—ç¬¦ä¸²
+	 * @param {string} str å­—ç¬¦ä¸²
 	 * @return {bool}
 	 */
 	isNumberString : function(str){
@@ -1958,9 +1958,9 @@ extend( string, {
  * @version 0.1.0.0 
  * @date 2011-08-01
  * @class milo.cookie  
- * ·½·¨¼¯Ö÷ÌåÀ´×ÔÓÚÔ­ÓĞoss_base.jsÖĞµÄCookie¶ÔÏó<br/>
- * ĞŞ¸ÄÇé¿öÈçÏÂ£º<br/>
- * ¶Ôclear·½·¨Ôö¼ÓsDomain, sPath·½·¨£¬·ñÔò·½·¨ÎŞĞ§¡£<br/> 
+ * æ–¹æ³•é›†ä¸»ä½“æ¥è‡ªäºåŸæœ‰oss_base.jsä¸­çš„Cookieå¯¹è±¡<br/>
+ * ä¿®æ”¹æƒ…å†µå¦‚ä¸‹ï¼š<br/>
+ * å¯¹clearæ–¹æ³•å¢åŠ sDomain, sPathæ–¹æ³•ï¼Œå¦åˆ™æ–¹æ³•æ— æ•ˆã€‚<br/> 
  */
  
 namespace("milo.cookie");
@@ -1969,13 +1969,13 @@ namespace("milo.cookie");
 var cookie = milo.cookie;
 extend( cookie, {
 	/**
-	 * ÉèÖÃcookie
-	 * @param {string} sName cookieÃû
-	 * @param {string} sValue cookieÖµ
-	 * @param {int} iExpireSec Ê§Ğ§Ê±¼ä£¨Ãë£©
-	 * @param {string} sDomain ×÷ÓÃÓò
-	 * @param {string} sPath ×÷ÓÃÂ·¾¶
-	 * @param {bool} bSecure ÊÇ·ñ¼ÓÃÜ
+	 * è®¾ç½®cookie
+	 * @param {string} sName cookieå
+	 * @param {string} sValue cookieå€¼
+	 * @param {int} iExpireSec å¤±æ•ˆæ—¶é—´ï¼ˆç§’ï¼‰
+	 * @param {string} sDomain ä½œç”¨åŸŸ
+	 * @param {string} sPath ä½œç”¨è·¯å¾„
+	 * @param {bool} bSecure æ˜¯å¦åŠ å¯†
 	 * @return {void}
 	 */
 	set : function(sName,sValue,iExpireSec,sDomain,sPath,bSecure){
@@ -2003,10 +2003,10 @@ extend( cookie, {
 		document.cookie=oCookieArray.join("; ");
 	},
 	/**
-	 * »ñÈ¡cookie
-	 * @param {string} sName cookieÃû
-	 * @param {string} sValue Ä¬ÈÏÖµ
-	 * @return {string} cookieÖµ
+	 * è·å–cookie
+	 * @param {string} sName cookieå
+	 * @param {string} sValue é»˜è®¤å€¼
+	 * @return {string} cookieå€¼
 	 */
 	get : function(sName,sDefaultValue){
 		var sRE = "(?:; |^)" + sName + "=([^;]*);?";
@@ -2019,10 +2019,10 @@ extend( cookie, {
 		}
 	},
 	/**
-	 * »ñÈ¡cookie
-	 * @param {string} sName cookieÃû
-	 * @param {string} sDomain ×÷ÓÃÓò
-	 * @param {sPath} sPath ×÷ÓÃÂ·¾¶
+	 * è·å–cookie
+	 * @param {string} sName cookieå
+	 * @param {string} sDomain ä½œç”¨åŸŸ
+	 * @param {sPath} sPath ä½œç”¨è·¯å¾„
 	 * @return {void} 
 	 */
 	clear : function(sName, sDomain, sPath){
@@ -2037,11 +2037,11 @@ extend( cookie, {
  * @version 0.1.0.0 
  * @date 2011-07-21
  * @class milo.date
- * ·½·¨¼¯Ö÷ÌåÀ´×ÔÓÚÔ­ÓĞoss_base.jsÖĞÎªdate¶ÔÏóÌí¼ÓµÄ²¿·ÖÔ­ĞÍ·½·¨<br/>
- * ĞŞ¸ÄÇé¿öÈçÏÂ£º<br/>
- * ÖØÃüÃûtoShortDateStringÎªtoDateString<br/>
- * ÖØÃüÃûtoShortStringÎªtoDateTimeString<br/> 
- * ±¾ÀàÖĞËùÓĞ·½·¨±»°ó¶¨µ½milo¶ÔÏóÖĞ£¬Í¨¹ı¶Ômilo.·½·¨Ãû½øĞĞµ÷ÓÃ¡£<br/> 
+ * æ–¹æ³•é›†ä¸»ä½“æ¥è‡ªäºåŸæœ‰oss_base.jsä¸­ä¸ºdateå¯¹è±¡æ·»åŠ çš„éƒ¨åˆ†åŸå‹æ–¹æ³•<br/>
+ * ä¿®æ”¹æƒ…å†µå¦‚ä¸‹ï¼š<br/>
+ * é‡å‘½åtoShortDateStringä¸ºtoDateString<br/>
+ * é‡å‘½åtoShortStringä¸ºtoDateTimeString<br/> 
+ * æœ¬ç±»ä¸­æ‰€æœ‰æ–¹æ³•è¢«ç»‘å®šåˆ°miloå¯¹è±¡ä¸­ï¼Œé€šè¿‡å¯¹milo.æ–¹æ³•åè¿›è¡Œè°ƒç”¨ã€‚<br/> 
  * <p>
  * Example:
  * <pre><code>
@@ -2056,8 +2056,8 @@ var date = milo.date;
 var _d = new Date();
 extend( date, {
 	/**
-	 * »ñÈ¡ÈÕÆÚ
-	 * @param {string} sep ·Ö¸ô·û Ä¬ÈÏÎª-
+	 * è·å–æ—¥æœŸ
+	 * @param {string} sep åˆ†éš”ç¬¦ é»˜è®¤ä¸º-
 	 * @return {string} yyyy-mm-dd
 	 */
 	toDateString : function(nd){	
@@ -2072,8 +2072,8 @@ extend( date, {
 		return a.join(sep);
 	},
 	/**
-	 * »ñÈ¡ÈÕÆÚºÍÊ±¼ä
-	 * @param {string} sep ·Ö¸ô·û Ä¬ÈÏÎª-
+	 * è·å–æ—¥æœŸå’Œæ—¶é—´
+	 * @param {string} sep åˆ†éš”ç¬¦ é»˜è®¤ä¸º-
 	 * @return {string} yyyy-mm-dd hh:ii:ss
 	 */
 	toDateTimeString : function(nd){
@@ -2088,15 +2088,15 @@ extend( date, {
 		return date.toDateString.apply(this,arguments) + " " + a.join(":");
 	},
 	/**
-	 * ÊÇ·ñÈóÄê
-	 * @param {int} year Äê·İ
-	 * @return {bool} ÊÇ/·ñ
+	 * æ˜¯å¦æ¶¦å¹´
+	 * @param {int} year å¹´ä»½
+	 * @return {bool} æ˜¯/å¦
 	 */
 	isLeapYear : function(year) {
 		return (0 == year % 4 && ((year % 100 != 0) || (year % 400 == 0)))
 	},
 	/**
-	 * »ñÈ¡·şÎñÆ÷Ê±¼ä
+	 * è·å–æœåŠ¡å™¨æ—¶é—´
 	 * @return {date} Date
 	 */
 	getSeverDateTime : function(){
@@ -2112,8 +2112,8 @@ extend( date, {
  * @version 0.1.0.0 
  * @date 2011-07-21
  * @class milo.number 
- * ·½·¨¼¯Ö÷ÌåÀ´×ÔÓÚÔ­ÓĞoss_base.jsÖĞÎªstring¶ÔÏóÌí¼ÓµÄ²¿·ÖÔ­ĞÍ·½·¨<br/>
- * ±¾ÀàÖĞËùÓĞ·½·¨±»°ó¶¨µ½milo¶ÔÏóÖĞ£¬Í¨¹ı¶Ômilo.·½·¨Ãû½øĞĞµ÷ÓÃ¡£<br/> 
+ * æ–¹æ³•é›†ä¸»ä½“æ¥è‡ªäºåŸæœ‰oss_base.jsä¸­ä¸ºstringå¯¹è±¡æ·»åŠ çš„éƒ¨åˆ†åŸå‹æ–¹æ³•<br/>
+ * æœ¬ç±»ä¸­æ‰€æœ‰æ–¹æ³•è¢«ç»‘å®šåˆ°miloå¯¹è±¡ä¸­ï¼Œé€šè¿‡å¯¹milo.æ–¹æ³•åè¿›è¡Œè°ƒç”¨ã€‚<br/> 
  * <p>
  * Example:
  * <pre><code>
@@ -2129,10 +2129,10 @@ namespace("milo.number");
 var number = milo.number;
 extend( number, {
 	/**
-	 * ÊÇ·ñÄ³Ò»·¶Î§µÄÕûÊı
-	 * @param {int} n ÊıÖµ
-	 * @param {int} iMin ·¶Î§µÍÖµ
-	 * @param {int} iMax ·¶Î§¸ßÖµ
+	 * æ˜¯å¦æŸä¸€èŒƒå›´çš„æ•´æ•°
+	 * @param {int} n æ•°å€¼
+	 * @param {int} iMin èŒƒå›´ä½å€¼
+	 * @param {int} iMax èŒƒå›´é«˜å€¼
 	 * @return {bool} 
 	 */
 	isInt : function(n, iMin, iMax){
@@ -2151,10 +2151,10 @@ extend( number, {
 		return true;
 	},
 	/**
-	 * ÊÇ·ñÄ³Ò»·¶Î§¸¡µãÊı
-	 * @param {float} n ÊıÖµ
-	 * @param {float} fMin ·¶Î§µÍÖµ
-	 * @param {float} fMax ·¶Î§¸ßÖµ
+	 * æ˜¯å¦æŸä¸€èŒƒå›´æµ®ç‚¹æ•°
+	 * @param {float} n æ•°å€¼
+	 * @param {float} fMin èŒƒå›´ä½å€¼
+	 * @param {float} fMax èŒƒå›´é«˜å€¼
 	 * @return {bool} 
 	 */
 	isFloat : function(n, fMin, fMax){
@@ -2170,8 +2170,8 @@ extend( number, {
 		return true;
 	},
 	/**
-	 * ÊÇ·ñQQºÅÂë
-	 * @param {int} qq qqºÅ
+	 * æ˜¯å¦QQå·ç 
+	 * @param {int} qq qqå·
 	 * @return {bool} 
 	 */
 	isQQ : function(qq){
@@ -2179,9 +2179,9 @@ extend( number, {
 		// /^[1-9]\d{4,11}$/.test(qq) && parseInt(qq)<=4294967294;   
 	},
 	/**
-	 * È¡Ëæ»úÕûÊı
-	 * @param {int} n ÕûÊı
-	 * @return {int} 0~n¼äµÄËæ»úÕûÊı
+	 * å–éšæœºæ•´æ•°
+	 * @param {int} n æ•´æ•°
+	 * @return {int} 0~né—´çš„éšæœºæ•´æ•°
 	 */
 	randomInt : function(n){
 		return Math.floor(Math.random() * n);
@@ -2192,7 +2192,7 @@ extend( number, {
  * @version 0.1.0.0 
  * @date 2011-08-01
  * @class milo.event 
- * ±¾ÀàÖĞËùÓĞ·½·¨±»°ó¶¨µ½milo¶ÔÏóÖĞ£¬Í¨¹ı¶Ômilo.·½·¨Ãû½øĞĞµ÷ÓÃ¡£<br/> 
+ * æœ¬ç±»ä¸­æ‰€æœ‰æ–¹æ³•è¢«ç»‘å®šåˆ°miloå¯¹è±¡ä¸­ï¼Œé€šè¿‡å¯¹milo.æ–¹æ³•åè¿›è¡Œè°ƒç”¨ã€‚<br/> 
  * <p>
  * Example:
  * <pre><code>
@@ -2209,10 +2209,10 @@ namespace("milo.event");
 var event = milo.event;
 extend( event, {	
 	/**
-	 * ÎªDOM¶ÔÏóÔö¼ÓÊÂ¼ş
-	 * @param {dom} element dom¶ÔÏó
-	 * @param {string} type ÊÂ¼şÃû³Æ
-	 * @param {function} type ÊÂ¼ş·½·¨
+	 * ä¸ºDOMå¯¹è±¡å¢åŠ äº‹ä»¶
+	 * @param {dom} element domå¯¹è±¡
+	 * @param {string} type äº‹ä»¶åç§°
+	 * @param {function} type äº‹ä»¶æ–¹æ³•
 	 * @return {undefined} 
 	 */
 	addEvent : function(el, type, fn){
@@ -2224,10 +2224,10 @@ extend( event, {
 		}
 	},	
 	/**
-	 * ÎªDOM¶ÔÏóÒÆ³ıÊÂ¼ş
-	 * @param {dom} element dom¶ÔÏó
-	 * @param {string} type ÊÂ¼şÃû³Æ
-	 * @param {function} type ÊÂ¼ş·½·¨
+	 * ä¸ºDOMå¯¹è±¡ç§»é™¤äº‹ä»¶
+	 * @param {dom} element domå¯¹è±¡
+	 * @param {string} type äº‹ä»¶åç§°
+	 * @param {function} type äº‹ä»¶æ–¹æ³•
 	 * @return {undefined} 
 	 */
 	removeEvent : function (el, type, fn){
@@ -2241,10 +2241,10 @@ extend( event, {
 	isReady : false,
 	readyFn : [],
 	/**
-	 * dom readyÊÂ¼ş
-	 * @param {dom} element dom¶ÔÏó
-	 * @param {string} type ÊÂ¼şÃû³Æ
-	 * @param {function} type ÊÂ¼ş·½·¨
+	 * dom readyäº‹ä»¶
+	 * @param {dom} element domå¯¹è±¡
+	 * @param {string} type äº‹ä»¶åç§°
+	 * @param {function} type äº‹ä»¶æ–¹æ³•
 	 * @return {undefined} 
 	 */
 	ready : function (fn){	
@@ -2260,9 +2260,9 @@ extend( event, {
 	},
 	
 	/**
-	* ¸Ã·½·¨ÓÃÓÚ°ó¶¨µã»÷ÊÂ¼ş£¬±ÈÒ»°ãµÄclickÊÂ¼ş·´Ó¦ËÙ¶È¿ì2±¶¡£
-	* @param {dom} obj Òª°ó¶¨µÄdom¶ÔÏó
-	* @param {function} fun ÊÂ¼ş´¥·¢µÄº¯Êı
+	* è¯¥æ–¹æ³•ç”¨äºç»‘å®šç‚¹å‡»äº‹ä»¶ï¼Œæ¯”ä¸€èˆ¬çš„clickäº‹ä»¶ååº”é€Ÿåº¦å¿«2å€ã€‚
+	* @param {dom} obj è¦ç»‘å®šçš„domå¯¹è±¡
+	* @param {function} fun äº‹ä»¶è§¦å‘çš„å‡½æ•°
 	*  @return {undefined} 
 	*/	
 	touchClick: function(obj, fun) {
@@ -2284,8 +2284,8 @@ extend( event, {
 		};
 	},
     /**
-     * Í£Ö¹ÊÂ¼ş¼ÌĞø½øĞĞ
-     * @param {event} e ÊÂ¼ş
+     * åœæ­¢äº‹ä»¶ç»§ç»­è¿›è¡Œ
+     * @param {event} e äº‹ä»¶
      * @return {dom}
      */
     preventDefault : function(e){
@@ -2297,8 +2297,8 @@ extend( event, {
         }
     },
     /**
-     * ×èÖ¹ÊÂ¼şÃ°Åİ´«µİ
-     * @param {event} e ÊÂ¼ş
+     * é˜»æ­¢äº‹ä»¶å†’æ³¡ä¼ é€’
+     * @param {event} e äº‹ä»¶
      * @return {dom}
      */
     stopPropagation : function(e){
@@ -2337,10 +2337,10 @@ function ready(){
 		
 	
 		milo.isReady = true;
-		//°ÑÔ¤¼ÓÔØµÄºÏ²¢ÎÄ¼şÀïµÄDefine£¬½øĞĞÔ¤NeedÒ»ÏÂ,ÒÔÀûÓÃÔ­Âß¼­£¬¼Óµ½mapÖĞ add by dickma
+		//æŠŠé¢„åŠ è½½çš„åˆå¹¶æ–‡ä»¶é‡Œçš„Defineï¼Œè¿›è¡Œé¢„Needä¸€ä¸‹,ä»¥åˆ©ç”¨åŸé€»è¾‘ï¼ŒåŠ åˆ°mapä¸­ add by dickma
 		milo.loader.preNeed();
 		
-		//ÔÚDom¼ÓÔØÍê±Ïºó£¬Èç¹ûmilo.ready()ÀïÓĞ»Øµ÷·½·¨£¬Ôò½øĞĞÖ´ĞĞ
+		//åœ¨DomåŠ è½½å®Œæ¯•åï¼Œå¦‚æœmilo.ready()é‡Œæœ‰å›è°ƒæ–¹æ³•ï¼Œåˆ™è¿›è¡Œæ‰§è¡Œ
 		if(milo.readyFn.length >0){
 			var i=0,fn;
 		
@@ -2361,7 +2361,7 @@ function ready(){
  * @version 0.1.0.0 
  * @date 2012-06-01
  * @class milo.object  
- * ¶ÔÏó´¦ÀíÍ¨ÓÃ·½·¨
+ * å¯¹è±¡å¤„ç†é€šç”¨æ–¹æ³•
  */
  
 namespace("milo.object");
@@ -2370,13 +2370,13 @@ namespace("milo.object");
 
 extend( milo.object, {
 	/**
-	 * ĞòÁĞ»¯JSON¶ÔÏó
-	 * ¶Ôobject×ª»¯Îªurl²ÎÊı×Ö·û´®£¬¸÷ÊôĞÔ¼äÒÔ&·Ö¸ô£¬Èça=1&b=2&c=3
-	 * ¶ÔÏóÊôĞÔÎªstring Ôò½øĞĞencodeURIComponent±àÂë
-	 * ¶ÔÏóÊôĞÔÎªbool ÔòÒÔ0´ú±ífalse 1´ú±ítrue
-	 * ¶ÔÏóÊôĞÔÎª¶ÔÏó£¬Ôò»á¼ÌĞø½øĞĞµİ¹éĞòÁĞ»¯
-	 * ¶ÔÏóÊôĞÔÎªfunction Ôò·µ»Øfunction.toString
-	 * @param {object} jsonObj json¶ÔÏó
+	 * åºåˆ—åŒ–JSONå¯¹è±¡
+	 * å¯¹objectè½¬åŒ–ä¸ºurlå‚æ•°å­—ç¬¦ä¸²ï¼Œå„å±æ€§é—´ä»¥&åˆ†éš”ï¼Œå¦‚a=1&b=2&c=3
+	 * å¯¹è±¡å±æ€§ä¸ºstring åˆ™è¿›è¡ŒencodeURIComponentç¼–ç 
+	 * å¯¹è±¡å±æ€§ä¸ºbool åˆ™ä»¥0ä»£è¡¨false 1ä»£è¡¨true
+	 * å¯¹è±¡å±æ€§ä¸ºå¯¹è±¡ï¼Œåˆ™ä¼šç»§ç»­è¿›è¡Œé€’å½’åºåˆ—åŒ–
+	 * å¯¹è±¡å±æ€§ä¸ºfunction åˆ™è¿”å›function.toString
+	 * @param {object} jsonObj jsonå¯¹è±¡
 	 * @return {string}
 	 */
 	serialize : function(jsonObj){
@@ -2424,10 +2424,10 @@ extend( milo.object, {
 		}
 	},
 	/**
-	 * ·´ĞòÁĞ»¯ÎªJSON¶ÔÏó
-	 * ¶Ôurl²ÎĞÎĞÎÊ½µÄ¶ÔÏó·´ĞòÁĞ»¯³ÉÎªJSON¶ÔÏó
-	 * ÓëserializeÏà¶ÔÓ¦
-	 * @param {object} jsonObj json¶ÔÏó
+	 * ååºåˆ—åŒ–ä¸ºJSONå¯¹è±¡
+	 * å¯¹urlå‚å½¢å½¢å¼çš„å¯¹è±¡ååºåˆ—åŒ–æˆä¸ºJSONå¯¹è±¡
+	 * ä¸serializeç›¸å¯¹åº”
+	 * @param {object} jsonObj jsonå¯¹è±¡
 	 * @return {string}
 	 */
 	unSerialize : function(jsonStr, de){
@@ -2450,9 +2450,9 @@ extend( milo.object, {
 		return retObj;
 	},
 	/**
-	 * ¶ÔÕû¸öobject½øĞĞutf8¸ñÊ½µÄurl½âÂë
-	 * @param {object} newopt ½âÂë¶ÔÏó
-	 * @return {object} ÒÑ½âÂë¶ÔÏó
+	 * å¯¹æ•´ä¸ªobjectè¿›è¡Œutf8æ ¼å¼çš„urlè§£ç 
+	 * @param {object} newopt è§£ç å¯¹è±¡
+	 * @return {object} å·²è§£ç å¯¹è±¡
 	 */
 	decode : function(newopt) {
 		if (typeof(newopt) == 'string') {
@@ -2501,7 +2501,7 @@ milo.base.extend(milo, milo.data);
  * @author chaozhou
  * @version 0.1.0.0 
  * @date 2013-08-15
- * dataÊı¾İÄ£¿é<br/>
+ * dataæ•°æ®æ¨¡å—<br/>
  */
  
 namespace("milo.data");
@@ -2510,9 +2510,9 @@ namespace("milo.data");
 var data = milo.data;
 extend( data, {
 	/**
-	 * ÉèÖÃdata
-     * @param {string} sKey dataÃû
-	 * @param {string} sValue dataÖµ
+	 * è®¾ç½®data
+     * @param {string} sKey dataå
+	 * @param {string} sValue dataå€¼
 	 * @return {void}
 	 */
 	set : function(sKey,sValue){
@@ -2525,16 +2525,16 @@ extend( data, {
         localStorage.setItem(sKey, sValue);
 	},
 	/**
-	 * »ñÈ¡data
-	 * @param {string} sKey dataÃû
-	 * @return {string} dataÖµ
+	 * è·å–data
+	 * @param {string} sKey dataå
+	 * @return {string} dataå€¼
 	 */
 	get : function(sKey){
 		return localStorage.getItem(sKey);
 	},
 	/**
-	 * Çå³ıdata
-	 * @param {string} sKey dataÃû
+	 * æ¸…é™¤data
+	 * @param {string} sKey dataå
 	 * @return {void}
 	 */
 	clear : function(sKey){
@@ -2547,9 +2547,9 @@ extend( data, {
 namespace("milo.ams");
 (function(){
 	/**
-	 * »ñÈ¡amsµÄ³õÊ¼ĞÅÏ¢
-	 * @param {number} amsActivityId »î¶¯ºÅ
-	 * @param {function} callback »Øµ÷·½·¨
+	 * è·å–amsçš„åˆå§‹ä¿¡æ¯
+	 * @param {number} amsActivityId æ´»åŠ¨å·
+	 * @param {function} callback å›è°ƒæ–¹æ³•
 	 * @return {undefined}
 	 */
 	function getAmsFile(amsActivityId,flowId, callback){
@@ -2572,7 +2572,7 @@ namespace("milo.ams");
 	}
 	
 	/*
-	 * init,submit ¸üĞÂ
+	 * init,submit æ›´æ–°
 	 */
 	function getDesc(obj, callback){
 		
@@ -2599,7 +2599,7 @@ namespace("milo.ams");
 				flow = null,
 				cfg = obj;
 
-			// ¸ù¾İÁ÷³ÌºÅÆ¥Åäµ½Á÷³Ì
+			// æ ¹æ®æµç¨‹å·åŒ¹é…åˆ°æµç¨‹
 			for(fid in flows){
 				if (fid == "f_" + obj.flowId){
 					flow = flows[fid];
@@ -2607,17 +2607,17 @@ namespace("milo.ams");
 				}
 			}
 			
-			// Ã»ÓĞÆ¥Åäµ½ 
+			// æ²¡æœ‰åŒ¹é…åˆ° 
 			if(flow == null){
 				return;
 			}
 			
-			// ÅĞ¶ÏÊÇ·ñÎª×Ô¶¨ÒåÁ÷³Ì
+			// åˆ¤æ–­æ˜¯å¦ä¸ºè‡ªå®šä¹‰æµç¨‹
 			if(flow.functions[0].sExtModuleId == null){
 			
 				need("ams.flowengine",function(FlowEngine){
 				
-					// Ìá½»Êı¾İ
+					// æäº¤æ•°æ®
 					FlowEngine.submit(window['amsCfg_' + obj.flowId]);
 					
 				});
@@ -2625,7 +2625,7 @@ namespace("milo.ams");
 				
 				var modName = flow.functions[0].method;
 				
-				// ÍêÕûÄ£¿éÃû³Æ(°üÀ¨Ïà¶ÔÂ·¾¶)
+				// å®Œæ•´æ¨¡å—åç§°(åŒ…æ‹¬ç›¸å¯¹è·¯å¾„)
 				if(obj.modJsPath && obj.modJsPath.indexOf('http') === -1){
 					
 				}else if(obj.modJsPath){
@@ -2655,7 +2655,7 @@ namespace("milo.ams");
 					window[mn+"_" + obj.flowId] = cloneClass(arguments[0]);
 					window[mn+"_" + obj.flowId].init(cfg);
 					
-					// Èç¹ûÊÇµ÷ÓÃamsSubmit
+					// å¦‚æœæ˜¯è°ƒç”¨amsSubmit
 					if (isFunction(obj.modSubmit)){
 						obj.modSubmit(window[mn+"_" + obj.flowId]);
 					}
@@ -2666,7 +2666,7 @@ namespace("milo.ams");
 	
 	function submit(obj){
 		
-		// Ìí¼ÓÄ£¿ésubmit·½·¨ 
+		// æ·»åŠ æ¨¡å—submitæ–¹æ³• 
 		obj.modSubmit = function(modObj){
 			if(isFunction(modObj.submit)){
 				modObj.submit(obj.flowId);
@@ -2678,16 +2678,16 @@ namespace("milo.ams");
 	
 	extend( milo.ams, {
 		/**
-		 * »ñÈ¡amsµÄ³õÊ¼ĞÅÏ¢
-		 * @param {number} amsActivityId »î¶¯ºÅ
-		 * @param {function} callback »Øµ÷·½·¨
+		 * è·å–amsçš„åˆå§‹ä¿¡æ¯
+		 * @param {number} amsActivityId æ´»åŠ¨å·
+		 * @param {function} callback å›è°ƒæ–¹æ³•
 		 * @return {undefined}
 		 */
 		
 		amsInit : function(amsActivityId,flowId,callback){
 		
 			if(arguments.length === 1){
-				init(amsActivityId); // amsActivityId Êµ¼ÊÉÏÊÇÒ»¸öobject
+				init(amsActivityId); // amsActivityId å®é™…ä¸Šæ˜¯ä¸€ä¸ªobject
 				return;
 			}
 		
@@ -2705,14 +2705,14 @@ namespace("milo.ams");
 				
 				if (flow == null) return;
 				
-				//¹«¹²ÅĞ¶Ï
-				//ÈçÔÚ´Ë½øĞĞ£¬»áÓ°ÏìÇ°ÆÚ²»ĞèÒªÌá½»Ö»ĞèÒªÕ¹Ê¾µÄ¹¦ÄÜ			
-				//¿ÉÒÔ¿¼ÂÇÇø·ÖÕ¹Ê¾ĞÔÄ£¿éºÍÌá½»ĞÔÄ£¿é
+				//å…¬å…±åˆ¤æ–­
+				//å¦‚åœ¨æ­¤è¿›è¡Œï¼Œä¼šå½±å“å‰æœŸä¸éœ€è¦æäº¤åªéœ€è¦å±•ç¤ºçš„åŠŸèƒ½			
+				//å¯ä»¥è€ƒè™‘åŒºåˆ†å±•ç¤ºæ€§æ¨¡å—å’Œæäº¤æ€§æ¨¡å—
 				cfg.iAMSActivityId = amsActivityId;
 				cfg.iFlowId = flowId;
 				
 				if(flow.functions[0].sExtModuleId == null){
-					//²âÊÔ
+					//æµ‹è¯•
 					if(amsActivityId == 7163){
 						need("ams.flowengine_poker",function(FlowEngine){
 							FlowEngine.submit(window['amsCfg_'+flowId]);
@@ -2729,7 +2729,7 @@ namespace("milo.ams");
 						flow.functions[0].method = 'share.commShare';
 					}
 					
-					// »¬¶¯´óÇø
+					// æ»‘åŠ¨å¤§åŒº
 					if(modName == 'cdkey.cdkeyExchage' &&  amsActivityId == 8814){
 						flow.functions[0].method = 'cdkey.cdkeyExchage_02';
 					}
@@ -2766,19 +2766,19 @@ namespace("milo.ams");
 			
 		},
 		/**
-		 * »ñÈ¡amsµÄ³õÊ¼ĞÅÏ¢
-		 * @param {number} amsActivityId »î¶¯ºÅ
-		 * @param {function} callback »Øµ÷·½·¨
+		 * è·å–amsçš„åˆå§‹ä¿¡æ¯
+		 * @param {number} amsActivityId æ´»åŠ¨å·
+		 * @param {function} callback å›è°ƒæ–¹æ³•
 		 * @return {undefined}
 		 */
 		amsSubmit : function(amsActivityId, flowId){
 		
 			if(arguments.length === 1){
-				submit(amsActivityId); // amsActivityId Êµ¼ÊÉÏÊÇÒ»¸öobject
+				submit(amsActivityId); // amsActivityId å®é™…ä¸Šæ˜¯ä¸€ä¸ªobject
 				return;
 			}
 		
-			//»ñÈ¡´¥·¢ÔªËØÉÏaction-dataÊôĞÔ´æ·ÅÔÚwindow["amsCfg_" + flowId].triggerSourceData
+			//è·å–è§¦å‘å…ƒç´ ä¸Šaction-dataå±æ€§å­˜æ”¾åœ¨window["amsCfg_" + flowId].triggerSourceData
 			var caller = arguments.callee.caller;
 			if((window.event && window.event.srcElement && window.event.srcElement != document) || (caller && caller.arguments[0])){
 				var ev = window.event || caller.arguments[0];
@@ -2814,8 +2814,8 @@ namespace("milo.ui");
 
 (function(){
 	/**
-	 * milo.ui³õÊ¼ĞÅÏ¢
-	 * @param {msg} strgin ĞèÒªµ¯³öµÄ×Ö·û´®ÄÚÈİ
+	 * milo.uiåˆå§‹ä¿¡æ¯
+	 * @param {msg} strgin éœ€è¦å¼¹å‡ºçš„å­—ç¬¦ä¸²å†…å®¹
 	 * @return {undefined}
 	 */
 	extend( milo.ui, {

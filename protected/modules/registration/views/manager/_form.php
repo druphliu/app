@@ -89,18 +89,18 @@
         <div class="form-group">
             <div class="col-sm-offset-3" id="awards">
                 <?php if($awards){?>
-                    <?php foreach($awards as $grade=>$award){?>
+                    <?php foreach($awards as $id=>$award){?>
                         <div  class="form-group">
                             签到:
-                            <?php echo CHtml::textField('mun'.$grade,$grade)?>天
+                            <?php echo CHtml::textField('count'.$id,$award['count'])?>天
                             奖励:
-                            <?php echo CHtml::textField('award'.$grade,$award['name'])?>
+                            <?php echo CHtml::textField('award'.$id,$award['name'])?>
                         </div>
                         <?php }?>
                 <?php }else{?>
                 <div  class="form-group">
                     签到:
-                    <?php echo CHtml::textField('mun1')?>天
+                    <?php echo CHtml::textField('count1')?>天
                     奖励:
                     <?php echo CHtml::textField('award1')?>
                 </div>
@@ -303,7 +303,7 @@
         $(".js_add").click(function(){
             var count = $("#awards div").length+1;
             var html = '<div class="form-group">' +
-                '签到: <input type="text" id="mun'+count+'" name="mun'+count+'" value="">天 ' +
+                '签到: <input type="text" id="count'+count+'" name="count'+count+'" value="">天 ' +
                 '奖励: <input type="text" id="award'+count+'" name="award'+count+'" value="">  ' +
                 '</div>';
             $("#awards").append(html);
