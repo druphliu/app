@@ -79,21 +79,24 @@ class HandleController extends CController
             $endTime = strtotime(date('Y-m-d', strtotime('+1 days')))-1;
             $logExit = ActiveLogModel::model($logTable)->find('activeId=:activeId and openId=:openId and
             datetime>=' . $startTime . ' and datetime<=' . $endTime, array(':activeId' => $activeId, ':openId' => $openId));
-            if ($logExit) {
+            $count = ActiveLogModel::model($logTable)->count('activeId=:activeId and openId=:openId',
+                array(':activeId' => $activeId, ':openId' => $openId));//已经签到次数
+            $grade = $count+1;//当天签到天数
+            $codeHas = ActiveAwardsModel::model($table)->find('activeId=:activeId and grade=:grade and
+                        type=:type and openId=:openId', array(':activeId' => $activeId, ':grade' => $grade,':type'=>$type,':openId'=>$openId));
+            if ($logExit || $codeHas) {
                 $result = 1;//签到过了
                 $msg = '你今天已经签过到了';
             } else {
-                $count = ActiveLogModel::model($logTable)->count('activeId=:activeId and openId=:openId',
-                    array(':activeId' => $activeId, ':openId' => $openId));
-                $count = $count+1;
+
                 $awardsArray = unserialize($active->awards);
                 foreach($awardsArray as $a){
                     $awards[$a['count']] = $a;
                 }
-                if(isset($awards[$count])){
+                if(isset($awards[$grade])){
                     //获取礼包码
                     $code = ActiveAwardsModel::model($table)->find('activeId=:activeId and grade=:grade and
-                        type=:type and openId is null', array(':activeId' => $activeId, ':grade' => $count,':type'=>$type));
+                        type=:type and openId is null', array(':activeId' => $activeId, ':grade' => $grade,':type'=>$type));
                     if ($code) {
                         $code->status=2;
                         $code->openId = $openId;
@@ -101,7 +104,7 @@ class HandleController extends CController
                         $code->save();
                         $result = 2;
 
-                        $msg = '恭喜你，获得' . $awardsArray[$count]['name'] . '，礼包码为:'.$code->code;
+                        $msg = '恭喜你，获得' . $awards[$grade]['name'] . '，礼包码为:'.$code->code;
                     } else {
                         $result = -3;
                         $msg = '抱歉，礼包码发完了，请联系客服';
