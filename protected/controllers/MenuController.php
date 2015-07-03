@@ -110,7 +110,7 @@ class MenuController extends WechatManagerController
                 if($model->type == Globals::TYPE_KEYWORDS){
                     $model->keywordsId = $_POST['keywordsId'];
                 }else{
-                    $model->url = $_POST['url'];
+                    $model->url = urldecode($_POST['url']);
                 }
                 if ($model->validate()) {
                     $model->save();
@@ -155,7 +155,7 @@ class MenuController extends WechatManagerController
             if($status==1){
                 $model->parentId = isset($_POST['parentId']) ? $_POST['parentId'] : 0;
                 $model->keywordsId =isset($_POST['keywordsId']) ? $_POST['keywordsId'] : 0;
-                $model->url =isset($_POST['url']) ? $_POST['url'] : 0;
+                $model->url =isset($_POST['url']) ? urldecode($_POST['url']) : 0;
                 if ($model->validate()) {
                     $model->save();
                 } else {

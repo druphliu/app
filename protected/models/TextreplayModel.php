@@ -105,7 +105,7 @@ class TextReplayModel extends CActiveRecord
     protected function beforeSave()
     {
         if (parent::beforeSave()) {
-            $this->content = strip_tags($this->content,'<a>');
+            $this->content = strip_tags($this->content,'<a><br>');
             return true;
         } else {
             return false;

@@ -107,7 +107,7 @@ class ApiController extends Controller
 
     private function menuResponse($key, $request)
     {
-        $menuInfo = MenuModel::model()->find('name=:name', array(':name' => $key));
+        $menuInfo = MenuModel::model()->find('name=:name and wechatId=:wechatId', array(':name' => $key,':wechatId'=>$this->wechatInfo->id));
         if ($menuInfo) {
             $keywordsId = $menuInfo->keywordsId;
             switch ($menuInfo->type) {

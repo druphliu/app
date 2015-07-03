@@ -318,7 +318,7 @@ $this->breadcrumbs = array(
                 $.ajax({
                     type: "POST",
                     url: postUrl,
-                    data: "name=" + name + "&parentId=" + parentId + "&keywordsId=" + keywordsId + "&type=" + type + "&url=" + url,
+                    data: "name=" + name + "&parentId=" + parentId + "&keywordsId=" + keywordsId + "&type=" + type + "&url=" + encodeURIComponent(url),
                     dataType: 'json',
                     success: function (data) {
                         if (data.status == 1) {
